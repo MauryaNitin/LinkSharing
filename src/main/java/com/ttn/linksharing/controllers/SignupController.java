@@ -15,17 +15,10 @@ public class SignupController {
     @Autowired
     SignupService signupService;
 
-    @PostMapping("/users")
+    @PostMapping("/signup")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user){
-        System.out.println(user);
         User user1 = signupService.createUser(user);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}").buildAndExpand(user1.getUserId()).toUri();
         return ResponseEntity.created(uri).build();
-
-    }
-
-    @GetMapping("/users/{id}")
-    public User getUser(@PathVariable Long id){
-        return signupService.getUserById(id);
     }
 }

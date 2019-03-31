@@ -32,7 +32,7 @@ public class CryptoUtils {
         return new sun.misc.BASE64Encoder().encode(enc);
     }
 
-    public String decrypt(String str) throws Exception {
+    public static String decrypt(String str) throws Exception {
         Cipher dcipher = Cipher.getInstance("DES");
         dcipher.init(Cipher.DECRYPT_MODE, key);
 
