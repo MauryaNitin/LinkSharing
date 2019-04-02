@@ -13,15 +13,10 @@ public class SignupService {
     UserRepository userRepository;
 
     public User createUser(User user) {
-        if(userRepository.findByUsernameOrEmail(user.getUsername(), user.getEmail()) != null){
+        if(userRepository.existsByUsernameOrEmail(user.getUsername(), user.getEmail())){
             throw new UserAlreadyExistsException("User Already Exists!");
         }
-        try {
-            user.setPassword(CryptoUtils.encrypt(user.getPassword()));
-        } catch (Exception e) {
-            System.err.println("Encryption Failed!");
-            user.setPassword(user.getPassword());
-        }
+        user.setPassword(CryptoUtils.encrypt(user.getPassword()));
         return userRepository.save(user);
     }
 

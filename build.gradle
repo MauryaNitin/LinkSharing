@@ -29,4 +29,5 @@ dependencies {
 	runtimeOnly 'mysql:mysql-connector-java'
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	compile 'org.springframework.boot:spring-boot-starter-mail:2.0.1.RELEASE'
 }

@@ -7,6 +7,8 @@ import com.ttn.linksharing.repositories.UserRepository;
 import com.ttn.linksharing.utils.CryptoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
 
@@ -17,20 +19,15 @@ public class LoginService {
     UserRepository userRepository;
 
     public User loginUser(Map<String, String> credentials){
-        User user = userRepository.findByUsernameOrEmail(credentials.get("username"), credentials.get("email"));
+        User user = userRepository.findByUsernameOrEmail(credentials.get("username"), credentials.get("username"));
         if(user == null){
             throw new UserNotFoundException("No such user exists!");
         }
-        try {
-            if(CryptoUtils.decrypt(user.getPassword()).equals(credentials.get("password"))){
-                return user;
-            }
-            else{
-                throw new IncorrectPasswordException("Incorrect Password!");
-            }
-        } catch (Exception e) {
-            System.err.println("Decryption Failed!");
-            throw new RuntimeException("User cannot be authenticated!");
+        else if(CryptoUtils.decrypt(user.getPassword()).equals(credentials.get("password"))){
+            return user;
+        }
+        else{
+            throw new IncorrectPasswordException("Password is incorrect!");
         }
     }
 }

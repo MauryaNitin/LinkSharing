@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @RestController
@@ -16,8 +19,10 @@ public class LoginController {
     LoginService loginService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody Map<String, String> credentials){
-        loginService.loginUser(credentials);
+    public ResponseEntity login(@RequestBody Map<String, String> credentials, HttpServletRequest request, HttpServletResponse response){
+        User user = loginService.loginUser(credentials);
+        HttpSession session = request.getSession();
+        session.setAttribute("logged-in-user", user);
         return ResponseEntity.accepted().build();
     }
 }

@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -32,6 +33,7 @@ public class User {
     @NotNull(message = "Username cannot be empty!")
     private String username;
 
+    @Column(unique = true)
     @NotNull(message = "Email cannot be empty!")
     @Email(message = "Please provide a valid email address!")
 //    @Pattern(regexp=".+@.+\\..+", message="Please provide a valid email address!")
