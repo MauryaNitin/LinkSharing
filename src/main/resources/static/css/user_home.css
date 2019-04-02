@@ -1,0 +1,173 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    width: 100%;
+}
+
+
+header {
+    padding: 20px;
+    background: dodgerblue;
+    overflow: auto;
+    height: 100px;
+    position: fixed;
+    width: 100%;
+    top: 0px;
+}
+
+#header-wrapper {
+    overflow: auto;
+}
+
+#header-wrapper > div {
+    display: inline-block;
+}
+
+#logo * {
+    height: 50px;
+    float: left;
+    color: white;
+    text-decoration: none;
+    margin-right: 5px;
+}
+
+#nav {
+    float: right;
+}
+
+
+.nav-icons {
+    display: inline-block;
+}
+
+
+.search-icon{
+    height: 15px;
+    margin: 5px 5px -3px 5px;
+}
+
+#search-bar{
+    float: right;
+    border: 1px black solid;
+    border-radius: 5px;
+    background: white;
+    padding: 2px;
+}
+
+#search-bar input{
+    border: none;
+    padding: 5px;
+}
+
+ul img{
+    height: 26px;
+    padding: 2px;
+}
+
+select {
+    background: blue;
+    border: 5px solid blue;
+    color: white;
+    font-weight: bolder;
+    border-radius: 5px;
+}
+
+
+input:focus {
+    outline: none;
+}
+
+
+/*******************main content**********************/
+
+#content-wrapper{
+    padding: 20px;
+    overflow: auto;
+    margin-top: 100px;
+}
+
+
+.box{
+    border: 1px lightsteelblue solid;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    overflow: auto;
+}
+
+.box-header{
+    border: lightsteelblue 1px solid;
+    border-radius: 0 5px;
+    padding: 5px;
+    background: lightsteelblue;
+    color: white;
+}
+
+.box-content{
+    padding: 10px;
+}
+
+.box-content div:first-child{
+    margin-bottom: 20px;
+}
+
+.box-content input{
+    width: 70%;
+    float: right;
+    border: 1px black solid;
+    padding: 2px;
+    border-radius: 5px;
+
+}
+
+.box-footer{
+
+}
+
+#section1{
+    float: left;
+    width: 30%;
+    display: inline-block;
+}
+
+
+#section2{
+    float: right;
+    height: 50px;
+    width: 69%;
+    display: inline-block;
+}
+
+.btn{
+    float: right;
+    background: blue;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    font-weight: bolder;
+    border: blue;
+    cursor: pointer;
+}
+
+
+/******************************footer****************************/
+
+footer{
+    clear: both;
+    text-align: center;
+    background: black;
+    color: white;
+    height: 150px;
+    position: relative;
+}
+
+footer div{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

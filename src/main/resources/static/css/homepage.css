@@ -1,0 +1,157 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+#container{
+    width: 100%;
+}
+
+header{
+    padding: 20px;
+    background: black;
+    overflow: auto;
+    height: 150px;
+    position: relative;
+}
+
+header > div{
+    padding: 20px;
+}
+
+
+#logo *{
+    height: 50px;
+    float: left;
+    color: white;
+    text-decoration: none;
+    margin-right: 5px;
+}
+
+.search-icon{
+    height: 15px;
+    margin: 5px 5px -3px 5px;
+}
+
+#search-bar{
+    float: right;
+    border: 2px black solid;
+    border-radius: 5px;
+    background: white;
+    padding: 2px;
+}
+
+#search-bar input{
+    border: none;
+    padding: 5px;
+}
+
+#top-posts{
+    position: relative;
+}
+
+#filter-post{
+    float: right;
+    background: dodgerblue;
+    border: 5px solid dodgerblue;
+    border-radius: 5px;
+    padding: 0 10px;
+    color: white;
+    font-weight: bolder;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+#content{
+    width: 70%;
+    padding: 20px;
+    display: inline-block;
+}
+
+#aside{
+    width: auto;
+    display: inline-block;
+    float: right;
+    padding: 15px;
+}
+
+#aside>div{
+    border: blue 1px solid;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: auto;
+}
+
+#aside>div>h3{
+    padding: 10px;
+    border-bottom: blue 1px solid;
+    background: lightblue;
+    color: white;
+}
+
+#aside>div>div{
+    padding: 10px;
+}
+
+#aside>div>div input{
+    width: 50%;
+    float: right;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#content > div{
+    overflow: auto;
+    margin-bottom: 20px;
+    border: 1px black solid;
+    border-radius: 10px;
+}
+
+#content>div>h3{
+    border-bottom: 1px black solid;
+    padding: 10px;
+    background: lightsteelblue;
+    color: white;
+}
+
+#content>div>div{
+    padding: 10px;
+}
+
+
+#aside button {
+    float: right;
+    margin-bottom: 10px;
+    background: blue;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    font-weight: bolder;
+    border: blue;
+    cursor: pointer;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+footer{
+    clear: both;
+    text-align: center;
+    background: black;
+    color: white;
+    height: 150px;
+    position: relative;
+}
+
+footer div{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
