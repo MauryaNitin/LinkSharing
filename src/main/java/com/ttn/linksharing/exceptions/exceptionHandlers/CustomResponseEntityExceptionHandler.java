@@ -24,8 +24,12 @@ import java.util.List;
 @ControllerAdvice
 @RestController
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+    private final MessageSource messageSource;
+
     @Autowired
-    MessageSource messageSource;
+    public CustomResponseEntityExceptionHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest webRequest){

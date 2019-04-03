@@ -1,122 +1,216 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Link Sharing - To The New</title>
-    <link rel="stylesheet" href="css/homepage.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" th:href="@{'/css/homepage.css'}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<div id="container">
-    <header>
-        <div id="header-wrapper">
-            <a id="logo" href="#">
-                <img src="images/icons/Link-sharing-icon.png" alt="Link Sharing">
-                <h1>Link Sharing</h1>
-            </a>
-            <div id="search-bar">
-                    <span><img class="search-icon" src="images/icons/icons8-search-26.png" alt="icon"><input type="text"
-                                                                                                             placeholder="Search">
-                        <img class="search-icon" src="images/icons/icons8-cancel-26.png" alt="close">
-                    </span>
-            </div>
-            <div style="clear: both"></div>
-        </div>
-    </header>
-    <section id="content-wrapper">
-        <div id="content">
-            <div id="recent-shares">
-                <h3>Recent Shares</h3>
-                <div>
-                    Share 1
-                </div>
-                <div>
-                    Share 2
-                </div>
-            </div>
+<div class="container-fluid">
 
-            <div id="top-posts">
-                <h3>Top Posts</h3>
-                <select name="filter-post" id="filter-post">
-                    <option value="0">Today</option>
-                    <option value="1">Yesterday</option>
-                    <option value="2">alkd</option>
-                    <option value="3">Tsdf</option>
-                    <option value="4">Tosdd</option>
-                </select>
-                <div>
-                    Post 1
+    <!-----------------------------------------Header------------------------------------------------------------>
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="#" style="text-decoration: none; color: white">
+            <img src="/images/logo.png" width="50" height="50" class="d-inline-block align-top" alt="LinkSharing">
+            <h1 style="display: inline-block">Link Sharing</h1>
+        </a>
+        <form class="form-inline">
+            <input class="form-control mr-md-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-md-0" type="submit">Search</button>
+        </form>
+    </nav>
+
+    <!-----------------------------------------Content------------------------------------------------------------>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8" id="content">
+                <div class="card">
+                    <div class="card-header">
+                        Recent Shares
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <img src="/images/default-person.jpg" alt="image" width="100px"
+                                             height="100px" class="card-left-img">
+                                    </div>
+
+                                    <div class="col-md-10">
+                                        Username
+                                        <div class="card-text" style="text-align: justify; font-size: 14px">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
+                                            dolore dolores doloribus earum enim et excepturi facere fuga ipsa ipsum
+                                            nihil, odit quam quas quo quod, reprehenderit similique veritatis, vitae!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <img src="/images/default-person.jpg" alt="image" width="100px"
+                                             height="100px" class="card-left-img">
+                                    </div>
+
+                                    <div class="col-md-10">
+                                        Username
+                                        <div class="card-text" style="text-align: justify; font-size: 14px">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
+                                            dolore dolores doloribus earum enim et excepturi facere fuga ipsa ipsum
+                                            nihil, odit quam quas quo quod, reprehenderit similique veritatis, vitae!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    Post 2
+                <hr>
+                <div class="card">
+                    <div class="card-header">
+                        Top Posts
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <img src="/images/default-person.jpg" alt="image" width="100px" height="100px"
+                                             class="card-left-img">
+                                    </div>
+                                    <div class="col-md-10">
+                                        Username
+                                        <div class="card-text" style="text-align: justify; font-size: 14px">
+                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
+                                            dolore dolores doloribus earum enim et excepturi facere fuga ipsa ipsum
+                                            nihil, odit quam quas quo quod, reprehenderit similique veritatis, vitae!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="sidebar" class="col-md-4">
+                <div class="well">
+                    <div class="card">
+                        <div class="card-header">
+                            Login
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/login}" action="#" th:object="${user}" method="post">
+                                <div class="form-group row">
+                                    <label for="username-login" class="col-md-4 col-form-label">Username</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" th:field="*{username}" name="username" id="username-login" placeholder="Username/Email">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword" class="col-md-4 col-form-label">Password</label>
+                                    <div class="col-md-8">
+                                        <input type="password" class="form-control" th:field="*{password}" name="password" id="inputPassword" placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div th:each="error: ${loginErrorsList}">
+                                        <div th:text="error"></div>
+                                    </div>
+                                </div>
+                                <a href="#">Forgot password?</a>
+                                <input type="submit" class="btn btn-primary" value="Login" style="float: right">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="card">
+                    <div class="card-header">
+                        Register
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/signup}" th:object="${user}"  method="post">
+                            <div class="form-group row">
+                                <label for="firstname" class="col-md-4 col-form-label">First Name: </label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" th:field="*{firstname}" id="firstname" name="firstname" placeholder="First Name">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="lastname" class="col-md-4 col-form-label">Last Name: </label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" th:field="*{lastname}" id="lastname" name="lastname" placeholder="Last Name">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="email" class="col-md-4 col-form-label">Email: </label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" th:field="*{email}" id="email" name="email" placeholder="Email">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="username" class="col-md-4 col-form-label">Username: </label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" th:field="*{username}" id="username" name="username" placeholder="Username">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="password" class="col-md-4 col-form-label">Password: </label>
+                                <div class="col-md-8">
+                                    <input type="password" class="form-control" th:field="*{password}" id="password" placeholder="Password">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="confirmPassword" class="col-md-4 col-form-label">Confirm Password: </label>
+                                <div class="col-md-8">
+                                    <input type="password" class="form-control"  id="confirmPassword" placeholder="Confirm Password">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-4 col-form-label" for="photo">
+                                    Photo:
+                                </label>
+                                <div class="col-md-8">
+                                    <div class="input-group mb-3">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input form-control" th:field="*{profilePicturePath}" id="photo" aria-describedby="inputGroupFileAddon01">
+                                            <label class="custom-file-label" for="photo">Choose file</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="submit" class="btn btn-primary" value="Register" style="float: right">
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-        <div id="aside">
-            <div id="login-container">
-                <h3>Login</h3>
-                <div>
-                    <label for="email">
-                        Email/Username* : <input type="text" id="email">
-                    </label>
-                </div>
-                <div>
-                    <label for="password">
-                        Password* : <input type="text" id="password">
-                    </label>
-                </div>
-                <div id="login-btn">
-                    <button>Login</button>
-                </div>
-            </div>
-            <div id="register-container">
-                <h3>Register</h3>
-                <div>
-                    <label for="reg-first-name">
-                        First Name* : <input type="text" id="reg-first-name">
-                    </label>
-                </div>
-                <div>
-                    <label for="reg-last-name">
-                        Last Name* : <input type="text" id="reg-last-name">
-                    </label>
-                </div>
-                <div>
-                    <label for="reg-email">
-                        Email* : <input type="text" id="reg-email">
-                    </label>
-                </div>
-                <div>
-                    <label for="reg-username">
-                        Username* : <input type="text" id="reg-username">
-                    </label>
-                </div>
-                <div>
-                    <label for="reg-password">
-                        Password* : <input type="text" id="reg-password">
-                    </label>
-                </div>
-                <div>
-                    <label for="reg-conf-password">
-                        Confirm Password* : <input type="text" id="reg-conf-password">
-                    </label>
-                </div>
-                <div>
-                    <label for="reg-photo">
-                        Photo : <input type="file" id="reg-photo">
-                    </label>
-                </div>
-                <div id="register-btn">
-                    <button>Register</button>
-                </div>
-            </div>
-        </div>
-    </section>
-    <footer>
-        <div>Copyright &copy; To The New, 2019.</div>
+    </div>
+
+    <!----------------------------------------------Footer----------------------------------------------------->
+    <footer class="container-fluid text-center bg-dark">
+        <p>TO THE NEW</p>
     </footer>
 </div>
 
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>

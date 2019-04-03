@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Header</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+          integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <script src="https://use.fontawesome.com/b193e6d66d.js"></script>
+</head>
+<body>
+<div th:fragment="header-fragment">
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="#" style="text-decoration: none; color: white">
+            <img src="/images/logo.png" width="50" height="50" class="d-inline-block align-top" alt="LinkSharing">
+            <h1 style="display: inline-block">Link Sharing</h1>
+        </a>
+        <div>
+            <ul class="nav justify-content-end">
+                <!--<li class="nav-item">-->
+                    <!--<form class="form-inline">-->
+                        <!--<input class="form-control mr-md-2" type="search" placeholder="Search" aria-label="Search">-->
+                        <!--<button class="btn btn-outline-success my-2 my-md-0" type="submit">Search</button>-->
+                    <!--</form>-->
+                <!--</li>-->
+                <li class="nav-item">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Search" aria-label="search" aria-describedby="search-btn">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button" id="search-btn">Search</button>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#commentModal">
+                        <i class="fa fa-comment" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#inviteModal">
+                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#linkModal">
+                        <i class="fa fa-link" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#docModal">
+                        <i class="fa fa-file" aria-hidden="true"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user-circle" aria-hidden="true"></i> Username
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#">Profile</a>
+                            <a class="dropdown-item" href="#">Topics</a>
+                            <a class="dropdown-item" href="#">Posts</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Logout</a>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+    <!----------------------Modals------------------------>
+    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commentModalLabel">Create Topic</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group row">
+                            <label for="topicName" class="col-sm-2 col-form-label">Name: </label>
+                            <div class="col-sm-10">
+                                <input class="form-control mr-md-2" type="search" id="topicName" placeholder="Topic">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="visibility" class="col-sm-2 col-form-label">Visibility: </label>
+                            <div class="col-sm-10">
+                                <div class="dropdown" id="visibility">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Select Visibility
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#">Public</a>
+                                        <a class="dropdown-item" href="#">Private</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="inviteModalLabel">Send Invitation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group row">
+                            <label for="invite-email" class="col-sm-2 col-form-label">Email: </label>
+                            <div class="col-sm-10">
+                                <input class="form-control mr-md-2" type="search" id="invite-email" placeholder="Email">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inviteTopic" class="col-sm-2 col-form-label">Topic: </label>
+                            <div class="col-sm-10">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="inviteTopic" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Select Topic
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#">Public</a>
+                                        <a class="dropdown-item" href="#">Private</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Invite</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-labelledby="linkModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="linkModalLabel">Share Link</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group row">
+                            <label for="linkUrl" class="col-sm-2 col-form-label">Link: </label>
+                            <div class="col-sm-10">
+                                <input name="linkUrl" class="form-control mr-md-2" type="search" id="linkUrl" placeholder="Link">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="linkDesc" class="col-sm-2 col-form-label">Description: </label>
+                            <div class="col-sm-10">
+                                <textarea name="linkDesc" class="form-control mr-md-2"  rows="4" id="linkDesc" placeholder="Link Description"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="linkTopic" class="col-sm-2 col-form-label">Topic: </label>
+                            <div class="col-sm-10">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="linkTopic" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Select Topic
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#">Public</a>
+                                        <a class="dropdown-item" href="#">Private</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="docModal" tabindex="-1" role="dialog" aria-labelledby="docModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="docModalLabel">Share Document</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group row">
+                            <label for="docFile" class="col-sm-2 col-form-label">Document: </label>
+                            <div class="col-sm-10">
+                                <input name="docFile" class="form-control mr-md-2" type="File" id="docFile" placeholder="Document">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="docDesc" class="col-sm-2 col-form-label">Description: </label>
+                            <div class="col-sm-10">
+                                <textarea name="linkDesc" class="form-control mr-md-2" rows="4" id="docDesc" placeholder="Document Description"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="docTopic" class="col-sm-2 col-form-label">Topic: </label>
+                            <div class="col-sm-10">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="docTopic" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Select Topic
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#">Public</a>
+                                        <a class="dropdown-item" href="#">Private</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

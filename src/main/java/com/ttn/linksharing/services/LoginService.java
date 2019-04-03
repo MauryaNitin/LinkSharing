@@ -7,10 +7,6 @@ import com.ttn.linksharing.repositories.UserRepository;
 import com.ttn.linksharing.utils.CryptoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Map;
 
 @Service
 public class LoginService {
@@ -18,12 +14,13 @@ public class LoginService {
     @Autowired
     UserRepository userRepository;
 
-    public User loginUser(Map<String, String> credentials){
-        User user = userRepository.findByUsernameOrEmail(credentials.get("username"), credentials.get("username"));
+    public User loginUser(String username, String password){
+        // sending same parameter two times because it can have either email or username
+        User user = userRepository.findByUsernameOrEmail(username, username);
         if(user == null){
             throw new UserNotFoundException("No such user exists!");
         }
-        else if(CryptoUtils.decrypt(user.getPassword()).equals(credentials.get("password"))){
+        else if(CryptoUtils.decrypt(user.getPassword()).equals(password)){
             return user;
         }
         else{
