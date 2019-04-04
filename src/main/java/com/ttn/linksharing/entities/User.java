@@ -1,5 +1,6 @@
 package com.ttn.linksharing.entities;
 
+import com.ttn.linksharing.CO.SignupCO;
 import com.ttn.linksharing.enums.Roles;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -9,14 +10,15 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-public class User {
+public class User implements Serializable{
     @Id
-    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long userId;
+    private Long id;
 
     @NotNull(message = "First Name cannot be empty!")
     @Column(name = "first_name")
@@ -26,6 +28,7 @@ public class User {
     @Column(name = "last_name")
     private String lastname;
 
+    @Column(unique = true)
     @NotNull(message = "Username cannot be empty!")
     private String username;
 
@@ -56,12 +59,38 @@ public class User {
 
     private Roles role;
 
-    public Long getUserId() {
-        return userId;
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "topic_id")
+    )
+    @OneToMany
+    List<Topic> topicsList;
+
+
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "resource_id")
+    )
+    @OneToMany
+    List<Resource> resourcesList;
+
+    public User(SignupCO signupCO){
+        this.firstname = signupCO.getFirstname();
+        this.lastname = signupCO.getLastname();
+        this.username = signupCO.getUsername();
+        this.email = signupCO.getEmail();
+        this.password = signupCO.getPassword();
+        this.profilePicturePath = signupCO.getPhoto();
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public User(){}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstname() {
@@ -126,6 +155,22 @@ public class User {
 
     public void setRole(Roles role) {
         this.role = role;
+    }
+
+    public List<Topic> getTopicsList() {
+        return topicsList;
+    }
+
+    public void setTopicsList(List<Topic> topicsList) {
+        this.topicsList = topicsList;
+    }
+
+    public List<Resource> getResourcesList() {
+        return resourcesList;
+    }
+
+    public void setResourcesList(List<Resource> resourcesList) {
+        this.resourcesList = resourcesList;
     }
 
     public Date getCreatedOn() {

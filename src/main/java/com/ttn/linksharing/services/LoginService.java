@@ -5,6 +5,8 @@ import com.ttn.linksharing.exceptions.IncorrectPasswordException;
 import com.ttn.linksharing.exceptions.UserNotFoundException;
 import com.ttn.linksharing.repositories.UserRepository;
 import com.ttn.linksharing.utils.CryptoUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +16,16 @@ public class LoginService {
     @Autowired
     UserRepository userRepository;
 
-    public User loginUser(String username, String password){
+    public User loginUser(String username, String password) {
         // sending same parameter two times because it can have either email or username
+        Logger logger = LoggerFactory.getLogger(LoginService.class);
+        logger.info(username, password);
         User user = userRepository.findByUsernameOrEmail(username, username);
-        if(user == null){
+        if (user == null) {
             throw new UserNotFoundException("No such user exists!");
-        }
-        else if(CryptoUtils.decrypt(user.getPassword()).equals(password)){
+        } else if (CryptoUtils.decrypt(user.getPassword()).equals(password)) {
             return user;
-        }
-        else{
+        } else {
             throw new IncorrectPasswordException("Password is incorrect!");
         }
     }

@@ -25,10 +25,14 @@
         </form>
     </nav>
 
-    <!-----------------------------------------Content------------------------------------------------------------>
+    <!----------------------------------------------Content------------------------------------------------------------>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-8" id="content">
+
+                <!-----------------------------------Recent Shares----------------------------------------------------->
+
                 <div class="card">
                     <div class="card-header">
                         Recent Shares
@@ -76,6 +80,9 @@
                     </div>
                 </div>
                 <hr>
+
+                <!-----------------------------------Top Posts-------------------------------------------------------->
+
                 <div class="card">
                     <div class="card-header">
                         Top Posts
@@ -102,30 +109,36 @@
                     </div>
                 </div>
             </div>
+            <!-----------------------------------------------sidebar--------------------------------------------------->
+
             <div id="sidebar" class="col-md-4">
                 <div class="well">
+
+                    <!-----------------------------------------Login---------------------------------------------------->
+
                     <div class="card">
                         <div class="card-header">
                             Login
                         </div>
                         <div class="card-body">
-                            <form th:action="@{/login}" action="#" th:object="${user}" method="post">
+                            <form th:action="@{/login}" action="#" th:object="${loginCO}" method="post">
                                 <div class="form-group row">
-                                    <label for="username-login" class="col-md-4 col-form-label">Username</label>
+                                    <label for="username-login" class="col-md-4 col-form-label">Username: </label>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control" th:field="*{username}" name="username" id="username-login" placeholder="Username/Email">
+                                        <input type="text" class="form-control" th:field="*{username}" name="username" id="username-login" placeholder="Username/Email" autocomplete="off">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="inputPassword" class="col-md-4 col-form-label">Password</label>
+                                    <label for="inputPassword" class="col-md-4 col-form-label">Password: </label>
                                     <div class="col-md-8">
                                         <input type="password" class="form-control" th:field="*{password}" name="password" id="inputPassword" placeholder="Password">
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <div th:each="error: ${loginErrorsList}">
-                                        <div th:text="error"></div>
-                                    </div>
+                                <div id="loginErrors" th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger'" th:role="'alert'" style="padding: 2px; font-size: 14px">
+                                    <ul style="margin: 2px">
+                                        <li th:errors="*{username}"></li>
+                                        <li th:errors="*{password}"></li>
+                                    </ul>
                                 </div>
                                 <a href="#">Forgot password?</a>
                                 <input type="submit" class="btn btn-primary" value="Login" style="float: right">
@@ -134,22 +147,25 @@
                     </div>
                 </div>
                 <hr>
+
+                <!---------------------------------------Register------------------------------------------------------>
+
                 <div class="card">
                     <div class="card-header">
                         Register
                     </div>
                     <div class="card-body">
-                        <form th:action="@{/signup}" th:object="${user}"  method="post">
+                        <form action="#" th:action="@{/signup}" th:object="${signupCO}" method="post">
                             <div class="form-group row">
                                 <label for="firstname" class="col-md-4 col-form-label">First Name: </label>
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control" th:field="*{firstname}" id="firstname" name="firstname" placeholder="First Name">
+                                    <input type="text" class="form-control" th:field="*{firstname}" id="firstname" name="firstname" placeholder="First Name" autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="lastname" class="col-md-4 col-form-label">Last Name: </label>
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control" th:field="*{lastname}" id="lastname" name="lastname" placeholder="Last Name">
+                                    <input type="text" class="form-control" th:field="*{lastname}" id="lastname" name="lastname" placeholder="Last Name" autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -161,7 +177,7 @@
                             <div class="form-group row">
                                 <label for="username" class="col-md-4 col-form-label">Username: </label>
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control" th:field="*{username}" id="username" name="username" placeholder="Username">
+                                    <input type="text" class="form-control" th:field="*{username}" id="username" name="username" placeholder="Username" autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -173,7 +189,7 @@
                             <div class="form-group row">
                                 <label for="confirmPassword" class="col-md-4 col-form-label">Confirm Password: </label>
                                 <div class="col-md-8">
-                                    <input type="password" class="form-control"  id="confirmPassword" placeholder="Confirm Password">
+                                    <input type="password" class="form-control" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirm Password">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -183,11 +199,19 @@
                                 <div class="col-md-8">
                                     <div class="input-group mb-3">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input form-control" th:field="*{profilePicturePath}" id="photo" aria-describedby="inputGroupFileAddon01">
+                                            <input type="file" class="custom-file-input form-control" th:field="*{photo}" id="photo" aria-describedby="inputGroupFileAddon01">
                                             <label class="custom-file-label" for="photo">Choose file</label>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div id="signupErrors" th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger'" th:role="'alert'" style="padding: 2px; font-size: 14px">
+                                <ul style="margin: 2px">
+                                    <li th:errors="*{firstname}"></li>
+                                    <li th:errors="*{email}"></li>
+                                    <li th:errors="*{username}"></li>
+                                    <li th:errors="*{password}"></li>
+                                </ul>
                             </div>
                             <input type="submit" class="btn btn-primary" value="Register" style="float: right">
                         </form>
@@ -198,6 +222,7 @@
     </div>
 
     <!----------------------------------------------Footer----------------------------------------------------->
+
     <footer class="container-fluid text-center bg-dark">
         <p>TO THE NEW</p>
     </footer>
