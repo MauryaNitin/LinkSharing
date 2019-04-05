@@ -10,12 +10,10 @@ public class Rating implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "resource_id")
+    @ManyToOne
     private Resource resource;
 
     private Integer rating;

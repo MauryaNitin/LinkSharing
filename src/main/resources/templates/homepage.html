@@ -115,7 +115,6 @@
                 <div class="well">
 
                     <!-----------------------------------------Login---------------------------------------------------->
-
                     <div class="card">
                         <div class="card-header">
                             Login
@@ -155,41 +154,41 @@
                         Register
                     </div>
                     <div class="card-body">
-                        <form action="#" th:action="@{/signup}" th:object="${signupCO}" method="post">
+                        <form th:action="@{/signup}" action="#" th:object="${signupCO}" method="post" enctype="multipart/form-data">
                             <div class="form-group row">
-                                <label for="firstname" class="col-md-4 col-form-label">First Name: </label>
+                                <label for="first-name" class="col-md-4 col-form-label">First Name: </label>
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control" th:field="*{firstname}" id="firstname" name="firstname" placeholder="First Name" autocomplete="off">
+                                    <input type="text" class="form-control" th:field="*{firstname}" id="first-name" name="firstname" placeholder="First Name" autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="lastname" class="col-md-4 col-form-label">Last Name: </label>
+                                <label for="last-name" class="col-md-4 col-form-label">Last Name: </label>
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control" th:field="*{lastname}" id="lastname" name="lastname" placeholder="Last Name" autocomplete="off">
+                                    <input type="text" class="form-control" th:field="*{lastname}" id="last-name" name="lastname" placeholder="Last Name" autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="email" class="col-md-4 col-form-label">Email: </label>
+                                <label for="e-mail" class="col-md-4 col-form-label">Email: </label>
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control" th:field="*{email}" id="email" name="email" placeholder="Email">
+                                    <input type="text" class="form-control" th:field="*{email}" id="e-mail" name="email" placeholder="Email">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="username" class="col-md-4 col-form-label">Username: </label>
+                                <label for="user-name" class="col-md-4 col-form-label">Username: </label>
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control" th:field="*{username}" id="username" name="username" placeholder="Username" autocomplete="off">
+                                    <input type="text" class="form-control" th:field="*{username}" id="user-name" name="username" placeholder="Username" autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label">Password: </label>
+                                <label for="pass-word" class="col-md-4 col-form-label">Password: </label>
                                 <div class="col-md-8">
-                                    <input type="password" class="form-control" th:field="*{password}" id="password" placeholder="Password">
+                                    <input type="password" class="form-control" th:field="*{password}" id="pass-word" placeholder="Password">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="confirmPassword" class="col-md-4 col-form-label">Confirm Password: </label>
+                                <label for="confirm-Password" class="col-md-4 col-form-label">Confirm Password: </label>
                                 <div class="col-md-8">
-                                    <input type="password" class="form-control" th:field="*{confirmPassword}" id="confirmPassword" placeholder="Confirm Password">
+                                    <input type="password" class="form-control" th:field="*{confirmPassword}" id="confirm-Password" placeholder="Confirm Password">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -205,7 +204,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="signupErrors" th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger'" th:role="'alert'" style="padding: 2px; font-size: 14px">
+                            <div id="signupErrors" th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger'" style="padding: 2px; font-size: 14px">
                                 <ul style="margin: 2px">
                                     <li th:errors="*{firstname}"></li>
                                     <li th:errors="*{email}"></li>
@@ -220,6 +219,7 @@
             </div>
         </div>
     </div>
+
 
     <!----------------------------------------------Footer----------------------------------------------------->
 

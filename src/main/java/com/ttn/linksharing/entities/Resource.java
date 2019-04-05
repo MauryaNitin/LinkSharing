@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -15,6 +16,16 @@ public class Resource implements Serializable {
     @NotNull(message = "Description cannot cannot be empty!")
     @Size(min = 2, message = "Description should be more than 2 characters!")
     private String description;
+
+    @ManyToOne
+    private User user;
+
+    @ManyToOne
+    private Topic topic;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "resource")
+    private List<Rating> rating;
+
 
     public Long getId() {
         return id;

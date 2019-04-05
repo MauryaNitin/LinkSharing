@@ -1,9 +1,8 @@
 package com.ttn.linksharing.exceptions.exceptionHandlers;
 
-import com.ttn.linksharing.exceptions.GenericExceptionResponse;
-import com.ttn.linksharing.exceptions.IncorrectPasswordException;
-import com.ttn.linksharing.exceptions.UserAlreadyExistsException;
-import com.ttn.linksharing.exceptions.UserNotFoundException;
+import com.ttn.linksharing.CO.LoginCO;
+import com.ttn.linksharing.CO.SignupCO;
+import com.ttn.linksharing.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
@@ -32,6 +32,17 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     @Autowired
     public CustomResponseEntityExceptionHandler(MessageSource messageSource) {
         this.messageSource = messageSource;
+    }
+
+    @ExceptionHandler(StorageFileNotFoundException.class)
+    public ResponseEntity<Object> handleStorageFileNotFound(StorageFileNotFoundException exc) {
+        return ResponseEntity.notFound().build();
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public final ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex, WebRequest webRequest){
+        GenericExceptionResponse genericExceptionResponse = new GenericExceptionResponse(new Date(), ex.getMessage(), webRequest.getDescription(false));
+        return new ResponseEntity<>(genericExceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

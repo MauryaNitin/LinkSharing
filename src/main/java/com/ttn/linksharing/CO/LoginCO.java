@@ -4,13 +4,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class LoginCO {
-
     @NotBlank(message = "Username cannot be empty!")
     @Size(min = 3, message = "Username must be more than 3 characters!")
     private String username;
 
     @NotBlank(message = "Password cannot be empty!")
-    @Size(min = 5, message = "Password should be atleast 5 characters long!")
+    @Size(min = 3, message = "Password should be atleast 3 characters long!")
     private String password;
 
     public String getUsername() {
@@ -27,5 +26,13 @@ public class LoginCO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "LoginCO{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

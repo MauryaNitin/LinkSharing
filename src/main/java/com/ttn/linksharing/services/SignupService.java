@@ -4,6 +4,7 @@ import com.ttn.linksharing.entities.User;
 import com.ttn.linksharing.exceptions.UserAlreadyExistsException;
 import com.ttn.linksharing.repositories.UserRepository;
 import com.ttn.linksharing.utils.CryptoUtils;
+import com.ttn.linksharing.utils.EmailServiceUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 public class SignupService {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    EmailServiceUtil emailService;
 
     public User createUser(User user) {
         if(userRepository.existsByUsernameOrEmail(user.getUsername(), user.getEmail())){
@@ -27,9 +31,15 @@ public class SignupService {
 //        User user1 = userRepository.save(user);
 //        session.getTransaction().commit();
 //        session.close();
-
-        return userRepository.save(user);
-
+        User savedUser = userRepository.save(user);
+        if(savedUser != null){
+            emailService.sendMail(
+                    savedUser.getEmail(),
+                    "Account Activation",
+                    "Welcome to link sharing @ TO THE NEW"
+            );
+        }
+        return savedUser;
     }
 
 }

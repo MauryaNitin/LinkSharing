@@ -1,11 +1,12 @@
 package com.ttn.linksharing.CO;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 public class SignupCO {
-
     @NotBlank(message = "First name cannot be empty!")
     @Size(min=2, message = "First name should have more than 2 characters!")
     private String firstname;
@@ -24,7 +25,7 @@ public class SignupCO {
 
     private String confirmPassword;
 
-    private String photo;
+    private MultipartFile photo;
 
     public String getFirstname() {
         return firstname;
@@ -74,11 +75,11 @@ public class SignupCO {
         this.confirmPassword = confirmPassword;
     }
 
-    public String getPhoto() {
+    public MultipartFile getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(MultipartFile photo) {
         this.photo = photo;
     }
 

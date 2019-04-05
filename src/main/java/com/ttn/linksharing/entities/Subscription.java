@@ -11,15 +11,21 @@ public class Subscription implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "topic_id")
+    @ManyToOne
     private Topic topic;
 
     private Seriousness seriousness;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public User getUser() {
         return user;

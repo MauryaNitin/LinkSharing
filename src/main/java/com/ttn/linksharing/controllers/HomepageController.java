@@ -20,12 +20,4 @@ public class HomepageController {
         return "homepage";
     }
 
-//    @GetMapping("/")
-//    public ModelAndView homepage(){
-//        ModelAndView mv = new ModelAndView("homepage");
-//        mv.addObject("loginCO", new LoginCO());
-//        mv.addObject("signupCO", new SignupCO());
-//        return mv;
-//    }
-
 }

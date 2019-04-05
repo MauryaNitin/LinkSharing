@@ -57,22 +57,31 @@ public class User implements Serializable{
     @UpdateTimestamp
     private Date updatedOn;
 
-    private Roles role;
+    private Roles role = Roles.USER;
 
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "topic_id")
     )
-    @OneToMany
-    List<Topic> topicsList;
+    private List<Topic> topicsList;
 
-
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinTable(
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "resource_id")
     )
-    @OneToMany
-    List<Resource> resourcesList;
+    private List<Resource> resourcesList;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "subscription_id")
+    )
+    private List<Subscription> subscriptions;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Rating> rating;
 
     public User(SignupCO signupCO){
         this.firstname = signupCO.getFirstname();
@@ -80,7 +89,7 @@ public class User implements Serializable{
         this.username = signupCO.getUsername();
         this.email = signupCO.getEmail();
         this.password = signupCO.getPassword();
-        this.profilePicturePath = signupCO.getPhoto();
+        this.profilePicturePath = signupCO.getPhoto().getOriginalFilename();
     }
 
     public User(){}
@@ -141,12 +150,28 @@ public class User implements Serializable{
         this.profilePicturePath = profilePicturePath;
     }
 
-    public Boolean getIsActive() {
+    public Boolean getActive() {
         return isActive;
     }
 
-    public void setIsActive(boolean active) {
+    public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public Date getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public Date getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public void setUpdatedOn(Date updatedOn) {
+        this.updatedOn = updatedOn;
     }
 
     public Roles getRole() {
@@ -173,20 +198,32 @@ public class User implements Serializable{
         this.resourcesList = resourcesList;
     }
 
-    public Date getCreatedOn() {
-        return createdOn;
+    public List<Subscription> getSubscriptions() {
+        return subscriptions;
     }
 
-    public void setCreatedOn(Date createdOn) {
-        this.createdOn = createdOn;
+    public void setSubscriptions(List<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
     }
 
-    public Date getUpdatedOn() {
-        return updatedOn;
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", profilePicturePath='" + profilePicturePath + '\'' +
+                ", isActive=" + isActive +
+                ", createdOn=" + createdOn +
+                ", updatedOn=" + updatedOn +
+                ", role=" + role +
+                ", topicsList=" + topicsList +
+                ", resourcesList=" + resourcesList +
+                ", subscriptions=" + subscriptions +
+                ", rating=" + rating +
+                '}';
     }
-
-    public void setUpdatedOn(Date updatedOn) {
-        this.updatedOn = updatedOn;
-    }
-
 }

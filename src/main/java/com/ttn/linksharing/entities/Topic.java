@@ -1,5 +1,7 @@
 package com.ttn.linksharing.entities;
 
+import com.ttn.linksharing.DTO.TopicDTO;
+import com.ttn.linksharing.enums.Visibility;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -20,7 +22,7 @@ public class Topic implements Serializable {
     @Size(min = 2, message = "Topic name must have atleast 2 characters!")
     private String name;
 
-    private Boolean visibility;
+    private Visibility visibility;
 
     @CreationTimestamp
     @Column(name = "created_on")
@@ -35,7 +37,24 @@ public class Topic implements Serializable {
             joinColumns = @JoinColumn(name = "topic_id"),
             inverseJoinColumns = @JoinColumn(name = "resource_id")
     )
-    List<Resource> resourcesList;
+    private List<Resource> resourcesList;
+
+    @ManyToOne
+    private User user;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "topic_id"),
+            inverseJoinColumns = @JoinColumn(name = "subscription_id")
+    )
+    private List<Subscription> subscriptions;
+
+    public Topic(TopicDTO topicDTO) {
+        this.name = topicDTO.getName();
+        this.visibility = topicDTO.getVisibility();
+    }
+
+    public Topic(){}
 
     public Long getId() {
         return id;
@@ -53,11 +72,11 @@ public class Topic implements Serializable {
         this.name = name;
     }
 
-    public Boolean getVisibility() {
+    public Visibility getVisibility() {
         return visibility;
     }
 
-    public void setVisibility(Boolean visibility) {
+    public void setVisibility(Visibility visibility) {
         this.visibility = visibility;
     }
 
@@ -83,5 +102,21 @@ public class Topic implements Serializable {
 
     public void setUpdatedOn(Date updatedOn) {
         this.updatedOn = updatedOn;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Subscription> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(List<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
     }
 }
