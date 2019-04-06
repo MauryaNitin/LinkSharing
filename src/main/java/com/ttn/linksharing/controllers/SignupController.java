@@ -3,6 +3,7 @@ package com.ttn.linksharing.controllers;
 import com.ttn.linksharing.CO.LoginCO;
 import com.ttn.linksharing.CO.SignupCO;
 import com.ttn.linksharing.entities.User;
+import com.ttn.linksharing.services.LoginService;
 import com.ttn.linksharing.services.SignupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,34 +29,35 @@ public class SignupController {
     @Autowired
     SignupService signupService;
 
+    @Autowired
+    FileUploadController uploader;
+
+    @Autowired
+    LoginService loginService;
+
     Logger logger = LoggerFactory.getLogger(SignupController.class);
 
     @PostMapping("/signup")
-    public String signup(@Valid @ModelAttribute("signupCO") SignupCO signupCO, BindingResult result, HttpServletRequest request, Model model, @RequestParam("photo") MultipartFile photo){
+    public String signup(@Valid @ModelAttribute("signupCO") SignupCO signupCO, BindingResult result, HttpServletRequest request, Model model){
         logger.debug(signupCO.toString());
+        if(!signupCO.getConfirmPassword().equals(signupCO.getPassword())){
+            result.addError(new ObjectError("confirmPassword", "Password did not match"));
+        }
         if(result.hasErrors()){
             logger.warn(result.getFieldErrors().toString());
             model.addAttribute("loginCO", new LoginCO());
             return "homepage";
         }
         User user = new User(signupCO);
-        try {
-            byte[] profilePic = signupCO.getPhoto().getBytes();
-            Path path = Paths.get(System.getProperty("user.dir") + "/" + signupCO.getPhoto().getOriginalFilename());
-            Files.write(path, profilePic);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        uploader.saveProfilePicture(signupCO.getPhoto(), signupCO);
         User user1 = signupService.createUser(user);
         if(user1 == null){
             logger.error("Error occurred in saving user. Null returned from db.");
             return "errors";
         }
-//        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("{id}").buildAndExpand(user1.getUserId()).toUri();
-//        return ResponseEntity.created(uri).build();
-//        user1 = loginService.loginUser(user.getUsername(), user.getPassword());
-//        HttpSession session = request.getSession();
-//        session.setAttribute("loggedInUser", user1);
+//        else{
+//            loginService.loginUser(user.getUsername(), user.getPassword());
+//        }
         return "redirect:/dashboard";
     }
 }

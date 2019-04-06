@@ -16,15 +16,10 @@
         </a>
         <div>
             <ul class="nav justify-content-end">
-                <!--<li class="nav-item">-->
-                    <!--<form class="form-inline">-->
-                        <!--<input class="form-control mr-md-2" type="search" placeholder="Search" aria-label="Search">-->
-                        <!--<button class="btn btn-outline-success my-2 my-md-0" type="submit">Search</button>-->
-                    <!--</form>-->
-                <!--</li>-->
                 <li class="nav-item">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Search" aria-label="search" aria-describedby="search-btn">
+                        <input type="text" class="form-control" placeholder="Search" aria-label="search"
+                               aria-describedby="search-btn">
                         <div class="input-group-append">
                             <button class="btn btn-primary" type="button" id="search-btn">Search</button>
                         </div>
@@ -52,8 +47,13 @@
                 </li>
                 <li class="nav-item">
                     <div class="btn-group">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fa fa-user-circle" aria-hidden="true"></i> Username
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false" th:text="${userDTO.getFirstname()}">
+                            <img th:if="${userDTO.getPhoto()}"
+                                 th:src="${'images/' + userDTO.getUsername() + '_' + userDTO.getPhoto()}"
+                                 alt="profile-picture" width="30px" height="30px">
+                            <i th:unless="${userDTO.getPhoto()}" th:classappend="'fa fa-user-circle'"
+                               aria-hidden="true"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="#">Profile</a>
@@ -69,7 +69,8 @@
         </div>
     </nav>
     <!----------------------Modals------------------------>
-    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel" aria-hidden="true">
+    <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -79,37 +80,46 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form th:action="@{/topic/create}" action="#" th:object="${topicCO}" method="post">
                         <div class="form-group row">
                             <label for="topicName" class="col-sm-2 col-form-label">Name: </label>
                             <div class="col-sm-10">
-                                <input class="form-control mr-md-2" type="search" id="topicName" placeholder="Topic">
+                                <input class="form-control mr-md-2" th:field="*{name}" type="search" id="topicName"
+                                       placeholder="Topic" autocomplete="off">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="visibility" class="col-sm-2 col-form-label">Visibility: </label>
                             <div class="col-sm-10">
-                                <div class="dropdown" id="visibility">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Select Visibility
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Public</a>
-                                        <a class="dropdown-item" href="#">Private</a>
-                                    </div>
+                                <div class="input-group mb-3">
+                                    <select class="custom-select" id="visibility" name="visibility"
+                                            th:field="*{visibility}">
+                                        <option th:each="visibilityItr : ${T(com.ttn.linksharing.enums.Visibility).values()}"
+                                                th:value="${visibilityItr}"
+                                                th:text="${visibilityItr.getValue()}"></option>
+                                    </select>
+                                </div>
+                                <div th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger'"
+                                     style="padding: 2px; font-size: 14px">
+                                    <ul style="margin: 2px">
+                                        <li th:errors="*{name}"></li>
+                                        <li th:errors="*{visibility}"></li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
+                        <hr>
+                        <div style="float: right">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-primary" value="Create"/>
+                        </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Create</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -130,7 +140,8 @@
                             <label for="inviteTopic" class="col-sm-2 col-form-label">Topic: </label>
                             <div class="col-sm-10">
                                 <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="inviteTopic" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="inviteTopic"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Select Topic
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -149,7 +160,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-labelledby="linkModalLabel" aria-hidden="true">
+    <div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-labelledby="linkModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -163,20 +175,23 @@
                         <div class="form-group row">
                             <label for="linkUrl" class="col-sm-2 col-form-label">Link: </label>
                             <div class="col-sm-10">
-                                <input name="linkUrl" class="form-control mr-md-2" type="search" id="linkUrl" placeholder="Link">
+                                <input name="linkUrl" class="form-control mr-md-2" type="search" id="linkUrl"
+                                       placeholder="Link">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="linkDesc" class="col-sm-2 col-form-label">Description: </label>
                             <div class="col-sm-10">
-                                <textarea name="linkDesc" class="form-control mr-md-2"  rows="4" id="linkDesc" placeholder="Link Description"></textarea>
+                                <textarea name="linkDesc" class="form-control mr-md-2" rows="4" id="linkDesc"
+                                          placeholder="Link Description"></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="linkTopic" class="col-sm-2 col-form-label">Topic: </label>
                             <div class="col-sm-10">
                                 <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="linkTopic" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="linkTopic"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Select Topic
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -195,7 +210,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="docModal" tabindex="-1" role="dialog" aria-labelledby="docModalLabel" aria-hidden="true">
+    <div class="modal fade" id="docModal" tabindex="-1" role="dialog" aria-labelledby="docModalLabel"
+         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -209,20 +225,23 @@
                         <div class="form-group row">
                             <label for="docFile" class="col-sm-2 col-form-label">Document: </label>
                             <div class="col-sm-10">
-                                <input name="docFile" class="form-control mr-md-2" type="File" id="docFile" placeholder="Document">
+                                <input name="docFile" class="form-control mr-md-2" type="File" id="docFile"
+                                       placeholder="Document">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="docDesc" class="col-sm-2 col-form-label">Description: </label>
                             <div class="col-sm-10">
-                                <textarea name="linkDesc" class="form-control mr-md-2" rows="4" id="docDesc" placeholder="Document Description"></textarea>
+                                <textarea name="linkDesc" class="form-control mr-md-2" rows="4" id="docDesc"
+                                          placeholder="Document Description"></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="docTopic" class="col-sm-2 col-form-label">Topic: </label>
                             <div class="col-sm-10">
                                 <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="docTopic" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="docTopic"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Select Topic
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">

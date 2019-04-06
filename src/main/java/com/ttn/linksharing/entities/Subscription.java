@@ -17,6 +17,7 @@ public class Subscription implements Serializable {
     @ManyToOne
     private Topic topic;
 
+    @Enumerated(EnumType.STRING)
     private Seriousness seriousness;
 
     public Long getId() {

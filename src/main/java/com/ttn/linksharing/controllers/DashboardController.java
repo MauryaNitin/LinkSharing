@@ -1,5 +1,7 @@
 package com.ttn.linksharing.controllers;
 
+import com.ttn.linksharing.CO.TopicCO;
+import com.ttn.linksharing.DTO.TopicDTO;
 import com.ttn.linksharing.DTO.UserDTO;
 import com.ttn.linksharing.entities.User;
 import com.ttn.linksharing.services.UserService;
@@ -30,9 +32,13 @@ public class DashboardController {
         Long userId = (Long)session.getAttribute("loggedInUserId");
         model.addAttribute("userId", userId);
         UserDTO userDTO = userService.getUserDto(userId);
+        TopicCO topicCO = new TopicCO();
         logger.info(userDTO.toString());
-        model.addAttribute("userDto", userDTO);
+        model.addAttribute("userDTO", userDTO);
+        model.addAttribute("topicCO", topicCO);
         return "dashboard";
     }
+
+
 
 }

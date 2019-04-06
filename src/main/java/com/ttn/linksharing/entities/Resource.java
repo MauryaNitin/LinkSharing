@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,7 +25,7 @@ public class Resource implements Serializable {
     private Topic topic;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "resource")
-    private List<Rating> rating;
+    private List<Rating> rating = new ArrayList<>();
 
 
     public Long getId() {

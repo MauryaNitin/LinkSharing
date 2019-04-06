@@ -11,6 +11,7 @@ import com.ttn.linksharing.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.List;
@@ -27,6 +28,14 @@ public class UserService {
     @Autowired
     TopicRepository topicRepository;
 
+
+    public User createUser(User user){
+        return userRepository.save(user);
+    }
+
+    public Boolean findByUsernameOrEmail(User user){
+        return  userRepository.existsByUsernameOrEmail(user.getUsername(), user.getEmail());
+    }
 
     public User getUserById(Long id){
         Optional<User> optional = userRepository.findById(id);

@@ -1,5 +1,6 @@
 package com.ttn.linksharing.entities;
 
+import com.ttn.linksharing.CO.TopicCO;
 import com.ttn.linksharing.DTO.TopicDTO;
 import com.ttn.linksharing.enums.Visibility;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class Topic implements Serializable {
     @Size(min = 2, message = "Topic name must have atleast 2 characters!")
     private String name;
 
+    @Enumerated(EnumType.STRING)
     private Visibility visibility;
 
     @CreationTimestamp
@@ -32,26 +35,24 @@ public class Topic implements Serializable {
     @Column(name = "updated_on")
     private Date updatedOn;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "topic_id"),
-            inverseJoinColumns = @JoinColumn(name = "resource_id")
-    )
-    private List<Resource> resourcesList;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "topic_id"),
-            inverseJoinColumns = @JoinColumn(name = "subscription_id")
-    )
-    private List<Subscription> subscriptions;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "topic")
+    private List<Resource> resourcesList = new ArrayList<>();
 
-    public Topic(TopicDTO topicDTO) {
-        this.name = topicDTO.getName();
-        this.visibility = topicDTO.getVisibility();
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "topic")
+    private List<Subscription> subscriptions = new ArrayList<>();
+
+//    public Topic(TopicDTO topicDTO) {
+//        this.name = topicDTO.getName();
+//        this.visibility = topicDTO.getVisibility();
+//    }
+
+    public Topic(TopicCO topicCO){
+        this.name = topicCO.getName();
+        this.visibility = topicCO.getVisibility();
     }
 
     public Topic(){}

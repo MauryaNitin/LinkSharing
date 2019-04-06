@@ -39,16 +39,21 @@ public class LoginController {
 //    }
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute("loginCO") LoginCO loginCO, BindingResult result, HttpServletRequest request, Model model) {
-        logger.info(loginCO.toString());
-        if (result.hasErrors()) {
-            logger.warn(result.getFieldErrors().toString());
-            model.addAttribute("signupCO", new SignupCO());
-            return "homepage";
+    public String login(@Valid @ModelAttribute("loginCO") LoginCO loginCO, BindingResult result, HttpServletRequest request,HttpSession session, Model model) {
+        if(request.getSession(false) == null){
+            return "redirect:/dashboard";
         }
-        User user1 = loginService.loginUser(loginCO.getUsername(), loginCO.getPassword());
-        HttpSession session = request.getSession(false);
-        session.setAttribute("loggedInUserId", user1.getId());
-        return "redirect:/dashboard";
+        else{
+            logger.debug(loginCO.toString());
+            if (result.hasErrors()) {
+                logger.warn(result.getFieldErrors().toString());
+                model.addAttribute("signupCO", new SignupCO());
+                return "homepage";
+            }
+            User user1 = loginService.loginUser(loginCO.getUsername(), loginCO.getPassword());
+            session = request.getSession(false);
+            session.setAttribute("loggedInUserId", user1.getId());
+            return "redirect:/dashboard";
+        }
     }
 }

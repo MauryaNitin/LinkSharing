@@ -15,14 +15,14 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4">
-                                <img th:if="${userDto.getPhoto()}" th:src="${'images/' + userDto.getPhoto()}" alt="profile-pic" width="100px" height="100px">
-                                <img th:unless="${userDto.getPhoto()}" src="images/default-person.jpg" alt="profile-picture" width="100px" height="100px">
+                                <img th:if="${userDTO.getPhoto()}" th:src="${'images/' + userDTO.getUsername() + '_' + userDTO.getPhoto()}" alt="profile-pic" width="100px" height="100px">
+                                <img th:unless="${userDTO.getPhoto()}" src="images/default-person.jpg" alt="profile-picture" width="100px" height="100px">
                             </div>
                             <div class="col-md-8">
-                                <div th:text="${userDto.getFirstname()}" class="card-title">
+                                <div th:text="${userDTO.getFirstname()}" class="card-title">
                                     <!--Username-->
                                 </div>
-                                <div th:text="${'@' + userDto.getUsername()}" class="card-text"></div>
+                                <div th:text="${'@' + userDTO.getUsername()}" class="card-text"></div>
                                 <div class="card-text">
                                     <div class="row">
                                         <div class="col-md-6">Subscriptions</div>

@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,31 +58,20 @@ public class User implements Serializable{
     @UpdateTimestamp
     private Date updatedOn;
 
+    @Enumerated(EnumType.STRING)
     private Roles role = Roles.USER;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "topic_id")
-    )
-    private List<Topic> topicsList;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "resource_id")
-    )
-    private List<Resource> resourcesList;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "subscription_id")
-    )
-    private List<Subscription> subscriptions;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Topic> topics = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Rating> rating;
+    private List<Resource> resources = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Subscription> subscriptions = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Rating> ratings = new ArrayList<>();
 
     public User(SignupCO signupCO){
         this.firstname = signupCO.getFirstname();
@@ -182,20 +172,28 @@ public class User implements Serializable{
         this.role = role;
     }
 
-    public List<Topic> getTopicsList() {
-        return topicsList;
+    public List<Topic> getTopics() {
+        return topics;
     }
 
-    public void setTopicsList(List<Topic> topicsList) {
-        this.topicsList = topicsList;
+    public void setTopics(List<Topic> topics) {
+        this.topics = topics;
     }
 
-    public List<Resource> getResourcesList() {
-        return resourcesList;
+    public List<Resource> getResources() {
+        return resources;
     }
 
-    public void setResourcesList(List<Resource> resourcesList) {
-        this.resourcesList = resourcesList;
+    public void setResources(List<Resource> resources) {
+        this.resources = resources;
+    }
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
     }
 
     public List<Subscription> getSubscriptions() {
@@ -206,24 +204,4 @@ public class User implements Serializable{
         this.subscriptions = subscriptions;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", profilePicturePath='" + profilePicturePath + '\'' +
-                ", isActive=" + isActive +
-                ", createdOn=" + createdOn +
-                ", updatedOn=" + updatedOn +
-                ", role=" + role +
-                ", topicsList=" + topicsList +
-                ", resourcesList=" + resourcesList +
-                ", subscriptions=" + subscriptions +
-                ", rating=" + rating +
-                '}';
-    }
 }
