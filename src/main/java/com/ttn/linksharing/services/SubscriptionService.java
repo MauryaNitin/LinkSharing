@@ -3,7 +3,6 @@ package com.ttn.linksharing.services;
 import com.ttn.linksharing.entities.Subscription;
 import com.ttn.linksharing.entities.Topic;
 import com.ttn.linksharing.entities.User;
-import com.ttn.linksharing.enums.Seriousness;
 import com.ttn.linksharing.repositories.SubscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

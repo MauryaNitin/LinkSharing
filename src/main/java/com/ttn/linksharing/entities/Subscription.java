@@ -18,7 +18,7 @@ public class Subscription implements Serializable {
     private Topic topic;
 
     @Enumerated(EnumType.STRING)
-    private Seriousness seriousness;
+    private Seriousness seriousness = Seriousness.CASUAL;
 
     public Long getId() {
         return id;
