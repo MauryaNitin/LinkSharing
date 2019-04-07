@@ -51,4 +51,14 @@ public class Subscription implements Serializable {
     public void setSeriousness(Seriousness seriousness) {
         this.seriousness = seriousness;
     }
+
+    @Override
+    public String toString() {
+        return "Subscription{" +
+                "id=" + id +
+                ", user=" + user +
+                ", topic=" + topic +
+                ", seriousness=" + seriousness +
+                '}';
+    }
 }

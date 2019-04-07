@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,19 +39,19 @@ public class SignupController {
     Logger logger = LoggerFactory.getLogger(SignupController.class);
 
     @PostMapping("/signup")
-    public String signup(@Valid @ModelAttribute("signupCO") SignupCO signupCO, BindingResult result, HttpServletRequest request, Model model){
+    public String signup(@Valid @ModelAttribute("signupCO") SignupCO signupCO, BindingResult result, ModelMap model){
         logger.debug(signupCO.toString());
         if(!signupCO.getConfirmPassword().equals(signupCO.getPassword())){
             result.addError(new ObjectError("confirmPassword", "Password did not match"));
         }
         if(result.hasErrors()){
             logger.warn(result.getFieldErrors().toString());
-            model.addAttribute("loginCO", new LoginCO());
+//            model.addAttribute("loginCO", new LoginCO());
             return "homepage";
         }
         User user = new User(signupCO);
-        uploader.saveProfilePicture(signupCO.getPhoto(), signupCO);
         User user1 = signupService.createUser(user);
+        uploader.saveProfilePicture(signupCO.getPhoto(), signupCO.getUsername());
         if(user1 == null){
             logger.error("Error occurred in saving user. Null returned from db.");
             return "errors";

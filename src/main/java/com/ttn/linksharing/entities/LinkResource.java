@@ -1,5 +1,6 @@
 package com.ttn.linksharing.entities;
 
+import com.ttn.linksharing.CO.LinkResourceCO;
 import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
@@ -12,6 +13,14 @@ public class LinkResource extends Resource implements Serializable {
     @Column(name = "link_url")
     @URL(message = "Url not valid!")
     private String linkUrl;
+
+    public LinkResource(LinkResourceCO linkResourceCO, Topic topic){
+        this.linkUrl = linkResourceCO.getUrl();
+        this.setDescription(linkResourceCO.getDescription());
+        this.setTopic(topic);
+    }
+
+    public LinkResource(){}
 
     public String getLinkUrl() {
         return linkUrl;

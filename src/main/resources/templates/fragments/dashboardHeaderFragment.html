@@ -41,7 +41,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-toggle="modal" data-target="#docModal">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#documentModal">
                         <i class="fa fa-file" aria-hidden="true"></i>
                     </a>
                 </li>
@@ -68,7 +68,11 @@
             </ul>
         </div>
     </nav>
+
     <!----------------------Modals------------------------>
+
+    <!-----------------------------------CREATE TOPIC------------------------------->
+
     <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="commentModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -118,6 +122,9 @@
             </div>
         </div>
     </div>
+
+    <!------------------------------SEND INVITATION MODAL----------------------------->
+
     <div class="modal fade" id="inviteModal" tabindex="-1" role="dialog" aria-labelledby="inviteModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -129,37 +136,45 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form th:action="@{/invite}" action="#" th:object="${invitationCO}" method="post" autocomplete="off">
                         <div class="form-group row">
                             <label for="invite-email" class="col-sm-2 col-form-label">Email: </label>
-                            <div class="col-sm-10">
-                                <input class="form-control mr-md-2" type="search" id="invite-email" placeholder="Email">
+                            <div class="col-md-1"></div>
+                            <div class="col-sm-9">
+                                <input th:field="*{email}" class="form-control mr-md-2" type="search" id="invite-email" placeholder="Email">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="inviteTopic" class="col-sm-2 col-form-label">Topic: </label>
-                            <div class="col-sm-10">
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="inviteTopic"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Select Topic
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Public</a>
-                                        <a class="dropdown-item" href="#">Private</a>
-                                    </div>
-                                </div>
+                            <label for="topicsList" class="col-sm-2 col-form-label">Topic: </label>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-9">
+                                <select class="custom-select" id="topicsList" name="topicsList"
+                                        th:field="*{topicId}">
+                                    <option th:each="subs : ${userDTO.getSubscriptions()}"
+                                            th:value="${subs.getId()}"
+                                            th:text="${subs.getName()}"></option>
+                                </select>
                             </div>
                         </div>
+                        <div th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger'" style="padding: 2px; font-size: 14px">
+                            <ul style="margin: 2px">
+                                <li th:errors="*{email}"></li>
+                                <li th:errors="*{topicId}"></li>
+                            </ul>
+                        </div>
+                        <hr>
+                        <div style="float: right">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-primary" value="Invite"/>
+                        </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Invite</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!------------------------------SHARE LINK MODAL------------------------------------>
+
     <div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-labelledby="linkModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -171,91 +186,113 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form th:action="@{/resources/link/create}" action="#" th:object="${linkResourceCO}" method="post">
                         <div class="form-group row">
                             <label for="linkUrl" class="col-sm-2 col-form-label">Link: </label>
-                            <div class="col-sm-10">
-                                <input name="linkUrl" class="form-control mr-md-2" type="search" id="linkUrl"
-                                       placeholder="Link">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-9">
+                                <input th:field="*{url}" name="linkUrl" class="form-control mr-md-2" type="search" id="linkUrl"
+                                       placeholder="Link" autocomplete="off">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="linkDesc" class="col-sm-2 col-form-label">Description: </label>
-                            <div class="col-sm-10">
-                                <textarea name="linkDesc" class="form-control mr-md-2" rows="4" id="linkDesc"
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-9">
+                                <textarea th:field="*{description}" name="linkDesc" class="form-control mr-md-2" rows="4" id="linkDesc"
                                           placeholder="Link Description"></textarea>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="linkTopic" class="col-sm-2 col-form-label">Topic: </label>
-                            <div class="col-sm-10">
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="linkTopic"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Select Topic
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Public</a>
-                                        <a class="dropdown-item" href="#">Private</a>
-                                    </div>
-                                </div>
+                            <label for="topicsList" class="col-sm-2 col-form-label">Topic: </label>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-9">
+                                <select class="custom-select" id="topicsList" name="topicsList"
+                                        th:field="*{topicId}">
+                                    <option th:each="subs : ${userDTO.getSubscriptions()}"
+                                            th:value="${subs.getId()}"
+                                            th:text="${subs.getName()}"></option>
+                                </select>
                             </div>
                         </div>
+                        <div th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger'" style="padding: 2px; font-size: 14px">
+                            <ul style="margin: 2px">
+                                <li th:errors="*{url}"></li>
+                                <li th:errors="*{description}"></li>
+                                <li th:errors="*{topicId}"></li>
+                            </ul>
+                        </div>
+                        <hr>
+                        <div style="float: right">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-primary" value="Share"/>
+                        </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Share</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="docModal" tabindex="-1" role="dialog" aria-labelledby="docModalLabel"
+
+    <!------------------------------SHARE DOCUMENT MODAL------------------------------------>
+
+
+    <div class="modal fade" id="documentModal" tabindex="-1" role="dialog" aria-labelledby="documentModalLabel"
          aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="docModalLabel">Share Document</h5>
+                    <h5 class="modal-title" id="documentModalLabel">Share Link</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form th:action="@{/resources/document/create}" action="#" th:object="${documentResourceCO}" method="post" enctype="multipart/form-data">
                         <div class="form-group row">
-                            <label for="docFile" class="col-sm-2 col-form-label">Document: </label>
-                            <div class="col-sm-10">
-                                <input name="docFile" class="form-control mr-md-2" type="File" id="docFile"
-                                       placeholder="Document">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="docDesc" class="col-sm-2 col-form-label">Description: </label>
-                            <div class="col-sm-10">
-                                <textarea name="linkDesc" class="form-control mr-md-2" rows="4" id="docDesc"
-                                          placeholder="Document Description"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="docTopic" class="col-sm-2 col-form-label">Topic: </label>
-                            <div class="col-sm-10">
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="docTopic"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Select Topic
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#">Public</a>
-                                        <a class="dropdown-item" href="#">Private</a>
+                            <label for="linkUrl" class="col-sm-2 col-form-label">Link: </label>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-9">
+                                <div class="input-group mb-3">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input form-control" th:field="*{document}" id="document" aria-describedby="inputGroupFileAddon01">
+                                        <label class="custom-file-label" for="document">Choose File</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="linkDesc" class="col-sm-2 col-form-label">Description: </label>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-9">
+                                <textarea th:field="*{description}" name="linkDesc" class="form-control mr-md-2" rows="4" id="linkDesc"
+                                          placeholder="Document Description"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="topicsList" class="col-sm-2 col-form-label">Topic: </label>
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-9">
+                                <select class="custom-select" id="topicsList" name="topicsList"
+                                        th:field="*{topicId}">
+                                    <option th:each="subs : ${userDTO.getSubscriptions()}"
+                                            th:value="${subs.getId()}"
+                                            th:text="${subs.getName()}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger'" style="padding: 2px; font-size: 14px">
+                            <ul style="margin: 2px">
+                                <li th:errors="*{document}"></li>
+                                <li th:errors="*{description}"></li>
+                                <li th:errors="*{topicId}"></li>
+                            </ul>
+                        </div>
+                        <hr>
+                        <div style="float: right">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" class="btn btn-primary" value="Share"/>
+                        </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Share</button>
                 </div>
             </div>
         </div>

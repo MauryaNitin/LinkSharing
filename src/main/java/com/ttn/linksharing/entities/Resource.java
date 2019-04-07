@@ -27,7 +27,6 @@ public class Resource implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "resource")
     private List<Rating> rating = new ArrayList<>();
 
-
     public Long getId() {
         return id;
     }
@@ -42,5 +41,29 @@ public class Resource implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Topic topic) {
+        this.topic = topic;
+    }
+
+    public List<Rating> getRating() {
+        return rating;
+    }
+
+    public void setRating(List<Rating> rating) {
+        this.rating = rating;
     }
 }

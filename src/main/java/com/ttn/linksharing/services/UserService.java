@@ -23,10 +23,10 @@ public class UserService {
     UserRepository userRepository;
 
     @Autowired
-    SubscriptionRepository subscriptionRepository;
+    SubscriptionService subscriptionService;
 
     @Autowired
-    TopicRepository topicRepository;
+    TopicService topicService;
 
 
     public User createUser(User user){
@@ -49,22 +49,26 @@ public class UserService {
     public UserDTO getUserDto(Long userId){
         UserDTO userDTO = new UserDTO(getUserById(userId));
 
-//        userDTO.setSubscriptions(getSubscriptionsCount(userId));
-//        userDTO.setTopics(topicRepository.get());
+        userDTO.setSubscriptions(getSubscriptions(userId));
+        userDTO.setTopics(getTopics(userId));
         return userDTO;
     }
-//
-//    public List<Subscription> getSubscriptions(Long userId){
-//        if(userId == null){
-//            throw new UserNotFoundException("No such User Exists!");
-//        }
-//        return subscriptionRepository.getSubscriptionByUserId(userId);
-//    }
-//
-//    public Integer getSubscriptionsCount(Long userId){
-//        if(userId == null){
-//            throw new UserNotFoundException("No such User Exists!");
-//        }
-//    }
+
+    public List<Topic> getSubscriptions(Long userId){
+        if(userId == null){
+            throw new UserNotFoundException("No such User Exists!");
+        }
+        else{
+            User user = getUserById(userId);
+            return subscriptionService.getSubscribedTopicsByUserId(user);
+        }
+    }
+
+    public List<Topic> getTopics(Long userId){
+        if(userId == null){
+            throw new UserNotFoundException("No such User Exists!");
+        }
+        return topicService.getTopicsByUserId(userId);
+    }
 
 }

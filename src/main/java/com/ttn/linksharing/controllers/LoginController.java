@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,21 +40,16 @@ public class LoginController {
 //    }
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute("loginCO") LoginCO loginCO, BindingResult result, HttpServletRequest request,HttpSession session, Model model) {
-        if(request.getSession(false) == null){
-            return "redirect:/dashboard";
+    public String login(@Valid @ModelAttribute("loginCO") LoginCO loginCO, BindingResult result, HttpServletRequest request, ModelMap model) {
+        logger.debug(loginCO.toString());
+        if (result.hasErrors()) {
+            logger.warn(result.getFieldErrors().toString());
+//            model.addAttribute("signupCO", new SignupCO());
+            return "homepage";
         }
-        else{
-            logger.debug(loginCO.toString());
-            if (result.hasErrors()) {
-                logger.warn(result.getFieldErrors().toString());
-                model.addAttribute("signupCO", new SignupCO());
-                return "homepage";
-            }
-            User user1 = loginService.loginUser(loginCO.getUsername(), loginCO.getPassword());
-            session = request.getSession(false);
-            session.setAttribute("loggedInUserId", user1.getId());
-            return "redirect:/dashboard";
-        }
+        User user1 = loginService.loginUser(loginCO.getUsername(), loginCO.getPassword());
+        HttpSession session = request.getSession(false);
+        session.setAttribute("loggedInUserId", user1.getId());
+        return "redirect:/dashboard";
     }
 }
