@@ -2,7 +2,6 @@ package com.ttn.linksharing.DTO;
 
 import com.ttn.linksharing.entities.Topic;
 import com.ttn.linksharing.entities.User;
-import com.ttn.linksharing.services.UserService;
 
 import java.util.List;
 
@@ -71,15 +70,4 @@ public class UserDTO {
         this.topics = topics;
     }
 
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-                "username='" + username + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", subscriptions=" + subscriptions +
-                ", topics=" + topics +
-                ", photo='" + photo + '\'' +
-                '}';
-    }
 }

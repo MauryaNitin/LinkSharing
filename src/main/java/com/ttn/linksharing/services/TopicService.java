@@ -10,10 +10,16 @@ import com.ttn.linksharing.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TopicService {
@@ -41,7 +47,7 @@ public class TopicService {
 
     public Topic getTopicById(Long topicId){
         Optional<Topic> optional = topicRepository.findById(topicId);
-        Topic topic = optional.isPresent() ? optional.get() : null;
+        Topic topic = optional.orElse(null);
         if(topic == null){
 //            throw new UserNotFoundException("No such User Exists!");
             logger.warn("Topic not Found!");
@@ -51,6 +57,10 @@ public class TopicService {
 
     public List<Topic> getTopicsByUserId(Long userId){
         return topicRepository.findByUserId(userId);
+    }
+
+    public List<Topic> getTrendingTopics(Integer count){
+        return topicRepository.getTrendingTopics(new PageRequest(0,count)).getContent();
     }
 
 }

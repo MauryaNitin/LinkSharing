@@ -46,7 +46,7 @@ public class SignupController {
         }
         if(result.hasErrors()){
             logger.warn(result.getFieldErrors().toString());
-//            model.addAttribute("loginCO", new LoginCO());
+            model.addAttribute("loginCO", new LoginCO());
             return "homepage";
         }
         User user = new User(signupCO);

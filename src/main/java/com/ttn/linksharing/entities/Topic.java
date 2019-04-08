@@ -1,7 +1,6 @@
 package com.ttn.linksharing.entities;
 
 import com.ttn.linksharing.CO.TopicCO;
-import com.ttn.linksharing.DTO.TopicDTO;
 import com.ttn.linksharing.enums.Visibility;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -44,11 +43,6 @@ public class Topic implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "topic")
     private List<Subscription> subscriptions = new ArrayList<>();
-
-//    public Topic(TopicDTO topicDTO) {
-//        this.name = topicDTO.getName();
-//        this.visibility = topicDTO.getVisibility();
-//    }
 
     public Topic(TopicCO topicCO){
         this.name = topicCO.getName();

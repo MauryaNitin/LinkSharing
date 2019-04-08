@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -25,31 +26,23 @@ public class LoginController {
 
     Logger logger = LoggerFactory.getLogger(LoginController.class);
 
-//    @ModelAttribute
-//    public ModelAndView checkSession(HttpSession session,HttpServletRequest request, HttpServletResponse response){
-//        User user = (User)session.getAttribute("loggedInUser");
-//        if(user != null){
-//            ModelAndView modelAndView = new ModelAndView("dashboard");
-//            return modelAndView;
-//        }
-//        else{
-//            ModelAndView modelAndView = new ModelAndView("homepage");
-//            return modelAndView;
-//        }
-//
-//    }
-
     @PostMapping("/login")
     public String login(@Valid @ModelAttribute("loginCO") LoginCO loginCO, BindingResult result, HttpServletRequest request, ModelMap model) {
         logger.debug(loginCO.toString());
         if (result.hasErrors()) {
             logger.warn(result.getFieldErrors().toString());
-//            model.addAttribute("signupCO", new SignupCO());
             return "homepage";
         }
         User user1 = loginService.loginUser(loginCO.getUsername(), loginCO.getPassword());
+        model.addAttribute("signupCO", new SignupCO());
         HttpSession session = request.getSession(false);
         session.setAttribute("loggedInUserId", user1.getId());
         return "redirect:/dashboard";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "redirect:/";
     }
 }
