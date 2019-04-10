@@ -1,5 +1,6 @@
 package com.ttn.linksharing.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ttn.linksharing.enums.Seriousness;
 
 import javax.persistence.*;
@@ -11,9 +12,11 @@ public class Subscription implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @JsonManagedReference
     @ManyToOne
     private User user;
 
+    @JsonManagedReference
     @ManyToOne
     private Topic topic;
 
@@ -50,15 +53,5 @@ public class Subscription implements Serializable {
 
     public void setSeriousness(Seriousness seriousness) {
         this.seriousness = seriousness;
-    }
-
-    @Override
-    public String toString() {
-        return "Subscription{" +
-                "id=" + id +
-                ", user=" + user +
-                ", topic=" + topic +
-                ", seriousness=" + seriousness +
-                '}';
     }
 }

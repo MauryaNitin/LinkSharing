@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.validation.ConstraintViolationException;
 import java.util.Date;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<String> errorMessageList=ex.getBindingResult().getAllErrors().stream().filter(e->e instanceof FieldError).map((e)->{
             FieldError fieldError = (FieldError) e;
-            return messageSource.getMessage(fieldError, null);
+            return messageSource.getMessage(fieldError, new Locale("hi"));
         }).collect(Collectors.toList());
 
         GenericExceptionResponse exceptionResponse = new GenericExceptionResponse(new Date(),"Validation Failed!",errorMessageList.toString());

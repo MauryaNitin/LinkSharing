@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <title>Post - Linksharing</title>
     <style>
-        .card-left-img{
+        .card-left-img {
             border-radius: 50%;
         }
 
-        div.card{
+        div.card {
             margin-top: 20px;
         }
     </style>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 <div th:include="~{fragments/dashboardHeaderFragment}"></div>
@@ -23,36 +24,54 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-2">
-                            <img class="card-left-img" src="images/default-person.jpg" alt="profile-picture" width="100px" height="100px">
+                            <img th:if="${resourceDTO.getUser().getProfilePicturePath()}"
+                                 th:src="${'/uploads/profile_pics/' + resourceDTO.getUser().getUsername() + '_' + resourceDTO.getUser().getProfilePicturePath()}"
+                                 alt="profile-pic" width="100px" height="100px">
+                            <img th:unless="${resourceDTO.getUser().getProfilePicturePath()}"
+                                 src="images/default-person.jpg"
+                                 alt="profile-picture"
+                                 width="100px" height="100px">
                         </div>
-                        <div class="col-md-8">
-                            <div class="card-title">
-                                Username
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            kdshakjh
+                        <div class="col-md-10">
+                            <p>
+                                <a class="float-right" th:href="${'/topic/' + resourceDTO.getTopic().getId()}"
+                                   th:text="${resourceDTO.getTopic().getName()}"></a>
+                                <a th:href="${'/users/' + resourceDTO.getUser().getId() + '/profile'}"
+                                   th:text="${resourceDTO.getUser().getFirstname() + ' ' + resourceDTO.getUser().getLastname()}"></a>
+                            <p>
+                                <span th:text="${'@' + resourceDTO.getUser().getUsername()}"></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                                <span class="float-right"><i class="text-warning fa fa-star"></i></span>
+                            </p>
+                            <p>
+                                <span class="float-right" th:text="${'Created On : ' + resourceDTO.getResource().getCreatedOn()}"></span>
+                            </p>
+                            </p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="card-body">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab alias aperiam blanditiis consequuntur error esse, facilis id illo laudantium magni maxime nulla numquam officiis quae quas quisquam quo repellendus, velit.
+                            <div class="card-body p-0 m-3">
+                                <p th:text="${resourceDTO.getDescription()}"></p>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <a href="#">Google</a>
-                            <a href="#">Google</a>
-                            <a href="#">Google</a>
-                            <a href="#">Google</a>
+                    <div class="row clearfix">
+                        <div class="col">
+                            <a class="float-left pr-3" href="#"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a>
+                            <a class="float-left pr-3" href="#"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a>
+                            <a class="float-left pr-3" href="#"><i class="fab fa-google-plus-square fa-lg" aria-hidden="true"></i></a>
                         </div>
                         <div class="col-md-6">
-                            <a href="#">Google</a>
-                            <a href="#">Google</a>
-                            <a href="#">Google</a>
-                            <a href="#">Google</a>
+                            <a class="float-right pl-3" href="#">Delete</a>
+                            <a class="float-right pl-3" href="#">Edit</a>
+                            <a class="float-right pl-3" th:href="${resourceDTO.getResource().getLinkUrl()}" target="_blank"
+                               th:if="${resourceDTO.getType().equals('linkResource')}">View Full site</a>
+                            <a class="float-right" th:href="${'uploads/docs/' + resourceDTO.getUser().getUsername() + '_' + resourceDTO.getResource().getDocumentPath()}"
+                               target="_blank" th:unless="${resourceDTO.getType().equals('linkResource')}" download>Download</a>
                         </div>
                     </div>
                 </div>
@@ -64,15 +83,80 @@
                     Trending Topics
                 </div>
                 <div class="card-body">
-
+                    <div th:each="topic : ${trendingTopicsDTO.getTrendingTopics()}">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img th:if="${topic.getUser().getProfilePicturePath()}"
+                                     th:src="${'/uploads/profile_pics/' + topic.getUser().getUsername() + '_' + topic.getUser().getProfilePicturePath()}"
+                                     alt="profile-pic" width="40px" height="40px">
+                                <img th:unless="${topic.getUser().getProfilePicturePath()}"
+                                     src="images/default-person.jpg" alt="profile-picture"
+                                     width="40px" height="40px">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="row">
+                                    <div class="col">
+                                        <a th:href="@{'/topic/' + ${topic.getId()}}" th:text="${topic.getName()}"></a>
+                                    </div>
+                                    <div class="col">
+                                        <a href="#"
+                                           th:if="${topic.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
+                                           th:text="'Unsubscribe'"></a>
+                                        <a href="#"
+                                           th:unless="${topic.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
+                                           th:text="'Subscribe'"></a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col" th:text="${'@' + topic.getUser().getUsername()}"></div>
+                                    <div class="col">Subscriptions</div>
+                                    <div class="col">Posts</div>
+                                </div>
+                                <div class="row justify-content-end">
+                                    <div class="col"></div>
+                                    <div class="col" th:text="${topic.getSubscriptions().size()}"></div>
+                                    <div class="col" th:text="${topic.getResourcesList().size()}"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-end">
+                            <div class="col-md-4">
+                                <select class="custom-select " name="seriousness">
+                                    <option th:each="seriousness : ${T(com.ttn.linksharing.enums.Seriousness).values()}"
+                                            th:value="${seriousness}"
+                                            th:text="${seriousness.getValue()}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="custom-select" name="visibility">
+                                    <option th:each="visibilityItr : ${T(com.ttn.linksharing.enums.Visibility).values()}"
+                                            th:value="${visibilityItr}"
+                                            th:text="${visibilityItr.getValue()}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                                <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+</div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 package com.ttn.linksharing.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -10,9 +12,11 @@ public class Rating implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @JsonManagedReference
     @ManyToOne
     private User user;
 
+    @JsonManagedReference
     @ManyToOne
     private Resource resource;
 

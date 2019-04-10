@@ -9,7 +9,6 @@ import com.ttn.linksharing.utils.EmailServiceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +34,6 @@ public class SubscriptionService {
     }
 
     public List<Topic> getSubscribedTopicsByUserId(User user){
-        System.out.println("getting subscribed topics");
         return user
                 .getSubscriptions()
                 .stream()

@@ -1,5 +1,7 @@
 package com.ttn.linksharing.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ttn.linksharing.CO.TopicCO;
 import com.ttn.linksharing.enums.Visibility;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,13 +36,16 @@ public class Topic implements Serializable {
     @Column(name = "updated_on")
     private Date updatedOn;
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "topic")
     private List<Resource> resourcesList = new ArrayList<>();
 
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "topic")
     private List<Subscription> subscriptions = new ArrayList<>();
 

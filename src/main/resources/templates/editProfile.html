@@ -5,29 +5,45 @@
     <title>Edit Profile</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <style>
-        .card{
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
 </head>
 <body>
 <div th:include="~{fragments/dashboardHeaderFragment}"></div>
-<div class="container-fluid ">
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <img src="images/default-person.jpg" alt="profile-picture" width="100px" height="100px">
+                            <a th:href="@{'/users/' + ${userDTO.getId()} + '/profile'}">
+                                <img th:if="${userDTO.getPhoto()}"
+                                     th:src="${'/uploads/profile_pics/' + userDTO.getUsername() + '_' + userDTO.getPhoto()}"
+                                     alt="profile-pic" width="100px" height="100px">
+                                <img th:unless="${userDTO.getPhoto()}" src="images/default-person.jpg"
+                                     alt="profile-picture"
+                                     width="100px" height="100px">
+                            </a>
                         </div>
                         <div class="col-md-8">
                             <div class="card-title">
-                                Username
+                                <a th:href="@{'/users/' + ${userDTO.getId()}  + '/profile'}"
+                                   th:text="${userDTO.getFirstname() + ' ' + userDTO.getLastname()}"></a>
                             </div>
+                            <div th:text="${'@' + userDTO.getUsername()}" class="card-text"></div>
                             <div class="card-text">
-                                sdl
+                                <div class="row">
+                                    <div class="col-md-6">Subscriptions</div>
+                                    <div class="col-md-6">Topics</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <a href="#" th:text="${userDTO.getSubscriptions().size()}"></a>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a href="#" th:text="${userDTO.getTopics().size()}"></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -38,7 +54,59 @@
                     Trending Topics
                 </div>
                 <div class="card-body">
+                    <div th:each="subs : ${userDTO.getTopics()}">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img th:if="${subs.getUser().getProfilePicturePath()}"
+                                     th:src="${'/uploads/profile_pics/' + userDTO.getUsername() + '_' + subs.getUser().getProfilePicturePath()}"
+                                     alt="profile-pic" width="40px" height="40px">
+                                <img th:unless="${subs.getUser().getProfilePicturePath()}"
+                                     src="images/default-person.jpg" alt="profile-picture"
+                                     width="40px" height="40px">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="row">
+                                    <div class="col">
+                                        <a th:href="@{'/topic/' + ${subs.getId()}}" th:text="${subs.getName()}"></a>
+                                    </div>
+                                    <div class="col"><a href="#" class="float-right" >Unsubscribe</a></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col" th:text="${'@' + subs.getUser().getUsername()}"></div>
+                                    <div class="col">Subscriptions</div>
+                                    <div class="col">Posts</div>
+                                </div>
+                                <div class="row justify-content-end">
+                                    <div class="col"></div>
+                                    <div class="col" th:text="${subs.getSubscriptions().size()}"></div>
+                                    <div class="col" th:text="${subs.getResourcesList().size()}"></div>
+                                </div>
 
+                            </div>
+                        </div>
+                        <div class="row justify-content-end">
+                            <div class="col-md-4">
+                                <select class="custom-select " id="seriousness" name="seriousness">
+                                    <option th:each="seriousness : ${T(com.ttn.linksharing.enums.Seriousness).values()}"
+                                            th:value="${seriousness}"
+                                            th:text="${seriousness.getValue()}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="custom-select" id="visibility" name="visibility">
+                                    <option th:each="visibilityItr : ${T(com.ttn.linksharing.enums.Visibility).values()}"
+                                            th:value="${visibilityItr}"
+                                            th:text="${visibilityItr.getValue()}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-3" id="topic-btn">
+                                <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                                <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
                 </div>
             </div>
         </div>
@@ -50,7 +118,48 @@
                             Profile
                         </div>
                         <div class="card-body">
-
+                            <form th:action="@{'/users/' + ${#session.getAttribute('loggedInUserId')} + '/edit'}" action="#" th:object="${editProfileCO}" method="post" enctype="multipart/form-data">
+                                <div class="form-group row">
+                                    <label for="first-name" class="col-md-6 col-form-label">First Name: </label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" th:field="*{firstname}" id="first-name" name="firstname" placeholder="First Name" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="last-name" class="col-md-6 col-form-label">Last Name: </label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" th:field="*{lastname}" id="last-name" name="lastname" placeholder="Last Name" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="user-name" class="col-md-6 col-form-label">Username: </label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control" th:field="*{username}" id="user-name" name="username" placeholder="Username" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-6 col-form-label" for="photo">
+                                        Photo:
+                                    </label>
+                                    <div class="col-md-6">
+                                        <div class="input-group mb-3">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input form-control" th:field="*{photo}" id="photo" aria-describedby="inputGroupFileAddon01">
+                                                <label class="custom-file-label" for="photo">Choose file</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="signupErrors" th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger p-2'" style="font-size: 14px">
+                                    <ul class="m-2">
+                                        <li th:errors="*{firstname}"></li>
+                                        <li th:errors="*{lastname}"></li>
+                                        <li th:errors="*{username}"></li>
+                                        <li th:errors="*{photo}"></li>
+                                    </ul>
+                                </div>
+                                <input type="submit" class="btn btn-primary float-right" value="Update">
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -62,7 +171,27 @@
                             Change Password
                         </div>
                         <div class="card-body">
-
+                            <form th:action="@{'/users/' + ${#session.getAttribute('loggedInUserId')} + '/updatePassword'}" action="#" th:object="${changePasswordCO}" method="post" enctype="multipart/form-data">
+                                <div class="form-group row">
+                                    <label for="pass-word" class="col-md-6 col-form-label">Password: </label>
+                                    <div class="col-md-6">
+                                        <input type="password" class="form-control" th:field="*{password}" id="pass-word" placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="confirm-Password" class="col-md-6 col-form-label">Confirm Password: </label>
+                                    <div class="col-md-6">
+                                        <input type="password" class="form-control" th:field="*{confirmPassword}" id="confirm-Password" placeholder="Confirm Password">
+                                    </div>
+                                </div>
+                                <div th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger p-2'" style="font-size: 14px">
+                                    <ul class="m-2">
+                                        <li th:errors="*{password}"></li>
+                                        <li th:errors="*{confirmPassword}"></li>
+                                    </ul>
+                                </div>
+                                <input type="submit" class="btn btn-primary float-right" value="Update">
+                            </form>
                         </div>
                     </div>
                 </div>

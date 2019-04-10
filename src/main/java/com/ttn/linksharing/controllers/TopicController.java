@@ -22,7 +22,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/topic")
 public class TopicController {
     @Autowired
     TopicService topicService;
@@ -32,7 +31,7 @@ public class TopicController {
 
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @PostMapping("/create")
+    @PostMapping("/topic/create")
     public String createTopic(@Valid @ModelAttribute TopicCO topicCO, BindingResult result, HttpSession session){
         Long loggedInUserId;
         if(session.getAttribute("loggedInUserId") != null){
@@ -45,7 +44,7 @@ public class TopicController {
         return "redirect:/dashboard";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/topic/{id}")
     public String showTopic(@PathVariable("id") Long id, ModelMap model, HttpSession session){
         if(session.getAttribute("loggedInUserId") == null){
             return "redirect:/";

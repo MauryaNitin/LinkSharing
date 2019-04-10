@@ -6,6 +6,7 @@ import com.ttn.linksharing.CO.LinkResourceCO;
 import com.ttn.linksharing.CO.TopicCO;
 import com.ttn.linksharing.DTO.TrendingTopicsDTO;
 import com.ttn.linksharing.DTO.UserDTO;
+import com.ttn.linksharing.services.ResourceService;
 import com.ttn.linksharing.services.SubscriptionService;
 import com.ttn.linksharing.services.TopicService;
 import com.ttn.linksharing.services.UserService;
@@ -16,12 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class DashboardController {
@@ -33,6 +34,9 @@ public class DashboardController {
 
     @Autowired
     TopicService topicService;
+
+    @Autowired
+    ResourceService resourceService;
 
     @Autowired
     EmailServiceUtil emailService;
@@ -79,4 +83,31 @@ public class DashboardController {
 
         return "redirect:/dashboard";
     }
+
+    @GetMapping("/search")
+    public String getSearchResults(@RequestParam("query") String query, ModelMap model, HttpSession session){
+        if(session.getAttribute("loggedInUserId") == null){
+            return "redirect:/";
+        }
+        Long userId = (Long)session.getAttribute("loggedInUserId");
+
+        model.addAttribute("topics", topicService.searchTopicsByName(query, userId));
+        model.addAttribute("resources", resourceService.searchResoucesByDescription(query, userId));
+
+        UserDTO userDTO = userService.getUserDto(userId);
+        TrendingTopicsDTO trendingTopicsDTO = new TrendingTopicsDTO();
+        trendingTopicsDTO.setTrendingTopics(topicService.getTrendingTopics(5));
+
+        model.addAttribute("userId", userId);
+        model.addAttribute("userDTO", userDTO);
+        model.addAttribute("trendingTopicsDTO", trendingTopicsDTO);
+
+        model.addAttribute("topicCO", new TopicCO());
+        model.addAttribute("linkResourceCO", new LinkResourceCO());
+        model.addAttribute("documentResourceCO", new DocumentResourceCO());
+        model.addAttribute("invitationCO", new InvitationCO());
+        return "search";
+    }
+
+
 }

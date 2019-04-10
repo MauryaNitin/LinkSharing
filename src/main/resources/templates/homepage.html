@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Link Sharing - To The New</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" th:href="@{'/css/homepage.css'}">
+    <link rel="stylesheet" th:href="@{'/css/app.css'}">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -204,8 +204,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="signupErrors" th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger'" style="padding: 2px; font-size: 14px">
-                                <ul style="margin: 2px">
+                            <div id="signupErrors" th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger p-2'" style="font-size: 14px">
+                                <ul class="m-2">
                                     <li th:errors="*{firstname}"></li>
                                     <li th:errors="*{email}"></li>
                                     <li th:errors="*{username}"></li>

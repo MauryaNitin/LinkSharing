@@ -1,21 +1,22 @@
 package com.ttn.linksharing.controllers;
 
-import com.ttn.linksharing.CO.DocumentResourceCO;
-import com.ttn.linksharing.CO.InvitationCO;
-import com.ttn.linksharing.CO.LinkResourceCO;
-import com.ttn.linksharing.CO.TopicCO;
+import com.ttn.linksharing.CO.*;
 import com.ttn.linksharing.DTO.UserDTO;
+import com.ttn.linksharing.DTO.UserPublicDTO;
 import com.ttn.linksharing.entities.User;
+import com.ttn.linksharing.enums.Roles;
 import com.ttn.linksharing.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -42,8 +43,88 @@ public class UserController {
         model.addAttribute("documentResourceCO", new DocumentResourceCO());
         model.addAttribute("invitationCO", new InvitationCO());
 
-        UserDTO showUserDTO  = userService.getUserDto(id);
+        UserPublicDTO showUserDTO = userService.getPublicUserDto(id);
         model.addAttribute("showUser", showUserDTO);
         return "userProfile";
     }
+
+    @GetMapping("/users")
+    public String showUsers(ModelMap model, HttpSession session){
+        if(session.getAttribute("loggedInUserId") == null){
+            return "redirect:/";
+        }
+        Long userId = (Long)session.getAttribute("loggedInUserId");
+        User user = userService.getUserById(userId);
+        if(!user.getRole().equals(Roles.ADMIN)){
+//            return "redirect:/";
+        }
+        List<User> users = userService.getAllUsers(userId);
+        model.addAttribute("usersList", users);
+
+        UserDTO userDTO = userService.getUserDto(userId);
+        model.addAttribute("userDTO", userDTO);
+
+        model.addAttribute("topicCO", new TopicCO());
+        model.addAttribute("linkResourceCO", new LinkResourceCO());
+        model.addAttribute("documentResourceCO", new DocumentResourceCO());
+        model.addAttribute("invitationCO", new InvitationCO());
+        return "users";
+    }
+
+    @GetMapping("/users/editProfile")
+    public String showEditProfile(ModelMap model, HttpSession session){
+        if(session.getAttribute("loggedInUserId") == null){
+            return "redirect:/";
+        }
+        Long userId = (Long)session.getAttribute("loggedInUserId");
+        User user = userService.getUserById(userId);
+
+        UserDTO userDTO = userService.getUserDto(userId);
+        model.addAttribute("userDTO", userDTO);
+
+        UpdateProfileCO updateProfileCO = new UpdateProfileCO(user);
+
+        model.addAttribute("topicCO", new TopicCO());
+        model.addAttribute("linkResourceCO", new LinkResourceCO());
+        model.addAttribute("documentResourceCO", new DocumentResourceCO());
+        model.addAttribute("invitationCO", new InvitationCO());
+        model.addAttribute("editProfileCO", updateProfileCO);
+        model.addAttribute("changePasswordCO", new UpdatePasswordCO());
+        return "editProfile";
+    }
+
+    @PostMapping("/users/{id}/edit")
+    public String editProfile(@Valid @ModelAttribute UpdateProfileCO updateProfileCO,
+                              BindingResult result,
+                              @PathVariable("id") Long id,
+                              HttpSession session){
+        if(session.getAttribute("loggedInUserId") == null && session.getAttribute("loggedInUserId") != id){
+            return "redirect:/";
+        }
+        if(result.hasErrors()){
+            return "redirect:/users/editProfile";
+        }
+        userService.updateUserDetails(updateProfileCO, id);
+        return "redirect:/dashboard";
+    }
+
+    @PostMapping("/users/{id}/updatePassword")
+    public String updatePassword(@Valid @ModelAttribute UpdatePasswordCO updatePasswordCO,
+                                 BindingResult result,
+                                 @PathVariable("id") Long id,
+                                 HttpSession session){
+        if(session.getAttribute("loggedInUserId") == null && session.getAttribute("loggedInUserId") != id){
+            return "redirect:/";
+        }
+        if(!updatePasswordCO.getPassword().equals(updatePasswordCO.getConfirmPassword())){
+            result.rejectValue("confirmPassword", "error.confirmPassword", "Password did not match!");
+            return "editProfile";
+        }
+        if(result.hasErrors()){
+            return "editProfile";
+        }
+        userService.updatePassword(updatePasswordCO, id);
+        return "redirect:/dashboard";
+    }
+
 }

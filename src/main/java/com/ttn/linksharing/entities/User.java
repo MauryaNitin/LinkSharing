@@ -1,5 +1,6 @@
 package com.ttn.linksharing.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ttn.linksharing.CO.SignupCO;
 import com.ttn.linksharing.enums.Roles;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,7 +9,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -61,17 +61,25 @@ public class User implements Serializable{
     @Enumerated(EnumType.STRING)
     private Roles role = Roles.USER;
 
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Topic> topics = new ArrayList<>();
 
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Resource> resources = new ArrayList<>();
 
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Subscription> subscriptions = new ArrayList<>();
 
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Rating> ratings = new ArrayList<>();
+
+    @JsonBackReference
+    @OneToMany(mappedBy = "user")
+    private List<Message> messages = new ArrayList<>();
 
     public User(SignupCO signupCO){
         this.firstname = signupCO.getFirstname();
@@ -146,6 +154,14 @@ public class User implements Serializable{
 
     public void setActive(Boolean active) {
         isActive = active;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 
     public Date getCreatedOn() {

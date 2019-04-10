@@ -20,7 +20,6 @@ public class LoginService {
 
     public User loginUser(String username, String password) {
         // sending same parameter two times because it can have either email or username
-        logger.info(username + password);
         User user = userRepository.findByUsernameOrEmail(username, username);
         if (user == null) {
             logger.error("User with Username: " + username +  " Not found!");

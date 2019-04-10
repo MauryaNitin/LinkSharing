@@ -21,12 +21,6 @@ public class SignupService {
             throw new UserAlreadyExistsException("User Already Exists!");
         }
         user.setPassword(CryptoUtils.encrypt(user.getPassword()));
-//        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-//        Session session = sessionFactory.openSession();
-//        session.beginTransaction();
-//        User user1 = userRepository.save(user);
-//        session.getTransaction().commit();
-//        session.close();
         User savedUser = userService.createUser(user);
         if (savedUser != null) {
             new Thread(() -> emailService.sendMail(

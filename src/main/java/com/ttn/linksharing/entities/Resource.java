@@ -1,10 +1,16 @@
 package com.ttn.linksharing.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,14 +24,27 @@ public class Resource implements Serializable {
     @Size(min = 2, message = "Description should be more than 2 characters!")
     private String description;
 
+    @JsonManagedReference
     @ManyToOne
     private User user;
 
+    @JsonManagedReference
     @ManyToOne
     private Topic topic;
 
+    @CreationTimestamp
+    private Date createdOn;
+
+    @UpdateTimestamp
+    private Date updatedOn;
+
+    @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "resource")
     private List<Rating> rating = new ArrayList<>();
+
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "resource")
+    private List<Message> messages = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -65,5 +84,29 @@ public class Resource implements Serializable {
 
     public void setRating(List<Rating> rating) {
         this.rating = rating;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public Date getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = createdOn;
+    }
+
+    public Date getUpdatedOn() {
+        return updatedOn;
+    }
+
+    public void setUpdatedOn(Date updatedOn) {
+        this.updatedOn = updatedOn;
     }
 }

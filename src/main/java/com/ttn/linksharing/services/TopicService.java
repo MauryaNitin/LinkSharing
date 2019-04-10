@@ -1,10 +1,12 @@
 package com.ttn.linksharing.services;
 
 import com.ttn.linksharing.CO.TopicCO;
+import com.ttn.linksharing.entities.Resource;
 import com.ttn.linksharing.entities.Subscription;
 import com.ttn.linksharing.entities.Topic;
 import com.ttn.linksharing.entities.User;
 import com.ttn.linksharing.enums.Seriousness;
+import com.ttn.linksharing.enums.Visibility;
 import com.ttn.linksharing.repositories.TopicRepository;
 import com.ttn.linksharing.repositories.UserRepository;
 import org.slf4j.Logger;
@@ -61,6 +63,13 @@ public class TopicService {
 
     public List<Topic> getTrendingTopics(Integer count){
         return topicRepository.getTrendingTopics(new PageRequest(0,count)).getContent();
+    }
+
+    public List<Topic> searchTopicsByName(String query, Long userId){
+        return topicRepository.findByNameLike(query)
+                .stream()
+                .filter(x -> (x.getVisibility() == Visibility.PRIVATE && x.getUser().getId() != userId))
+                .collect(Collectors.toList());
     }
 
 }

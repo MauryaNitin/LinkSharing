@@ -51,14 +51,15 @@ public class SignupController {
         }
         User user = new User(signupCO);
         User user1 = signupService.createUser(user);
-        uploader.saveProfilePicture(signupCO.getPhoto(), signupCO.getUsername());
+        if(signupCO.getPhoto() != null){
+            uploader.saveProfilePicture(signupCO.getPhoto(), signupCO.getUsername());
+        }
         if(user1 == null){
             logger.error("Error occurred in saving user. Null returned from db.");
             return "errors";
         }
-//        else{
-//            loginService.loginUser(user.getUsername(), user.getPassword());
-//        }
+
+        loginService.loginUser(user.getUsername(), user.getPassword());
         return "redirect:/dashboard";
     }
 }

@@ -5,8 +5,8 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{'/css/dashboard.css'}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{'/css/app.css'}">
 </head>
 <body>
 <div th:include="~{fragments/dashboardHeaderFragment}"></div>
@@ -19,7 +19,7 @@
                         <div class="col-md-4">
                             <a th:href="@{'/users/' + ${userId} + '/profile'}">
                                 <img th:if="${userDTO.getPhoto()}"
-                                     th:src="${'uploads/profile_pics/' + userDTO.getUsername() + '_' + userDTO.getPhoto()}"
+                                     th:src="${'/uploads/profile_pics/' + userDTO.getUsername() + '_' + userDTO.getPhoto()}"
                                      alt="profile-pic" width="100px" height="100px">
                                 <img th:unless="${userDTO.getPhoto()}" src="images/default-person.jpg"
                                      alt="profile-picture"
@@ -59,7 +59,7 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <img th:if="${subs.getUser().getProfilePicturePath()}"
-                                     th:src="${'uploads/profile_pics/' + userDTO.getUsername() + '_' + subs.getUser().getProfilePicturePath()}"
+                                     th:src="${'/uploads/profile_pics/' + userDTO.getUsername() + '_' + subs.getUser().getProfilePicturePath()}"
                                      alt="profile-pic" width="40px" height="40px">
                                 <img th:unless="${subs.getUser().getProfilePicturePath()}"
                                      src="images/default-person.jpg" alt="profile-picture"
@@ -108,7 +108,6 @@
                         </div>
                         <hr>
                     </div>
-
                 </div>
             </div>
             <div class="card">
@@ -120,7 +119,7 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <img th:if="${topic.getUser().getProfilePicturePath()}"
-                                     th:src="${'uploads/profile_pics/' + topic.getUser().getUsername() + '_' + topic.getUser().getProfilePicturePath()}"
+                                     th:src="${'/uploads/profile_pics/' + topic.getUser().getUsername() + '_' + topic.getUser().getProfilePicturePath()}"
                                      alt="profile-pic" width="40px" height="40px">
                                 <img th:unless="${topic.getUser().getProfilePicturePath()}"
                                      src="images/default-person.jpg" alt="profile-picture"
@@ -131,7 +130,14 @@
                                     <div class="col">
                                         <a th:href="@{'/topic/' + ${topic.getId()}}" th:text="${topic.getName()}"></a>
                                     </div>
-                                    <div class="col"><a href="#" style="float: right">Unsubscribe</a></div>
+                                    <div class="col">
+                                        <a href="#"
+                                           th:if="${topic.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
+                                           th:text="'Unsubscribe'"></a>
+                                        <a href="#"
+                                           th:unless="${topic.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
+                                           th:text="'Subscribe'"></a>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col" th:text="${'@' + topic.getUser().getUsername()}"></div>
@@ -143,7 +149,6 @@
                                     <div class="col" th:text="${topic.getSubscriptions().size()}"></div>
                                     <div class="col" th:text="${topic.getResourcesList().size()}"></div>
                                 </div>
-
                             </div>
                         </div>
                         <div class="row justify-content-end">
@@ -178,12 +183,12 @@
                     Inbox
                 </div>
                 <div class="card-body">
-                    <div th:each="topic : ${userDTO.getSubscriptions()}">
-                        <div th:each="resource : ${topic.getResourcesList()}" class="row">
+                    <th:block th:each="topic : ${userDTO.getSubscriptions()}">
+                        <div th:each="resource : ${topic.getResourcesList()}" class="row clearfix">
                             <div class="col-md-1">
                                 <a th:href="@{'/users/' + ${resource.getUser().getId()}  + '/profile'}">
                                     <img th:if="${resource.getUser().getProfilePicturePath()}"
-                                         th:src="${'uploads/profile_pics/' + userDTO.getUsername() + '_' + resource.getUser().getProfilePicturePath()}"
+                                         th:src="${'/uploads/profile_pics/' + userDTO.getUsername() + '_' + resource.getUser().getProfilePicturePath()}"
                                          alt="profile-pic" width="40px" height="40px">
                                     <img th:unless="${resource.getUser().getProfilePicturePath()}"
                                          src="images/default-person.jpg" alt="profile-picture"
@@ -192,12 +197,13 @@
                             </div>
                             <div class="col-md-11">
                                 <div class="row">
-                                        <div class="col-md-2">
-                                            <a th:href="@{'/users/' + ${resource.getUser().getId()}  + '/profile'}" th:text="${resource.getUser().getFirstname() + ' ' + resource.getUser().getLastname()}"></a>
-                                        </div>
+                                    <div class="col-md-2">
+                                        <a th:href="@{'/users/' + ${resource.getUser().getId()}  + '/profile'}"
+                                           th:text="${resource.getUser().getFirstname() + ' ' + resource.getUser().getLastname()}"></a>
+                                    </div>
                                     <div class="col-md-2" th:text="${'@' + resource.getUser().getUsername()}"></div>
                                     <div class="col">
-                                        <a th:href="${'/topic/' + resource.getTopic().getId()}" style="float: right"
+                                        <a th:href="${'/topic/' + resource.getTopic().getId()}" class="float-right"
                                            th:text="${resource.getTopic().getName()}"></a>
                                     </div>
                                 </div>
@@ -206,41 +212,44 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <a href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a>
-                                        <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                                        <a href="#"><i class="fa fa-google-plus-square" aria-hidden="true"></i></a>
+                                        <a href="#"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+                                        <a href="#"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                                        <a href="#"><i class="fab fa-google-plus-square" aria-hidden="true"></i></a>
                                     </div>
-                                    <div class="col-md-4"></div>
-                                    <div class="col-md-2">
-                                        <a href="#">View Full site</a>
-                                        <a href="#">Download</a>
+                                    <div class="col-md-3">
+                                        <a th:href="${resource.getLinkUrl()}" target="_blank"
+                                           th:if="${resource.toString().split('@')[0].equals('com.ttn.linksharing.entities.LinkResource')}">View
+                                            Full site</a>
+                                        <a th:href="${'/uploads/docs/' + resource.getUser().getUsername() + '_' + resource.getDocumentPath()}"
+                                           target="_blank"
+                                           th:unless="${resource.toString().split('@')[0].equals('com.ttn.linksharing.entities.LinkResource')}"
+                                           download>Download</a>
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <a href="#">Mark as Read</a>
                                     </div>
-                                    <div class="col-md-2">
-                                        <a href="#">View Post</a>
+                                    <div class="col-md-3">
+                                        <a th:href="${'/topic/' + resource.getTopic() + '/post/' + resource.getId()}">View
+                                            Post</a>
                                     </div>
                                 </div>
                             </div>
                             <hr>
                         </div>
-                    </div>
+                        <hr>
+                    </th:block>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+<script th:src="@{/js/app.js}"></script>
 </body>
 </html>

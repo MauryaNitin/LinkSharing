@@ -21,6 +21,7 @@ public class SignupCO {
     private String username;
 
     @NotBlank(message = "Password cannot be empty")
+    @Size(min = 5, message = "Password should have more than 5 characters!")
     private String password;
 
     private String confirmPassword;
