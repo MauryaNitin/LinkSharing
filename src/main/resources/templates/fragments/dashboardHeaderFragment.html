@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
           integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <script src="https://use.fontawesome.com/b193e6d66d.js"></script>
+    <link rel="stylesheet" th:href="@{'/css/app.css'}">
 </head>
 <body>
 <div th:fragment="header-fragment">
@@ -157,14 +158,14 @@
                                 </select>
                             </div>
                         </div>
-                        <div th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger'" style="padding: 2px; font-size: 14px">
-                            <ul style="margin: 2px">
+                        <div th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger p-2'" style="font-size: 14px">
+                            <ul class="m-2">
                                 <li th:errors="*{email}"></li>
                                 <li th:errors="*{topicId}"></li>
                             </ul>
                         </div>
                         <hr>
-                        <div style="float: right">
+                        <div class="float-right">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <input type="submit" class="btn btn-primary" value="Invite"/>
                         </div>

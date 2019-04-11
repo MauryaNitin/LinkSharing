@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{'/css/app.css'}">
+</head>
+<body>
+<div class="row justify-content-center">
+    <div class="col-md-4" th:fragment="loginForm">
+
+        <!-----------------------------------------Login---------------------------------------------------->
+        <div class="card">
+            <div class="card-header">
+                Login
+            </div>
+            <div class="card-body">
+                <div id="popup">
+
+                </div>
+                <form th:action="@{/login}" action="#" th:object="${loginCO}" method="post">
+                    <div class="form-group row">
+                        <label for="username-login" class="col-md-4 col-form-label">Username: </label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" th:field="*{username}" name="username" id="username-login" placeholder="Username/Email" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPassword" class="col-md-4 col-form-label">Password: </label>
+                        <div class="col-md-8">
+                            <input type="password" class="form-control" th:field="*{password}" name="password" id="inputPassword" placeholder="Password">
+                        </div>
+                    </div>
+                    <div id="loginErrors" th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger'" th:role="'alert'" style="padding: 2px; font-size: 14px">
+                        <ul style="margin: 2px">
+                            <li th:errors="*{username}"></li>
+                            <li th:errors="*{password}"></li>
+                        </ul>
+                    </div>
+                    <a id="forgotPassword" href="#">Forgot password?</a>
+                    <input type="submit" class="btn btn-primary float-right" value="Login">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

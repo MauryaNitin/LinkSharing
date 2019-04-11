@@ -41,5 +41,36 @@ $(document).ready(function () {
         })
     })
 
+    function unsubscribeTopic(){
+        event.preventDefault();
+        console.log(element);
+        var topicId = $("a").data("topicid").val();
+        console.log(topicId);
+        // $.ajax({
+        //         method: "GET",
+        //         url : "/topic/" + topicId + "/unsubscribe",
+        //     }
+        // ).done(function (response) {
+        //     if(response){
+        //         $("#alerts").append(response);
+        //     }
+        // })
+    }
 
+    function subscribeTopic(){
+        element.preventDefault();
+        console.log(element);
+        var topicId = $("a").data("topicid").val();
+        console.log(topicId);
+        // var topicId = $(element).attr("data-topicId");
+        // $.ajax({
+        //         method: "GET",
+        //         url : "/topic/" + topicId + "/subscribe",
+        //     }
+        // ).done(function (response) {
+        //     if(response){
+        //         $("#alerts").append(response);
+        //     }
+        // })
+    }
 });

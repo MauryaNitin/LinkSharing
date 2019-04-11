@@ -5,34 +5,82 @@
     <title>Alerts</title>
 </head>
 <body>
-<div th:fragment="failed" class="alert alert-danger alert-dismissible fade show">
+<!------------------------------------success----------------------------------------------->
+
+
+<div th:fragment="subscriptionSuccess" class="alert alert-success alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Failed!</strong>
+    <strong>Topic Subscribed Successfully!</strong>
 </div>
 
-<div th:fragment="success" class="alert alert-success alert-dismissible fade show">
+<div th:fragment="invitationSuccess" class="alert alert-success alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Success!</strong>
+    <strong>User Invited Successfully!</strong>
 </div>
 
-<div th:fragment="warning" class="alert alert-warn alert-dismissible fade show">
+<div th:fragment="unsubscribeSuccess" class="alert alert-success alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Warning!</strong>
+    <strong>Topic unsubscribed Successfully!</strong>
 </div>
+
+<!------------------------------------failed----------------------------------------------->
+
+<div th:fragment="noUserExist" class="login-popups alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>No such User Exist!</strong>
+</div>
+
+
+<div th:fragment="emailNotValid" class="alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Provided Email</strong> is Not Valid!
+</div>
+
+<div th:fragment="privateSubscriptionFailed" class="alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>You cannot subscribe private Topic!</strong>
+</div>
+
+
+<div th:fragment="subscriptionFailed" class="alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Topic Subscription Failed!</strong>
+</div>
+
+<div th:fragment="subscriptionRequestNotAuthorized" class="alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>You are Not Authorized to subscribe this topic!</strong>
+</div>
+
+<div th:fragment="invitationFailed" class="alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Invitation Sent failed!</strong>
+</div>
+
+<div th:fragment="unsubscribeFailed" class="alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Topic unsubscribe Failed!</strong>
+</div>
+
+<!------------------------------------Info----------------------------------------------->
 
 <div th:fragment="forgetPassword-acknowledgement" class="login-popups alert alert-info alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     The <strong>Password reset link</strong> has been sent to your email!
 </div>
 
-<div th:fragment="noUserExist" class="login-popups alert alert-info alert-dismissible fade show">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>No such User Exist!</strong>
-</div>
-
 <div th:fragment="emailAreadySent" class="login-popups alert alert-info alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    The <strong>Password reset link</strong> has already sent to your email address!
+    Already sent <strong>Password reset link</strong> to your email address!
 </div>
+
+<!------------------------------------Warnings----------------------------------------------->
+
+<div th:fragment="warning" class="alert alert-warn alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Warning!</strong>
+</div>
+
+
 </body>
 </html>

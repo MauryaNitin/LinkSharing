@@ -1,7 +1,5 @@
 package com.ttn.linksharing.CO;
 
-import com.sun.istack.internal.NotNull;
-
 import javax.validation.constraints.Email;
 
 public class InvitationCO {

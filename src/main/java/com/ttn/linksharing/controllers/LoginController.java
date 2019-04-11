@@ -44,8 +44,13 @@ public class LoginController {
             return "homepage";
         }
         User user1 = loginService.loginUser(loginCO.getUsername(), loginCO.getPassword());
-        HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession();
         session.setAttribute("loggedInUserId", user1.getId());
+
+        if(session.getAttribute("subscriptionToken") != null){
+            return "redirect:/subscribe?token=" + session.getAttribute("subscriptionToken");
+        }
+
         return "redirect:/dashboard";
     }
 
@@ -68,7 +73,9 @@ public class LoginController {
     }
 
     @GetMapping("/reset")
-    public String showResetPasswordPage(@RequestParam("token") String token, HttpServletRequest request, ModelMap model) {
+    public String showResetPasswordPage(@RequestParam("token") String token,
+                                        HttpServletRequest request,
+                                        ModelMap model) {
         ForgotPassword forgotPassword = loginService.verifyResetToken(token);
         if (forgotPassword != null) {
             HttpSession session = request.getSession();

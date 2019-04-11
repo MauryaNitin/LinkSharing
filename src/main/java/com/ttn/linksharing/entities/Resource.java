@@ -21,6 +21,7 @@ public class Resource implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Lob
     @NotNull(message = "Description cannot cannot be empty!")
     @Size(min = 2, message = "Description should be more than 2 characters!")
     private String description;

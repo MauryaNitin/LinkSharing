@@ -11,6 +11,9 @@
 <body>
 <div th:include="~{fragments/dashboardHeaderFragment}"></div>
 <div class="container-fluid">
+    <div id="alerts">
+
+    </div>
     <div class="row">
         <div class="col-md-4">
             <div class="card">
@@ -27,11 +30,11 @@
                             </a>
                         </div>
                         <div class="col-md-8">
-                            <div class="card-title">
+                            <h3 class="card-text" >
                                 <a th:href="@{'/users/' + ${userId}  + '/profile'}"
                                    th:text="${userDTO.getFirstname() + ' ' + userDTO.getLastname()}"></a>
-                            </div>
-                            <div th:text="${'@' + userDTO.getUsername()}" class="card-text"></div>
+                            </h3>
+                            <a class="small text-muted" th:text="${'@' + userDTO.getUsername()}"></a>
                             <div class="card-text">
                                 <div class="row">
                                     <div class="col-md-6">Subscriptions</div>
@@ -59,7 +62,7 @@
                         <div class="row">
                             <div class="col-md-2">
                                 <img th:if="${subs.getUser().getProfilePicturePath()}"
-                                     th:src="${'/uploads/profile_pics/' + userDTO.getUsername() + '_' + subs.getUser().getProfilePicturePath()}"
+                                     th:src="${'/uploads/profile_pics/' + subs.getUser().getUsername() + '_' + subs.getUser().getProfilePicturePath()}"
                                      alt="profile-pic" width="40px" height="40px">
                                 <img th:unless="${subs.getUser().getProfilePicturePath()}"
                                      src="images/default-person.jpg" alt="profile-picture"
@@ -70,7 +73,14 @@
                                     <div class="col">
                                         <a th:href="@{'/topic/' + ${subs.getId()}}" th:text="${subs.getName()}"></a>
                                     </div>
-                                    <div class="col"><a href="#" style="float: right">Unsubscribe</a></div>
+                                    <div class="col">
+                                        <a class="float-right" href="#"
+                                           th:if="${subs.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
+                                           th:text="'Unsubscribe'" onclick="unsubscribeTopic()" th:data-topicId="${subs.getId()}"></a>
+                                        <a class="float-right" href="#"
+                                           th:unless="${subs.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
+                                           th:text="'Subscribe'" onclick="subscribeTopic()" th:data-topicId="${subs.getId()}"></a>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col" th:text="${'@' + subs.getUser().getUsername()}"></div>
@@ -87,20 +97,20 @@
                         </div>
                         <div class="row justify-content-end">
                             <div class="col-md-4">
-                                <select class="custom-select " id="seriousness" name="seriousness">
+                                <select class="custom-select " name="seriousness">
                                     <option th:each="seriousness : ${T(com.ttn.linksharing.enums.Seriousness).values()}"
                                             th:value="${seriousness}"
                                             th:text="${seriousness.getValue()}"></option>
                                 </select>
                             </div>
                             <div class="col-md-4">
-                                <select class="custom-select" id="visibility" name="visibility">
+                                <select class="custom-select" name="visibility">
                                     <option th:each="visibilityItr : ${T(com.ttn.linksharing.enums.Visibility).values()}"
                                             th:value="${visibilityItr}"
                                             th:text="${visibilityItr.getValue()}"></option>
                                 </select>
                             </div>
-                            <div class="col-md-3" id="topic-btn">
+                            <div class="col-md-3">
                                 <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a>
                                 <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                 <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
@@ -116,6 +126,7 @@
                 </div>
                 <div class="card-body">
                     <div th:each="topic : ${trendingTopicsDTO.getTrendingTopics()}">
+                        <input class="topicId" type="hidden" th:value="${topic.getId()}">
                         <div class="row">
                             <div class="col-md-2">
                                 <img th:if="${topic.getUser().getProfilePicturePath()}"
@@ -131,10 +142,10 @@
                                         <a th:href="@{'/topic/' + ${topic.getId()}}" th:text="${topic.getName()}"></a>
                                     </div>
                                     <div class="col">
-                                        <a href="#"
+                                        <a class="float-right" href="#"
                                            th:if="${topic.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
-                                           th:text="'Unsubscribe'"></a>
-                                        <a href="#"
+                                           th:text="'Unsubscribe'" ></a>
+                                        <a class="float-right" href="#"
                                            th:unless="${topic.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
                                            th:text="'Subscribe'"></a>
                                     </div>
@@ -188,7 +199,7 @@
                             <div class="col-md-1">
                                 <a th:href="@{'/users/' + ${resource.getUser().getId()}  + '/profile'}">
                                     <img th:if="${resource.getUser().getProfilePicturePath()}"
-                                         th:src="${'/uploads/profile_pics/' + userDTO.getUsername() + '_' + resource.getUser().getProfilePicturePath()}"
+                                         th:src="${'/uploads/profile_pics/' + resource.getUser().getUsername() + '_' + resource.getUser().getProfilePicturePath()}"
                                          alt="profile-pic" width="40px" height="40px">
                                     <img th:unless="${resource.getUser().getProfilePicturePath()}"
                                          src="images/default-person.jpg" alt="profile-picture"
@@ -210,26 +221,27 @@
                                 <div class="row">
                                     <div class="col" th:text="${resource.getDescription()}"></div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <a href="#"><i class="fab fa-facebook" aria-hidden="true"></i></a>
-                                        <a href="#"><i class="fab fa-twitter" aria-hidden="true"></i></a>
-                                        <a href="#"><i class="fab fa-google-plus-square" aria-hidden="true"></i></a>
+                                <div class="row clearfix">
+                                    <div class="col">
+                                        <a class="float-left pr-3" href="#"><i class="fab fa-facebook"
+                                                                               aria-hidden="true"></i></a>
+                                        <a class="float-left pr-3" href="#"><i class="fab fa-twitter"
+                                                                               aria-hidden="true"></i></a>
+                                        <a class="float-left pr-3" href="#"><i class="fab fa-google-plus-square"
+                                                                               aria-hidden="true"></i></a>
                                     </div>
-                                    <div class="col-md-3">
-                                        <a th:href="${resource.getLinkUrl()}" target="_blank"
-                                           th:if="${resource.toString().split('@')[0].equals('com.ttn.linksharing.entities.LinkResource')}">View
-                                            Full site</a>
-                                        <a th:href="${'/uploads/docs/' + resource.getUser().getUsername() + '_' + resource.getDocumentPath()}"
+                                    <div class="col-md-6">
+                                        <a class="float-right pl-3"
+                                           th:if="${resource.getClass().getSimpleName().equals('LinkResource')}"
+                                           th:href="${resource.getLinkUrl()}"
+                                        target="_blank">View Full site</a>
+                                        <a class="float-right pl-3"
+                                           th:unless="${resource.getClass().getSimpleName().equals('LinkResource')}"
+                                           th:href="${'uploads/docs/' + resource.getUser().getUsername() + '_' + resource.getDocumentPath()}"
                                            target="_blank"
-                                           th:unless="${resource.toString().split('@')[0].equals('com.ttn.linksharing.entities.LinkResource')}"
-                                           download>Download</a>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <a href="#">Mark as Read</a>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <a th:href="${'/topic/' + resource.getTopic() + '/post/' + resource.getId()}">View
+                                        download>Download</a>
+                                        <a class="float-right pl-3" href="#">Mark as Read</a>
+                                        <a class="float-right" th:href="${'/topic/' + resource.getTopic() + '/post/' + resource.getId()}">View
                                             Post</a>
                                     </div>
                                 </div>

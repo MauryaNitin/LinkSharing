@@ -112,41 +112,11 @@
             <!-----------------------------------------------sidebar--------------------------------------------------->
 
             <div id="sidebar" class="col-md-4">
-                <div class="well">
 
-                    <!-----------------------------------------Login---------------------------------------------------->
-                    <div class="card">
-                        <div class="card-header">
-                            Login
-                        </div>
-                        <div class="card-body">
-                            <div id="popup">
+                <!---------------------------------------Register------------------------------------------------------>
 
-                            </div>
-                            <form th:action="@{/login}" action="#" th:object="${loginCO}" method="post">
-                                <div class="form-group row">
-                                    <label for="username-login" class="col-md-4 col-form-label">Username: </label>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control" th:field="*{username}" name="username" id="username-login" placeholder="Username/Email" autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="inputPassword" class="col-md-4 col-form-label">Password: </label>
-                                    <div class="col-md-8">
-                                        <input type="password" class="form-control" th:field="*{password}" name="password" id="inputPassword" placeholder="Password">
-                                    </div>
-                                </div>
-                                <div id="loginErrors" th:if="${#fields.hasErrors()}" th:classappend="'alert alert-danger'" th:role="'alert'" style="padding: 2px; font-size: 14px">
-                                    <ul style="margin: 2px">
-                                        <li th:errors="*{username}"></li>
-                                        <li th:errors="*{password}"></li>
-                                    </ul>
-                                </div>
-                                <a id="forgotPassword" href="#">Forgot password?</a>
-                                <input type="submit" class="btn btn-primary float-right" value="Login">
-                            </form>
-                        </div>
-                    </div>
+                <div th:include="~{login :: loginForm}">
+
                 </div>
                 <hr>
 

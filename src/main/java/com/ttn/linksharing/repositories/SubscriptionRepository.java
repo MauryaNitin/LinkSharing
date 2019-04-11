@@ -23,5 +23,7 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Lon
 //    List<Long> getTopicIdsOfSubscriptionsByUserId(@Param("userId") Long userId);
 
     List<Subscription> findByUser(User user);
+    Subscription deleteByUserAndTopic(User user, Topic topic);
+    Subscription deleteByUser_IdAndTopic_Id(Long userId, Long topicId);
 
 }
