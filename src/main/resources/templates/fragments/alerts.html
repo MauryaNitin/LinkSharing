@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Alerts</title>
+</head>
+<body>
+<div th:fragment="failed" class="alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Failed!</strong>
+</div>
+
+<div th:fragment="success" class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Success!</strong>
+</div>
+
+<div th:fragment="warning" class="alert alert-warn alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Warning!</strong>
+</div>
+
+<div th:fragment="forgetPassword-acknowledgement" class="login-popups alert alert-info alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    The <strong>Password reset link</strong> has been sent to your email!
+</div>
+
+<div th:fragment="noUserExist" class="login-popups alert alert-info alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>No such User Exist!</strong>
+</div>
+
+<div th:fragment="emailAreadySent" class="login-popups alert alert-info alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    The <strong>Password reset link</strong> has already sent to your email address!
+</div>
+</body>
+</html>

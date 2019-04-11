@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,10 +34,10 @@ public class Resource implements Serializable {
     private Topic topic;
 
     @CreationTimestamp
-    private Date createdOn;
+    private LocalDateTime createdOn;
 
     @UpdateTimestamp
-    private Date updatedOn;
+    private LocalDateTime updatedOn;
 
     @JsonBackReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "resource")
@@ -94,19 +95,19 @@ public class Resource implements Serializable {
         this.messages = messages;
     }
 
-    public Date getCreatedOn() {
+    public LocalDateTime getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(LocalDateTime createdOn) {
         this.createdOn = createdOn;
     }
 
-    public Date getUpdatedOn() {
+    public LocalDateTime getUpdatedOn() {
         return updatedOn;
     }
 
-    public void setUpdatedOn(Date updatedOn) {
+    public void setUpdatedOn(LocalDateTime updatedOn) {
         this.updatedOn = updatedOn;
     }
 }

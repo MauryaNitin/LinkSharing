@@ -21,5 +21,25 @@ $(document).ready(function () {
         });
     });
 
+    $("#forgotPassword").on("click", function () {
+        var username = $("#username-login").val();
+        if(!username){
+            alert("Please Enter a username");
+            return;
+        }
+        $.ajax({
+                method: "POST",
+                url : "/forgotPassword",
+                data: {
+                    username: username
+                }
+            }
+        ).done(function (response) {
+            if(response){
+                $("#popup").append(response);
+            }
+        })
+    })
+
 
 });

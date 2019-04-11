@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class SignupCO {
@@ -24,6 +25,7 @@ public class SignupCO {
     @Size(min = 5, message = "Password should have more than 5 characters!")
     private String password;
 
+    @NotBlank(message = "Confirm Password cannot be empty")
     private String confirmPassword;
 
     private MultipartFile photo;

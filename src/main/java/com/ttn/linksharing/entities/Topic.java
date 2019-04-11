@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,11 +31,11 @@ public class Topic implements Serializable {
 
     @CreationTimestamp
     @Column(name = "created_on")
-    private Date createdOn;
+    private LocalDateTime createdOn;
 
     @UpdateTimestamp
     @Column(name = "updated_on")
-    private Date updatedOn;
+    private LocalDateTime updatedOn;
 
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
@@ -88,19 +89,19 @@ public class Topic implements Serializable {
         this.resourcesList = resourcesList;
     }
 
-    public Date getCreatedOn() {
+    public LocalDateTime getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(LocalDateTime createdOn) {
         this.createdOn = createdOn;
     }
 
-    public Date getUpdatedOn() {
+    public LocalDateTime getUpdatedOn() {
         return updatedOn;
     }
 
-    public void setUpdatedOn(Date updatedOn) {
+    public void setUpdatedOn(LocalDateTime updatedOn) {
         this.updatedOn = updatedOn;
     }
 

@@ -1,9 +1,12 @@
 package com.ttn.linksharing.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Table(name = "resource_ratings")
 @Entity
@@ -21,6 +24,12 @@ public class Rating implements Serializable {
     private Resource resource;
 
     private Integer rating;
+
+    @CreationTimestamp
+    private LocalDateTime createdOn;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedOn;
 
     public User getUser() {
         return user;

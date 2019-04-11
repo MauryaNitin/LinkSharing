@@ -2,9 +2,11 @@ package com.ttn.linksharing.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ttn.linksharing.enums.Seriousness;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 public class Subscription implements Serializable {
@@ -22,6 +24,9 @@ public class Subscription implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Seriousness seriousness = Seriousness.CASUAL;
+
+    @CreationTimestamp
+    private LocalDateTime createdOn;
 
     public Long getId() {
         return id;
@@ -53,5 +58,13 @@ public class Subscription implements Serializable {
 
     public void setSeriousness(Seriousness seriousness) {
         this.seriousness = seriousness;
+    }
+
+    public LocalDateTime getCreatedOn() {
+        return createdOn;
+    }
+
+    public void setCreatedOn(LocalDateTime createdOn) {
+        this.createdOn = createdOn;
     }
 }

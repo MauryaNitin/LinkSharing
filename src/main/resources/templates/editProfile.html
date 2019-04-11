@@ -171,7 +171,7 @@
                             Change Password
                         </div>
                         <div class="card-body">
-                            <form th:action="@{'/users/' + ${#session.getAttribute('loggedInUserId')} + '/updatePassword'}" action="#" th:object="${changePasswordCO}" method="post" enctype="multipart/form-data">
+                            <form th:action="@{'/users/' + ${#session.getAttribute('loggedInUserId')} + '/updatePassword'}" action="#" th:object="${updatePasswordCO}" method="post" enctype="multipart/form-data">
                                 <div class="form-group row">
                                     <label for="pass-word" class="col-md-6 col-form-label">Password: </label>
                                     <div class="col-md-6">

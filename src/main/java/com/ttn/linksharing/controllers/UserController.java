@@ -89,7 +89,7 @@ public class UserController {
         model.addAttribute("documentResourceCO", new DocumentResourceCO());
         model.addAttribute("invitationCO", new InvitationCO());
         model.addAttribute("editProfileCO", updateProfileCO);
-        model.addAttribute("changePasswordCO", new UpdatePasswordCO());
+        model.addAttribute("updatePasswordCO", new UpdatePasswordCO());
         return "editProfile";
     }
 

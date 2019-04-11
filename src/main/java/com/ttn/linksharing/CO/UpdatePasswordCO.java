@@ -8,6 +8,8 @@ public class UpdatePasswordCO {
     @NotBlank(message = "Password cannot be empty")
     @Size(min = 5, message = "Password should have more than 5 characters!")
     private String password;
+
+    @NotBlank(message = "Confirm Password cannot be empty")
     private String confirmPassword;
 
     public String getPassword() {

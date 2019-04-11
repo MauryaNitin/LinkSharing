@@ -9,21 +9,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @Controller
 public class SignupController {
@@ -39,10 +32,12 @@ public class SignupController {
     Logger logger = LoggerFactory.getLogger(SignupController.class);
 
     @PostMapping("/signup")
-    public String signup(@Valid @ModelAttribute("signupCO") SignupCO signupCO, BindingResult result, ModelMap model){
+    public String signup(@Valid @ModelAttribute("signupCO") SignupCO signupCO,
+                         BindingResult result,
+                         ModelMap model){
         logger.debug(signupCO.toString());
-        if(!signupCO.getConfirmPassword().equals(signupCO.getPassword())){
-            result.addError(new ObjectError("confirmPassword", "Password did not match"));
+        if(!signupCO.getPassword().equals(signupCO.getConfirmPassword())){
+            result.rejectValue("confirmPassword", "errors.signup.confirmPassword", "Password did not match!");
         }
         if(result.hasErrors()){
             logger.warn(result.getFieldErrors().toString());
@@ -56,9 +51,10 @@ public class SignupController {
         }
         if(user1 == null){
             logger.error("Error occurred in saving user. Null returned from db.");
-            return "errors";
+            return "errors/errors";
         }
 
+        System.out.println(" ---------> " + user.getUsername() +  "  " + user.getPassword());
         loginService.loginUser(user.getUsername(), user.getPassword());
         return "redirect:/dashboard";
     }

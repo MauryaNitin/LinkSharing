@@ -106,4 +106,8 @@ public class UserService {
         user.setPassword(CryptoUtils.encrypt(updatePasswordCO.getPassword()));
         return userRepository.save(user);
     }
+
+    public User getUserByUsernameOrEmail(String username, String email){
+        return userRepository.findByUsernameOrEmail(username, email);
+    }
 }
