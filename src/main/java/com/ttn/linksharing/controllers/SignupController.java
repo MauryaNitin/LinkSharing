@@ -5,17 +5,18 @@ import com.ttn.linksharing.CO.SignupCO;
 import com.ttn.linksharing.entities.User;
 import com.ttn.linksharing.services.LoginService;
 import com.ttn.linksharing.services.SignupService;
+import com.ttn.linksharing.utils.CryptoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -34,28 +35,28 @@ public class SignupController {
     @PostMapping("/signup")
     public String signup(@Valid @ModelAttribute("signupCO") SignupCO signupCO,
                          BindingResult result,
-                         ModelMap model){
-        logger.debug(signupCO.toString());
-        if(!signupCO.getPassword().equals(signupCO.getConfirmPassword())){
+                         ModelMap model,
+                         HttpServletRequest request) {
+        if (!signupCO.getPassword().equals(signupCO.getConfirmPassword())) {
             result.rejectValue("confirmPassword", "errors.signup.confirmPassword", "Password did not match!");
         }
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             logger.warn(result.getFieldErrors().toString());
             model.addAttribute("loginCO", new LoginCO());
             return "homepage";
         }
         User user = new User(signupCO);
         User user1 = signupService.createUser(user);
-        if(signupCO.getPhoto() != null){
+        if (signupCO.getPhoto() != null) {
             uploader.saveProfilePicture(signupCO.getPhoto(), signupCO.getUsername());
         }
-        if(user1 == null){
+        if (user1 == null) {
             logger.error("Error occurred in saving user. Null returned from db.");
             return "errors/errors";
         }
-
-        System.out.println(" ---------> " + user.getUsername() +  "  " + user.getPassword());
-        loginService.loginUser(user.getUsername(), user.getPassword());
+        HttpSession session = request.getSession();
+        User loggedInUser = loginService.loginUser(user.getUsername(), CryptoUtils.decrypt(user.getPassword()));
+        session.setAttribute("loggedInUserId", loggedInUser.getId());
         return "redirect:/dashboard";
     }
 }

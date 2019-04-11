@@ -10,12 +10,13 @@ import com.ttn.linksharing.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -32,32 +33,34 @@ public class LoginController {
     Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute("loginCO") LoginCO loginCO, BindingResult result, HttpServletRequest request, ModelMap model, SignupCO signupCO) {
+    public String login(@Valid @ModelAttribute("loginCO") LoginCO loginCO,
+                        BindingResult result,
+                        HttpServletRequest request,
+                        ModelMap model) {
         logger.debug(loginCO.toString());
         if (result.hasErrors()) {
+            model.addAttribute("signupCO", new SignupCO());
             logger.warn(result.getFieldErrors().toString());
             return "homepage";
         }
         User user1 = loginService.loginUser(loginCO.getUsername(), loginCO.getPassword());
-        model.addAttribute("signupCO", new SignupCO());
         HttpSession session = request.getSession(false);
         session.setAttribute("loggedInUserId", user1.getId());
         return "redirect:/dashboard";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
     }
 
     @PostMapping("/forgotPassword")
-    public String forgotPasswordController(@RequestParam("username") String username){
-        if(loginService.checkForAlreadyExistingToken(username)){
+    public String forgotPasswordController(@RequestParam("username") String username) {
+        if (loginService.checkForAlreadyExistingToken(username)) {
             return "fragments/alerts :: emailAreadySent";
-        }
-        else{
-            if(loginService.forgotPassword(username)){
+        } else {
+            if (loginService.forgotPassword(username)) {
                 return "fragments/alerts :: forgetPassword-acknowledgement";
             }
             return "fragments/alerts :: noUserExist";
@@ -65,16 +68,15 @@ public class LoginController {
     }
 
     @GetMapping("/reset")
-    public String showResetPasswordPage(@RequestParam("token") String token, HttpServletRequest request, ModelMap model){
+    public String showResetPasswordPage(@RequestParam("token") String token, HttpServletRequest request, ModelMap model) {
         ForgotPassword forgotPassword = loginService.verifyResetToken(token);
-        if(forgotPassword != null){
+        if (forgotPassword != null) {
             HttpSession session = request.getSession();
             session.setAttribute("userId", forgotPassword.getUserId());
             session.setAttribute("token", token);
             model.addAttribute("updatePasswordCO", new UpdatePasswordCO());
             return "resetPassword";
-        }
-        else{
+        } else {
             return "errors/linkExpired";
         }
     }
@@ -83,19 +85,17 @@ public class LoginController {
     public String resetPassword(@Valid @ModelAttribute UpdatePasswordCO updatePasswordCO,
                                 BindingResult result,
                                 HttpSession session,
-                                ModelMap model){
-        if(session.getAttribute("userId") == null){
+                                ModelMap model) {
+        if (session.getAttribute("userId") == null) {
             logger.warn("Not authenticated to reset password");
-        }
-        else{
-            if(!updatePasswordCO.getPassword().equals(updatePasswordCO.getConfirmPassword())){
+        } else {
+            if (!updatePasswordCO.getPassword().equals(updatePasswordCO.getConfirmPassword())) {
                 result.rejectValue("confirmPassword", "error.confirmPassword", "Password did not match!");
             }
-            if(result.hasErrors()){
+            if (result.hasErrors()) {
                 return "resetPassword";
-            }
-            else{
-                Long userId = (Long)session.getAttribute("userId");
+            } else {
+                Long userId = (Long) session.getAttribute("userId");
                 userService.updatePassword(updatePasswordCO, userId);
                 loginService.deleteForgotPasswordToken(userId);
             }

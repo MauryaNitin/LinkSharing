@@ -35,9 +35,7 @@ public class LoginService {
 
     public User loginUser(String username, String password) {
         // sending same parameter two times because it can have either email or username
-        System.out.println(" ---------> " + username +  "  " + password);
         User user = userService.getUserByUsernameOrEmail(username, username);
-        System.out.println("-> User" + user.getPassword() + "  $$$$  "  + user.getUsername());
         if (user == null) {
             logger.error("User with Username: " + username +  " Not found!");
             throw new UserNotFoundException("No such user exists!");
