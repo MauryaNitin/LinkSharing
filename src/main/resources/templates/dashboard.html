@@ -73,21 +73,21 @@
                                     <div class="col">
                                         <a th:href="@{'/topic/' + ${subs.getId()}}" th:text="${subs.getName()}"></a>
                                     </div>
-                                    <div class="col">
+                                    <div class="col small">
                                         <a class="float-right" href="#"
-                                           th:if="${subs.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
+                                           th:if="${subs.getUser().getId() != (#session.getAttribute('loggedInUserId'))}"
                                            th:text="'Unsubscribe'" onclick="unsubscribeTopic()" th:data-topicId="${subs.getId()}"></a>
-                                        <a class="float-right" href="#"
-                                           th:unless="${subs.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
-                                           th:text="'Subscribe'" onclick="subscribeTopic()" th:data-topicId="${subs.getId()}"></a>
+                                        <!--<a class="float-right" href="#"-->
+                                           <!--th:unless="${subs.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"-->
+                                           <!--th:text="'Subscribe'" onclick="subscribeTopic()" th:data-topicId="${subs.getId()}"></a>-->
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row small text-muted">
                                     <div class="col" th:text="${'@' + subs.getUser().getUsername()}"></div>
                                     <div class="col">Subscriptions</div>
                                     <div class="col">Posts</div>
                                 </div>
-                                <div class="row justify-content-end">
+                                <div class="row small text-info">
                                     <div class="col"></div>
                                     <div class="col" th:text="${subs.getSubscriptions().size()}"></div>
                                     <div class="col" th:text="${subs.getResourcesList().size()}"></div>
@@ -95,7 +95,7 @@
 
                             </div>
                         </div>
-                        <div class="row justify-content-end">
+                        <div class="row mt-2">
                             <div class="col-md-4">
                                 <select class="custom-select " name="seriousness">
                                     <option th:each="seriousness : ${T(com.ttn.linksharing.enums.Seriousness).values()}"
@@ -110,77 +110,78 @@
                                             th:text="${visibilityItr.getValue()}"></option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                                <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                <a class="pl-2 pt-3" href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                <a class="pl-2 pt-3" href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
                             </div>
                         </div>
                         <hr>
                     </div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card" th:fragment="trendingTopics">
                 <div class="card-header">
                     Trending Topics
                 </div>
                 <div class="card-body">
-                    <div th:each="topic : ${trendingTopicsDTO.getTrendingTopics()}">
-                        <input class="topicId" type="hidden" th:value="${topic.getId()}">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <img th:if="${topic.getUser().getProfilePicturePath()}"
-                                     th:src="${'/uploads/profile_pics/' + topic.getUser().getUsername() + '_' + topic.getUser().getProfilePicturePath()}"
-                                     alt="profile-pic" width="40px" height="40px">
-                                <img th:unless="${topic.getUser().getProfilePicturePath()}"
-                                     src="images/default-person.jpg" alt="profile-picture"
-                                     width="40px" height="40px">
-                            </div>
-                            <div class="col-md-10">
-                                <div class="row">
-                                    <div class="col">
-                                        <a th:href="@{'/topic/' + ${topic.getId()}}" th:text="${topic.getName()}"></a>
+                    <div th:each="topic : ${trendingTopicsDTO}">
+                        <div th:fragment="topics">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <img th:if="${topic.getUser().getProfilePicturePath()}"
+                                         th:src="${'/uploads/profile_pics/' + topic.getUser().getUsername() + '_' + topic.getUser().getProfilePicturePath()}"
+                                         alt="profile-pic" width="40px" height="40px">
+                                    <img th:unless="${topic.getUser().getProfilePicturePath()}"
+                                         src="images/default-person.jpg" alt="profile-picture"
+                                         width="40px" height="40px">
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col">
+                                            <a th:href="@{'/topic/' + ${topic.getId()}}" th:text="${topic.getName()}"></a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="float-right" href="#"
+                                               th:if="${topic.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
+                                               th:text="'Unsubscribe'" ></a>
+                                            <a class="float-right" href="#"
+                                               th:unless="${topic.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
+                                               th:text="'Subscribe'"></a>
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                        <a class="float-right" href="#"
-                                           th:if="${topic.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
-                                           th:text="'Unsubscribe'" ></a>
-                                        <a class="float-right" href="#"
-                                           th:unless="${topic.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
-                                           th:text="'Subscribe'"></a>
+                                    <div class="row">
+                                        <div class="col" th:text="${'@' + topic.getUser().getUsername()}"></div>
+                                        <div class="col">Subscriptions</div>
+                                        <div class="col">Posts</div>
+                                    </div>
+                                    <div class="row justify-content-end">
+                                        <div class="col"></div>
+                                        <div class="col" th:text="${topic.getSubscriptions().size()}"></div>
+                                        <div class="col" th:text="${topic.getResourcesList().size()}"></div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col" th:text="${'@' + topic.getUser().getUsername()}"></div>
-                                    <div class="col">Subscriptions</div>
-                                    <div class="col">Posts</div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-md-4">
+                                    <select class="custom-select " name="seriousness">
+                                        <option th:each="seriousness : ${T(com.ttn.linksharing.enums.Seriousness).values()}"
+                                                th:value="${seriousness}"
+                                                th:text="${seriousness.getValue()}"></option>
+                                    </select>
                                 </div>
-                                <div class="row justify-content-end">
-                                    <div class="col"></div>
-                                    <div class="col" th:text="${topic.getSubscriptions().size()}"></div>
-                                    <div class="col" th:text="${topic.getResourcesList().size()}"></div>
+                                <div class="col-md-4">
+                                    <select class="custom-select" name="visibility">
+                                        <option th:each="visibilityItr : ${T(com.ttn.linksharing.enums.Visibility).values()}"
+                                                th:value="${visibilityItr}"
+                                                th:text="${visibilityItr.getValue()}"></option>
+                                    </select>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row justify-content-end">
-                            <div class="col-md-4">
-                                <select class="custom-select " name="seriousness">
-                                    <option th:each="seriousness : ${T(com.ttn.linksharing.enums.Seriousness).values()}"
-                                            th:value="${seriousness}"
-                                            th:text="${seriousness.getValue()}"></option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <select class="custom-select" name="visibility">
-                                    <option th:each="visibilityItr : ${T(com.ttn.linksharing.enums.Visibility).values()}"
-                                            th:value="${visibilityItr}"
-                                            th:text="${visibilityItr.getValue()}"></option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                                <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                <div class="col-md-4">
+                                    <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                                    <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    <a href="#"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                </div>
                             </div>
                         </div>
                         <hr>
@@ -208,18 +209,24 @@
                             </div>
                             <div class="col-md-11">
                                 <div class="row">
-                                    <div class="col-md-2">
+                                    <div class="col-md-6">
                                         <a th:href="@{'/users/' + ${resource.getUser().getId()}  + '/profile'}"
                                            th:text="${resource.getUser().getFirstname() + ' ' + resource.getUser().getLastname()}"></a>
                                     </div>
-                                    <div class="col-md-2" th:text="${'@' + resource.getUser().getUsername()}"></div>
-                                    <div class="col">
+                                    <div class="col-md-6">
                                         <a th:href="${'/topic/' + resource.getTopic().getId()}" class="float-right"
                                            th:text="${resource.getTopic().getName()}"></a>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col" th:text="${resource.getDescription()}"></div>
+                                    <div class="col-md-2 small text-muted">
+                                        <span th:text="${'@' + resource.getUser().getUsername()}"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col" >
+                                        <div class="card-body pr-0 pt-2 pb-2 pl-0" th:text="${resource.getDescription()}"></div>
+                                    </div>
                                 </div>
                                 <div class="row clearfix">
                                     <div class="col">
@@ -231,18 +238,19 @@
                                                                                aria-hidden="true"></i></a>
                                     </div>
                                     <div class="col-md-6">
-                                        <a class="float-right pl-3"
+                                        <a class="float-right pl-3 small text-info" th:href="${'/topic/' + resource.getTopic() + '/post/' + resource.getId()}">
+                                            <i class="fa fa-eye" aria-hidden="true"></i> View Post</a>
+                                        <a class="float-right pl-3 small text-info" href="#"><i class="fa fa-envelope-open" aria-hidden="true"></i>
+                                             Mark as Read</a>
+                                        <a class="float-right pl-3 small text-info"
                                            th:if="${resource.getClass().getSimpleName().equals('LinkResource')}"
                                            th:href="${resource.getLinkUrl()}"
-                                        target="_blank">View Full site</a>
-                                        <a class="float-right pl-3"
+                                           target="_blank"><i class="fa fa-link" aria-hidden="true"></i> View Full site</a>
+                                        <a class="float-right pl-3 small text-info"
                                            th:unless="${resource.getClass().getSimpleName().equals('LinkResource')}"
                                            th:href="${'uploads/docs/' + resource.getUser().getUsername() + '_' + resource.getDocumentPath()}"
                                            target="_blank"
-                                        download>Download</a>
-                                        <a class="float-right pl-3" href="#">Mark as Read</a>
-                                        <a class="float-right" th:href="${'/topic/' + resource.getTopic() + '/post/' + resource.getId()}">View
-                                            Post</a>
+                                           download><i class="fa fa-download" aria-hidden="true"></i> Download</a>
                                     </div>
                                 </div>
                             </div>

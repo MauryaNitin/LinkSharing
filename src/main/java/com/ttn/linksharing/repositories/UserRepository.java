@@ -15,4 +15,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Query("select u from User u")
     List<User> findAllUsers();
+
+    List<User> findByFirstnameLikeOrUsernameLike(String firstname, String username);
 }

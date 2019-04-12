@@ -13,6 +13,7 @@ import com.ttn.linksharing.repositories.ResourceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -68,9 +69,17 @@ public class ResourceService {
     }
 
     public List<Resource> searchResoucesByDescription(String query, Long userId){
-        return resourceRepository.findByDescriptionLike(query)
+        return resourceRepository.findByDescriptionLike("%" + query + "%")
                 .stream()
                 .filter(x -> (x.getTopic().getVisibility() == Visibility.PRIVATE && x.getUser().getId() != userId))
+                .collect(Collectors.toList());
+    }
+
+    public List<Resource> getTopPosts(Integer count){
+        return resourceRepository
+                .getTopPostsHavingMaxRatings(new PageRequest(0, 5))
+                .getContent()
+                .stream().filter(x -> x.getTopic().getVisibility() != Visibility.PRIVATE)
                 .collect(Collectors.toList());
     }
 }

@@ -114,4 +114,11 @@ public class UserService {
     public User getUserByEmail(String email){
         return userRepository.findByEmail(email);
     }
+
+    public List<User> searchUsersByName(String query, Long userId){
+        return userRepository.findByFirstnameLikeOrUsernameLike("%" + query + "%", "%" + query + "%")
+                .stream()
+                .filter(x -> x.getId() != userId)
+                .collect(Collectors.toList());
+    }
 }

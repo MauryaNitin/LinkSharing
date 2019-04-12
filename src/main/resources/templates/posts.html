@@ -83,7 +83,7 @@
                     Trending Topics
                 </div>
                 <div class="card-body">
-                    <div th:each="topic : ${trendingTopicsDTO.getTrendingTopics()}">
+                    <div th:each="topic : ${trendingTopicsDTO}">
                         <div class="row">
                             <div class="col-md-2">
                                 <img th:if="${topic.getUser().getProfilePicturePath()}"
