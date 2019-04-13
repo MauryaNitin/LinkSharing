@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class SubscriptionService {
@@ -45,12 +45,8 @@ public class SubscriptionService {
         return subscription;
     }
 
-    public List<Topic> getSubscribedTopicsByUserId(User user) {
-        return user
-                .getSubscriptions()
-                .stream()
-                .map(Subscription::getTopic)
-                .collect(Collectors.toList());
+    public List<Subscription> getSubscriptionsByUser(User user) {
+        return subscriptionRepository.findByUser(user);
     }
 
     public Boolean sendInvitation(Long senderId, InvitationCO invitationCO) {
@@ -105,13 +101,14 @@ public class SubscriptionService {
         return null;
     }
 
-
-    public Subscription unsubscribeTopicByUser(Long userId, Long topicId){
+    @Transactional
+    public Integer unsubscribeTopicByUser(Long userId, Long topicId){
         return subscriptionRepository.deleteByUser_IdAndTopic_Id(userId, topicId);
     }
 
-    public void unsubscribeTopicByUser(User user, Topic topic){
-        subscriptionRepository.deleteByUserAndTopic(user, topic);
+    @Transactional
+    public Integer unsubscribeTopicByUser(User user, Topic topic){
+        return subscriptionRepository.deleteByUserAndTopic(user, topic);
     }
 
     public Invitation verifySubscriptionToken(String token){

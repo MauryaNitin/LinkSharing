@@ -1,31 +1,25 @@
 package com.ttn.linksharing.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Entity
-@Where(clause = "read_status = false")
+@Where(clause = "read_status = true")
 public class Message implements Serializable {
 
     @Id
     private Long id;
 
-    @JsonManagedReference
-    @ManyToOne
-    Resource resource;
+    private Resource resource;
 
-    @JsonManagedReference
-    @ManyToOne
-    User user;
+    private User user;
 
     @Column(columnDefinition = "default false")
-    Boolean readStatus;
+    private Boolean readStatus;
 
     public Long getId() {
         return id;

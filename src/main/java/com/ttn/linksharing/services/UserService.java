@@ -5,6 +5,7 @@ import com.ttn.linksharing.CO.UpdateProfileCO;
 import com.ttn.linksharing.DTO.UserDTO;
 import com.ttn.linksharing.DTO.UserPublicDTO;
 import com.ttn.linksharing.controllers.FileUploadController;
+import com.ttn.linksharing.entities.Subscription;
 import com.ttn.linksharing.entities.Topic;
 import com.ttn.linksharing.entities.User;
 import com.ttn.linksharing.enums.Visibility;
@@ -53,19 +54,18 @@ public class UserService {
 
     public UserDTO getUserDto(Long userId){
         UserDTO userDTO = new UserDTO(getUserById(userId));
-
         userDTO.setSubscriptions(getSubscriptions(userId));
         userDTO.setTopics(getTopics(userId));
         return userDTO;
     }
 
-    public List<Topic> getSubscriptions(Long userId){
+    public List<Subscription> getSubscriptions(Long userId){
         if(userId == null){
             throw new UserNotFoundException("No such User Exists!");
         }
         else{
             User user = getUserById(userId);
-            return subscriptionService.getSubscribedTopicsByUserId(user);
+            return subscriptionService.getSubscriptionsByUser(user);
         }
     }
 

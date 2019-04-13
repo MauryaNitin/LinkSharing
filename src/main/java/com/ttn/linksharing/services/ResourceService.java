@@ -3,12 +3,10 @@ package com.ttn.linksharing.services;
 import com.ttn.linksharing.CO.DocumentResourceCO;
 import com.ttn.linksharing.CO.LinkResourceCO;
 import com.ttn.linksharing.controllers.FileUploadController;
-import com.ttn.linksharing.entities.DocumentResource;
-import com.ttn.linksharing.entities.LinkResource;
-import com.ttn.linksharing.entities.Resource;
-import com.ttn.linksharing.entities.User;
+import com.ttn.linksharing.entities.*;
 import com.ttn.linksharing.enums.Visibility;
 import com.ttn.linksharing.exceptions.UserNotFoundException;
+import com.ttn.linksharing.repositories.MessageRepository;
 import com.ttn.linksharing.repositories.ResourceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +22,9 @@ import java.util.stream.Collectors;
 public class ResourceService {
     @Autowired
     ResourceRepository resourceRepository;
+
+    @Autowired
+    MessageRepository messageRepository;
 
     @Autowired
     TopicService topicService;

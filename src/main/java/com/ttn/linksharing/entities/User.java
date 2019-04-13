@@ -157,14 +157,6 @@ public class User implements Serializable{
         isActive = active;
     }
 
-    public List<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
-    }
-
     public LocalDateTime getCreatedOn() {
         return createdOn;
     }
@@ -205,14 +197,6 @@ public class User implements Serializable{
         this.resources = resources;
     }
 
-    public List<Rating> getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(List<Rating> ratings) {
-        this.ratings = ratings;
-    }
-
     public List<Subscription> getSubscriptions() {
         return subscriptions;
     }
@@ -221,4 +205,19 @@ public class User implements Serializable{
         this.subscriptions = subscriptions;
     }
 
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<Rating> ratings) {
+        this.ratings = ratings;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
 }

@@ -28,11 +28,4 @@ public class LoginCO {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "LoginCO{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
 }

@@ -4,6 +4,7 @@ import com.ttn.linksharing.CO.TopicCO;
 import com.ttn.linksharing.entities.Subscription;
 import com.ttn.linksharing.entities.Topic;
 import com.ttn.linksharing.entities.User;
+import com.ttn.linksharing.enums.Roles;
 import com.ttn.linksharing.enums.Visibility;
 import com.ttn.linksharing.repositories.TopicRepository;
 import org.slf4j.Logger;
@@ -30,7 +31,16 @@ public class TopicService {
     Logger logger = LoggerFactory.getLogger(TopicService.class);
 
     public Topic createTopic(TopicCO topicCO, Long userId) {
-        logger.info(topicCO.toString());
+        if(topicCO.getVisibility() == Visibility.PUBLIC){
+            if(topicRepository.findFirstByName(topicCO.getName()) != null){
+                return null;
+            }
+        }
+        else{
+            if(topicRepository.findFirstByNameAndUser_Id(topicCO.getName(), userId) != null){
+                return null;
+            }
+        }
         Topic topic = new Topic(topicCO);
         User user = userService.getUserById(userId);
         topic.setUser(user);
@@ -63,6 +73,25 @@ public class TopicService {
                 .stream()
                 .filter(x -> (x.getVisibility() == Visibility.PUBLIC || (x.getUser().getId() == userId)))
                 .collect(Collectors.toList());
+    }
+
+    public Topic updateTopic(Long topicId, TopicCO topicCO, Long userId){
+        Topic topic  = getTopicById(topicId);
+        if(!topic.getUser().getId().equals(userId) && userService.getUserById(userId).getRole() != Roles.ADMIN){
+            return null;
+        }
+        topic.setName(topicCO.getName());
+        topic.setVisibility(topicCO.getVisibility());
+        return topicRepository.save(topic);
+    }
+
+    public Topic deleteTopic(Long topicId, Long userId){
+        Topic topic  = getTopicById(topicId);
+        User user = userService.getUserById(userId);
+        if(!topic.getUser().getId().equals(user.getId()) && user.getRole() != Roles.ADMIN){
+            return null;
+        }
+        return topicRepository.deleteTopicByIdAndUser_Id(topic.getId(), user.getId());
     }
 
 }

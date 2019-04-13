@@ -6,6 +6,7 @@ import com.ttn.linksharing.DTO.UserDTO;
 import com.ttn.linksharing.entities.Invitation;
 import com.ttn.linksharing.entities.Subscription;
 import com.ttn.linksharing.entities.Topic;
+import com.ttn.linksharing.entities.User;
 import com.ttn.linksharing.enums.Visibility;
 import com.ttn.linksharing.services.SubscriptionService;
 import com.ttn.linksharing.services.TopicService;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -43,8 +44,11 @@ public class TopicController {
         } else {
             return "redirect:/dashboard";
         }
-        topicService.createTopic(topicCO, loggedInUserId);
-        return "redirect:/dashboard";
+        Topic topic = topicService.createTopic(topicCO, loggedInUserId);
+        if (topic != null) {
+            return "fragments/alerts :: createTopicSuccess";
+        }
+        return "fragments/alerts :: createTopicFailed";
     }
 
     @GetMapping("/topic/{id}")
@@ -91,19 +95,18 @@ public class TopicController {
     }
 
     @GetMapping("/subscribe")
-    public String subscribePrivateTopicByEmail(@RequestParam("token") String token,ModelMap model, HttpSession session) {
+    public String subscribePrivateTopicByEmail(@RequestParam("token") String token, ModelMap model, HttpSession session) {
         Invitation invitation = subscriptionService.verifySubscriptionToken(token);
         if (invitation != null) {
             Long loginId = (Long) session.getAttribute("loggedInUserId");
             if (loginId != null) {
-                if(invitation.getReceiverId() != loginId){
+                if (invitation.getReceiverId() != loginId) {
                     return "fragments/alerts :: subscriptionRequestNotAuthorized";
                 }
                 subscriptionService.subscribeTopic(invitation.getReceiverId(), invitation.getTopicId());
                 subscriptionService.invalidateToken(token);
                 return "fragments/alerts :: subscriptionSuccess";
-            }
-            else {
+            } else {
                 session.setAttribute("subscriptionToken", token);
                 model.addAttribute("loginCO", new LoginCO());
                 return "login";
@@ -115,7 +118,8 @@ public class TopicController {
     @GetMapping("/topic/{topicId}/subscribe")
     public String subscribePublicTopic(@PathVariable("topicId") Long topicId,
                                        ModelMap model,
-                                       HttpSession session) {
+                                       HttpSession session,
+                                       RedirectAttributes redirectAttributes){
         if (session.getAttribute("loggedInUserId") == null) {
             logger.warn("Redirecting to Homepage, Request not Authorized.");
             return "redirect:/";
@@ -123,22 +127,67 @@ public class TopicController {
         Long userId = (Long) session.getAttribute("loggedInUserId");
         Subscription subscription = subscriptionService.subscribePublicTopic(userId, topicId);
         if (subscription != null) {
-            return "fragments/alerts :: subscriptionSuccess";
+            redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: subscriptionSuccess");
+            return "redirect:/dashboard";
         }
-        return "fragments/alerts :: privateSubscriptionFailed";
+        redirectAttributes.addFlashAttribute("alertFailed", "fragments/alerts :: privateSubscriptionFailed");
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/topic/{topicId}/unsubscribe")
     public String unsubscribeTopic(@PathVariable("topicId") Long topicId,
-                                  HttpSession session){
+                                   HttpSession session,
+                                   RedirectAttributes redirectAttributes) {
         if (session.getAttribute("loggedInUserId") == null) {
             logger.warn("Redirecting to Homepage, Request not Authorized.");
             return "redirect:/";
         }
         Long userId = (Long) session.getAttribute("loggedInUserId");
-        if(subscriptionService.unsubscribeTopicByUser(userId, topicId) != null){
-            return "fragments/alerts :: unsubscribeSuccess";
-        };
-        return "fragments/alerts :: unsubscribeFailed";
+        User user = userService.getUserById(userId);
+        Topic topic  = topicService.getTopicById(topicId);
+        if (subscriptionService.unsubscribeTopicByUser(user, topic) != null) {
+            redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: unsubscribeSuccess");
+            return "redirect:/dashboard";
+        }
+        redirectAttributes.addFlashAttribute("alertFailed", "fragments/alerts :: unsubscribeFailed");
+        return "redirect:/dashboard";
     }
+
+    @PutMapping("/topic/{topicId}/edit")
+    public String editTopic(@PathVariable("topicId") Long topicId,
+                            @ModelAttribute("topicCO") TopicCO topicCO,
+                            HttpSession session,
+                            RedirectAttributes redirectAttributes){
+        if (session.getAttribute("loggedInUserId") == null) {
+            logger.warn("Redirecting to Homepage, Request not Authorized.");
+            return "redirect:/";
+        }
+        Long userId = (Long) session.getAttribute("loggedInUserId");
+        if(topicService.updateTopic(topicId, topicCO, userId) != null){
+            redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: editTopicSuccess");
+            return "redirect:/dashboard";
+        }
+        redirectAttributes.addFlashAttribute("alertFailed", "fragments/alerts :: editTopicFailed");
+        return "redirect:/dashboard";
+    }
+
+
+    @DeleteMapping("/topic/{topicId}/delete")
+    public String deleteTopic(@PathVariable("topicId") Long topicId,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes){
+        if (session.getAttribute("loggedInUserId") == null) {
+            logger.warn("Redirecting to Homepage, Request not Authorized.");
+            return "redirect:/";
+        }
+        Long userId = (Long) session.getAttribute("loggedInUserId");
+        if(topicService.deleteTopic(topicId, userId) != null){
+            redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: deleteTopicSuccess");
+            return "redirect:/dashboard";
+        }
+        redirectAttributes.addFlashAttribute("alertFailed", "fragments/alerts :: deleteTopicFailed");
+        return "redirect:/dashboard";
+    }
+
+
 }

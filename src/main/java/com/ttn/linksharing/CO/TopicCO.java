@@ -28,11 +28,4 @@ public class TopicCO {
         this.visibility = visibility;
     }
 
-    @Override
-    public String toString() {
-        return "TopicCO{" +
-                "name='" + name + '\'' +
-                ", visibility=" + visibility +
-                '}';
-    }
 }

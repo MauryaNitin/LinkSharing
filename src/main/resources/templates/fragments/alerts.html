@@ -8,58 +8,78 @@
 <!------------------------------------success----------------------------------------------->
 
 
-<div th:fragment="subscriptionSuccess" class="alert alert-success alert-dismissible fade show">
+<div th:fragment="subscriptionSuccess">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Topic Subscribed Successfully!</strong>
 </div>
 
-<div th:fragment="invitationSuccess" class="alert alert-success alert-dismissible fade show">
+<div th:fragment="invitationSuccess">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>User Invited Successfully!</strong>
 </div>
 
-<div th:fragment="unsubscribeSuccess" class="alert alert-success alert-dismissible fade show">
+<div th:fragment="unsubscribeSuccess">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Topic unsubscribed Successfully!</strong>
 </div>
 
+<div th:fragment="createTopicSuccess">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Topic created Successfully!</strong>
+</div>
+
+<div th:fragment="editTopicSuccess">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Topic updated Successfully!</strong>
+</div>
+
 <!------------------------------------failed----------------------------------------------->
 
-<div th:fragment="noUserExist" class="login-popups alert alert-danger alert-dismissible fade show">
+<div th:fragment="noUserExist">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>No such User Exist!</strong>
 </div>
 
 
-<div th:fragment="emailNotValid" class="alert alert-danger alert-dismissible fade show">
+<div th:fragment="emailNotValid">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Provided Email</strong> is Not Valid!
 </div>
 
-<div th:fragment="privateSubscriptionFailed" class="alert alert-danger alert-dismissible fade show">
+<div th:fragment="privateSubscriptionFailed">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>You cannot subscribe private Topic!</strong>
 </div>
 
 
-<div th:fragment="subscriptionFailed" class="alert alert-danger alert-dismissible fade show">
+<div th:fragment="subscriptionFailed">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Topic Subscription Failed!</strong>
 </div>
 
-<div th:fragment="subscriptionRequestNotAuthorized" class="alert alert-danger alert-dismissible fade show">
+<div th:fragment="subscriptionRequestNotAuthorized" >
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>You are Not Authorized to subscribe this topic!</strong>
 </div>
 
-<div th:fragment="invitationFailed" class="alert alert-danger alert-dismissible fade show">
+<div th:fragment="invitationFailed">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Invitation Sent failed!</strong>
 </div>
 
-<div th:fragment="unsubscribeFailed" class="alert alert-danger alert-dismissible fade show">
+<div th:fragment="unsubscribeFailed">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Topic unsubscribe Failed!</strong>
+</div>
+
+<div th:fragment="createTopicFailed">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Cannot create Topic!</strong>
+</div>
+
+<div th:fragment="editTopicFailed">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Cannot Update Topic!</strong>
 </div>
 
 <!------------------------------------Info----------------------------------------------->
@@ -74,12 +94,7 @@
     Already sent <strong>Password reset link</strong> to your email address!
 </div>
 
-<!------------------------------------Warnings----------------------------------------------->
 
-<div th:fragment="warning" class="alert alert-warn alert-dismissible fade show">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Warning!</strong>
-</div>
 
 
 </body>

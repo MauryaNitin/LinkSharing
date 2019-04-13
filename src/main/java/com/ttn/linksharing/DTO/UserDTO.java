@@ -1,5 +1,6 @@
 package com.ttn.linksharing.DTO;
 
+import com.ttn.linksharing.entities.Subscription;
 import com.ttn.linksharing.entities.Topic;
 import com.ttn.linksharing.entities.User;
 import com.ttn.linksharing.enums.Roles;
@@ -11,7 +12,7 @@ public class UserDTO {
     private String username;
     private String firstname;
     private String lastname;
-    private List<Topic> subscriptions;
+    private List<Subscription> subscriptions;
     private List<Topic> topics;
     private String photo;
     private Roles role;
@@ -59,11 +60,11 @@ public class UserDTO {
         this.lastname = lastname;
     }
 
-    public List<Topic> getSubscriptions() {
+    public List<Subscription> getSubscriptions() {
         return subscriptions;
     }
 
-    public void setSubscriptions(List<Topic> subscriptions) {
+    public void setSubscriptions(List<Subscription> subscriptions) {
         this.subscriptions = subscriptions;
     }
 

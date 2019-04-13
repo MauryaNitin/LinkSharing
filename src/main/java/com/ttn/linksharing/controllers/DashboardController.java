@@ -20,6 +20,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -50,7 +51,11 @@ public class DashboardController {
 
 
     @GetMapping("/dashboard")
-    public String showDashboardView(HttpSession session, ModelMap model) {
+    public String showDashboardView(HttpSession session,
+                                    ModelMap model,
+                                    @ModelAttribute("alertSuccess") String alertSuccess,
+                                    @ModelAttribute("alertFailed") String alertFailed,
+                                    @ModelAttribute("alertInfo") String alertInfo) {
         if (session.getAttribute("loggedInUserId") == null) {
             logger.warn("Redirecting to Homepage, Request not Authorized.");
             return "redirect:/";
@@ -64,7 +69,9 @@ public class DashboardController {
         model.addAttribute("userId", userId);
         model.addAttribute("userDTO", userDTO);
         model.addAttribute("trendingTopicsDTO", trendingTopicsDTO);
-
+        model.addAttribute("alertSuccess", alertSuccess);
+        model.addAttribute("alertFailed", alertFailed);
+        model.addAttribute("alertInfo", alertInfo);
         return "dashboard";
     }
 

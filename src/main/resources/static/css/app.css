@@ -50,12 +50,10 @@ li.nav-item{
     margin-top: 1em;
 }
 
-#alerts{
+.alerts{
     position: absolute;
-    top: 30px;
-    right: 30px;
-}
+    top: 20px;
+    right: 20px;
+    z-index: 2;
 
-a {
-    text-decoration: none;
 }

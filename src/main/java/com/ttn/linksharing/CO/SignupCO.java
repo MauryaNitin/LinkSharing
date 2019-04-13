@@ -86,16 +86,4 @@ public class SignupCO {
         this.photo = photo;
     }
 
-    @Override
-    public String toString() {
-        return "SignupCO{" +
-                "firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", email='" + email + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", confirmPassword='" + confirmPassword + '\'' +
-                ", photo='" + photo + '\'' +
-                '}';
-    }
 }

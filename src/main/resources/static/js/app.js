@@ -1,7 +1,6 @@
 $(document).ready(function () {
 
     $("#search").on("keyup", function () {
-        console.log($("#search").val());
         $.ajax({
                 method: "POST",
                 url : "/search",
@@ -16,7 +15,7 @@ $(document).ready(function () {
             var topicResults = [];
             for(var i = 0 ; i < topicsList.length; i++){
                 topicResults.push(response.topics[i].name)
-                $("#search-dropdown").append("<a class='dropdown-item' href='#'>" + response.topics[i].name + "</a>");
+                $("#search-dropdown").replaceWith("<a class='dropdown-item' href='#'>" + response.topics[i].name + "</a>");
             }
         });
     });
@@ -41,36 +40,57 @@ $(document).ready(function () {
         })
     })
 
-    function unsubscribeTopic(){
-        event.preventDefault();
-        console.log(element);
-        var topicId = $("a").data("topicid").val();
-        console.log(topicId);
-        // $.ajax({
-        //         method: "GET",
-        //         url : "/topic/" + topicId + "/unsubscribe",
-        //     }
-        // ).done(function (response) {
-        //     if(response){
-        //         $("#alerts").append(response);
-        //     }
-        // })
-    }
-
-    function subscribeTopic(){
-        element.preventDefault();
-        console.log(element);
-        var topicId = $("a").data("topicid").val();
-        console.log(topicId);
-        // var topicId = $(element).attr("data-topicId");
-        // $.ajax({
-        //         method: "GET",
-        //         url : "/topic/" + topicId + "/subscribe",
-        //     }
-        // ).done(function (response) {
-        //     if(response){
-        //         $("#alerts").append(response);
-        //     }
-        // })
-    }
 });
+
+
+function unsubscribeTopic(topic){
+    var topicId = topic.getAttribute("data-topicId");
+    var url  = "/topic/" + topicId + "/unsubscribe";
+    $("html").load(url);
+}
+
+function subscribeTopic(topic){
+    var topicId = topic.getAttribute("data-topicId");
+    var url  = "/topic/" + topicId + "/subscribe";
+    $("html").load(url);
+}
+
+$(document).on("click", ".edit-btn", function (event) {
+    event.preventDefault();
+    $(".topicName").hide();
+    $(".editTopicName").show();
+    $(".topicVisibility").hide();
+    $(".editTopicVisibility").show();
+    $(".edit-topic-close").show();
+    $(".edit-topic-save").show();
+    $(this).hide();
+})
+
+$(document).on("click", ".edit-topic-save", function (event) {
+    event.preventDefault();
+    $(".topicName").toggle();
+    $(".editTopicName").toggle();
+    $(".topicVisibility").toggle();
+    $(".editTopicVisibility").toggle();
+    $(".edit-topic-close").toggle();
+    $(".edit-topic-save").toggle();
+    $(".edit-btn").show();
+})
+
+$(document).on("click", ".edit-topic-close", function (event) {
+    event.preventDefault();
+    $(".topicName").toggle();
+    $(".editTopicName").toggle();
+    $(".topicVisibility").toggle();
+    $(".editTopicVisibility").toggle();
+    $(".edit-topic-save").toggle();
+    $(".edit-btn").show();
+    $(".edit-topic-close").toggle();
+})
+
+$(document).on("click", "[data-target*=Modal]", function () {
+    var element = $(this).attr('data-target');
+    console.log(element + this);
+    // $().modal('show');
+})
+

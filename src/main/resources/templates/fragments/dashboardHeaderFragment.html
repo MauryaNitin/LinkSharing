@@ -153,8 +153,8 @@
                                 <select class="custom-select" id="topicsList" name="topicsList"
                                         th:field="*{topicId}">
                                     <option th:each="subs : ${userDTO.getSubscriptions()}"
-                                            th:value="${subs.getId()}"
-                                            th:text="${subs.getName()}"></option>
+                                            th:value="${subs.getTopic().getId()}"
+                                            th:text="${subs.getTopic().getName()}"></option>
                                 </select>
                             </div>
                         </div>
@@ -212,8 +212,8 @@
                                 <select class="custom-select" id="topicsList" name="topicsList"
                                         th:field="*{topicId}">
                                     <option th:each="subs : ${userDTO.getSubscriptions()}"
-                                            th:value="${subs.getId()}"
-                                            th:text="${subs.getName()}"></option>
+                                            th:value="${subs.getTopic().getId()}"
+                                            th:text="${subs.getTopic().getName()}"></option>
                                 </select>
                             </div>
                         </div>
@@ -277,8 +277,8 @@
                                 <select class="custom-select" id="topicsList" name="topicsList"
                                         th:field="*{topicId}">
                                     <option th:each="subs : ${userDTO.getSubscriptions()}"
-                                            th:value="${subs.getId()}"
-                                            th:text="${subs.getName()}"></option>
+                                            th:value="${subs.getTopic().getId()}"
+                                            th:text="${subs.getTopic().getName()}"></option>
                                 </select>
                             </div>
                         </div>
