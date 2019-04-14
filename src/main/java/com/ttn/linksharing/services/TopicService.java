@@ -5,6 +5,7 @@ import com.ttn.linksharing.entities.Subscription;
 import com.ttn.linksharing.entities.Topic;
 import com.ttn.linksharing.entities.User;
 import com.ttn.linksharing.enums.Roles;
+import com.ttn.linksharing.enums.Seriousness;
 import com.ttn.linksharing.enums.Visibility;
 import com.ttn.linksharing.repositories.TopicRepository;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -85,13 +87,13 @@ public class TopicService {
         return topicRepository.save(topic);
     }
 
-    public Topic deleteTopic(Long topicId, Long userId){
-        Topic topic  = getTopicById(topicId);
+    @Transactional
+    public Integer deleteTopic(Long topicId, Long userId) {
+        Topic topic = getTopicById(topicId);
         User user = userService.getUserById(userId);
-        if(!topic.getUser().getId().equals(user.getId()) && user.getRole() != Roles.ADMIN){
+        if (!topic.getUser().getId().equals(user.getId()) && user.getRole() != Roles.ADMIN) {
             return null;
         }
         return topicRepository.deleteTopicByIdAndUser_Id(topic.getId(), user.getId());
     }
-
 }

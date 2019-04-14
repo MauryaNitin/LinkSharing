@@ -8,78 +8,98 @@
 <!------------------------------------success----------------------------------------------->
 
 
-<div th:fragment="subscriptionSuccess">
+<div th:fragment="subscriptionSuccess" class="alert alert-success alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Topic Subscribed Successfully!</strong>
 </div>
 
-<div th:fragment="invitationSuccess">
+<div th:fragment="invitationSuccess" class="alert alert-success alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>User Invited Successfully!</strong>
 </div>
 
-<div th:fragment="unsubscribeSuccess">
+<div th:fragment="unsubscribeSuccess" class="alert alert-success alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Topic unsubscribed Successfully!</strong>
 </div>
 
-<div th:fragment="createTopicSuccess">
+<div th:fragment="createTopicSuccess" class="alert alert-success alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Topic created Successfully!</strong>
 </div>
 
-<div th:fragment="editTopicSuccess">
+<div th:fragment="editTopicSuccess" class="alert alert-success alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Topic updated Successfully!</strong>
 </div>
 
+<div th:fragment="deleteTopicSuccess" class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Topic deleted Successfully!</strong>
+</div>
+
+<div th:fragment="changeSeriousnessSuccess" class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Topic Seriousness Changed Successfully!</strong>
+</div>
+
 <!------------------------------------failed----------------------------------------------->
 
-<div th:fragment="noUserExist">
+<div th:fragment="noUserExist" class="alert alert-danger alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>No such User Exist!</strong>
 </div>
 
 
-<div th:fragment="emailNotValid">
+<div th:fragment="emailNotValid" class="alert alert-danger alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Provided Email</strong> is Not Valid!
 </div>
 
-<div th:fragment="privateSubscriptionFailed">
+<div th:fragment="privateSubscriptionFailed" class="alert alert-danger alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>You cannot subscribe private Topic!</strong>
 </div>
 
 
-<div th:fragment="subscriptionFailed">
+<div th:fragment="subscriptionFailed" class="alert alert-danger alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Topic Subscription Failed!</strong>
 </div>
 
-<div th:fragment="subscriptionRequestNotAuthorized" >
+<div th:fragment="subscriptionRequestNotAuthorized" class="alert alert-danger alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>You are Not Authorized to subscribe this topic!</strong>
 </div>
 
-<div th:fragment="invitationFailed">
+<div th:fragment="invitationFailed" class="alert alert-danger alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Invitation Sent failed!</strong>
 </div>
 
-<div th:fragment="unsubscribeFailed">
+<div th:fragment="unsubscribeFailed" class="alert alert-danger alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Topic unsubscribe Failed!</strong>
 </div>
 
-<div th:fragment="createTopicFailed">
+<div th:fragment="createTopicFailed" class="alert alert-danger alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Cannot create Topic!</strong>
 </div>
 
-<div th:fragment="editTopicFailed">
+<div th:fragment="editTopicFailed" class="alert alert-danger alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Cannot Update Topic!</strong>
+</div>
+
+<div th:fragment="deleteTopicFailed" class="alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Topic deletion Failed!</strong>
+</div>
+
+<div th:fragment="changeSeriousnessFailed" class="alert alert-danger alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Cannot Change Topic Seriousness!</strong>
 </div>
 
 <!------------------------------------Info----------------------------------------------->

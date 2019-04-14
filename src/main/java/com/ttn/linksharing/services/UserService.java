@@ -5,14 +5,15 @@ import com.ttn.linksharing.CO.UpdateProfileCO;
 import com.ttn.linksharing.DTO.UserDTO;
 import com.ttn.linksharing.DTO.UserPublicDTO;
 import com.ttn.linksharing.controllers.FileUploadController;
-import com.ttn.linksharing.entities.Subscription;
-import com.ttn.linksharing.entities.Topic;
-import com.ttn.linksharing.entities.User;
+import com.ttn.linksharing.entities.*;
 import com.ttn.linksharing.enums.Visibility;
 import com.ttn.linksharing.exceptions.UserNotFoundException;
+import com.ttn.linksharing.repositories.MessageRepository;
+import com.ttn.linksharing.repositories.ResourceRepository;
 import com.ttn.linksharing.repositories.UserRepository;
 import com.ttn.linksharing.utils.CryptoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,9 @@ public class UserService {
     UserRepository userRepository;
 
     @Autowired
+    ResourceService resourceService;
+
+    @Autowired
     SubscriptionService subscriptionService;
 
     @Autowired
@@ -33,6 +37,9 @@ public class UserService {
 
     @Autowired
     FileUploadController uploader;
+
+    @Autowired
+    MessageRepository messageRepository;
 
 
     public User createUser(User user){
@@ -56,6 +63,7 @@ public class UserService {
         UserDTO userDTO = new UserDTO(getUserById(userId));
         userDTO.setSubscriptions(getSubscriptions(userId));
         userDTO.setTopics(getTopics(userId));
+        userDTO.setInboxResources(getInboxResources(userId));
         return userDTO;
     }
 
@@ -74,6 +82,22 @@ public class UserService {
             throw new UserNotFoundException("No such User Exists!");
         }
         return topicService.getTopicsByUserId(userId);
+    }
+
+    public List<Resource> getInboxResources(Long userId){
+        User user = getUserById(userId);
+        List<Resource> readResources = messageRepository
+                .findByUser(user)
+                .stream()
+                .map(Message::getResource)
+                .collect(Collectors.toList());
+
+        return getSubscriptions(userId)
+                .stream()
+                .map(x -> x.getTopic().getResourcesList())
+                .flatMap(List::stream)
+                .filter(x->!readResources.contains(x))
+                .collect(Collectors.toList());
     }
 
     public UserPublicDTO getPublicUserDto(Long userId){
@@ -116,7 +140,8 @@ public class UserService {
     }
 
     public List<User> searchUsersByName(String query, Long userId){
-        return userRepository.findByFirstnameLikeOrUsernameLike("%" + query + "%", "%" + query + "%")
+        return userRepository
+                .findByFirstnameLikeOrUsernameLike("%" + query + "%", "%" + query + "%")
                 .stream()
                 .filter(x -> x.getId() != userId)
                 .collect(Collectors.toList());

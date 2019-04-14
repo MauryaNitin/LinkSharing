@@ -25,5 +25,5 @@ public interface TopicRepository extends CrudRepository<Topic, Long> {
 
     Topic deleteByUser_IdAndAndId(Long userId, Long topicId);
 
-    Topic deleteTopicByIdAndUser_Id(Long topicId, Long userId);
+    Integer deleteTopicByIdAndUser_Id(Long topicId, Long userId);
 }

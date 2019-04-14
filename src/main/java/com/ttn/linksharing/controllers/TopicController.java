@@ -7,6 +7,7 @@ import com.ttn.linksharing.entities.Invitation;
 import com.ttn.linksharing.entities.Subscription;
 import com.ttn.linksharing.entities.Topic;
 import com.ttn.linksharing.entities.User;
+import com.ttn.linksharing.enums.Seriousness;
 import com.ttn.linksharing.enums.Visibility;
 import com.ttn.linksharing.services.SubscriptionService;
 import com.ttn.linksharing.services.TopicService;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -153,9 +155,9 @@ public class TopicController {
         return "redirect:/dashboard";
     }
 
-    @PutMapping("/topic/{topicId}/edit")
+    @PostMapping("/topic/{topicId}/edit")
     public String editTopic(@PathVariable("topicId") Long topicId,
-                            @ModelAttribute("topicCO") TopicCO topicCO,
+                            @RequestBody TopicCO topicCO,
                             HttpSession session,
                             RedirectAttributes redirectAttributes){
         if (session.getAttribute("loggedInUserId") == null) {
@@ -172,7 +174,7 @@ public class TopicController {
     }
 
 
-    @DeleteMapping("/topic/{topicId}/delete")
+    @GetMapping("/topic/{topicId}/delete")
     public String deleteTopic(@PathVariable("topicId") Long topicId,
                               HttpSession session,
                               RedirectAttributes redirectAttributes){
@@ -180,12 +182,30 @@ public class TopicController {
             logger.warn("Redirecting to Homepage, Request not Authorized.");
             return "redirect:/";
         }
-        Long userId = (Long) session.getAttribute("loggedInUserId");
+        Long userId = (Long) session.getAttribute("loggedInUserId");;
         if(topicService.deleteTopic(topicId, userId) != null){
             redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: deleteTopicSuccess");
             return "redirect:/dashboard";
         }
         redirectAttributes.addFlashAttribute("alertFailed", "fragments/alerts :: deleteTopicFailed");
+        return "redirect:/dashboard";
+    }
+
+    @PostMapping("/topic/{topicId}/seriousness")
+    public String changeSeriousness(@PathVariable("topicId") Long topicId,
+                                    @RequestParam("seriousness") Seriousness seriousness,
+                                    HttpSession session,
+                                    RedirectAttributes redirectAttributes){
+        if (session.getAttribute("loggedInUserId") == null) {
+            logger.warn("Redirecting to Homepage, Request not Authorized.");
+            return "redirect:/";
+        }
+        Long userId = (Long) session.getAttribute("loggedInUserId");
+        if(subscriptionService.changeSeriousness(userId, topicId, seriousness) != null){
+            redirectAttributes.addFlashAttribute("alertSuccess", "fragment/alerts :: changeSeriousnessSuccess");
+            return "redirect:/dashboard";
+        }
+        redirectAttributes.addFlashAttribute("alertFailed", "fragment/alerts :: changeSeriousnessFailed");
         return "redirect:/dashboard";
     }
 

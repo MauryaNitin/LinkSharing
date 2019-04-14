@@ -23,7 +23,7 @@ public class Rating implements Serializable {
     @ManyToOne
     private Resource resource;
 
-    private Integer rating;
+    private Integer rating = 0;
 
     @CreationTimestamp
     private LocalDateTime createdOn;

@@ -40,7 +40,55 @@ $(document).ready(function () {
         })
     })
 
+    $(document).on("click", "[data-target$=Modal]", function () {
+        var el = $(this).attr("data-target");
+        $(el).modal('toggle');
+    })
+
+    $(document).on("click", "[id^=saveEditTopic]", function (event) {
+        event.preventDefault();
+        topicId = $(this).attr("id").replace("saveEditTopic-", "");
+        $("#showTopicName-" + topicId).toggle();
+        $("#editTopicName-" + topicId).toggle();
+        $("#showTopicVisibility-" + topicId).toggle();
+        $("#editTopicVisibility-" + topicId).toggle();
+        $("#closeEditTopic-" + topicId).toggle();
+        $("[data-editTopic=editTopic-" + topicId + "]").toggle();
+        $(this).toggle();
+
+        var req = {
+            name: $("#editTopicName-" + topicId).val(),
+            visibility: $("#editTopicVisibility-" + topicId + " > select").val()
+        };
+
+        $.ajax({
+            method: "POST",
+            contentType: "application/json",
+            url : "/topic/" + topicId + "/edit",
+            dataType : 'json',
+            data: JSON.stringify(req)
+        }).done(function (response) {
+            location.reload();
+        });
+    })
+
+    $(document).on("click", "[id^=deleteTopic]", function (event) {
+        event.preventDefault();
+        var topicId = $(this).attr("id").replace("deleteTopic-", "");
+        var url = '/topic/' + topicId + '/delete'
+        $("html").load(url);
+    })
+
+    $(document).on("change", "[id^=topicSeriousness]", function (event) {
+        event.preventDefault();
+        var topicId = $(this).attr("id").replace("topicSeriousness-", "");
+        var url = '/topic/' + topicId + '/seriousness'
+        $("html").load(url,{
+            seriousness : $("#topicSeriousness-" + topicId).val()
+        });
+    })
 });
+
 
 
 function unsubscribeTopic(topic){
@@ -55,42 +103,31 @@ function subscribeTopic(topic){
     $("html").load(url);
 }
 
-$(document).on("click", ".edit-btn", function (event) {
+$(document).on("click", "[data-editTopic^=editTopic]", function (event) {
     event.preventDefault();
-    $(".topicName").hide();
-    $(".editTopicName").show();
-    $(".topicVisibility").hide();
-    $(".editTopicVisibility").show();
-    $(".edit-topic-close").show();
-    $(".edit-topic-save").show();
-    $(this).hide();
+    topicId = $(this).attr("data-editTopic").replace("editTopic-", "");
+    $("#showTopicName-" + topicId).toggle();
+    $("#editTopicName-" + topicId).toggle();
+    $("#showTopicVisibility-" + topicId).toggle();
+    $("#editTopicVisibility-" + topicId).toggle();
+    $("#closeEditTopic-" + topicId).toggle();
+    $("#saveEditTopic-" + topicId).toggle();
+    $(this).toggle();
+});
+
+$(document).on("click", "[id^=closeEditTopic]", function (event) {
+    event.preventDefault();
+    topicId = $(this).attr("id").replace("closeEditTopic-", "");
+    $("#showTopicName-" + topicId).toggle();
+    $("#editTopicName-" + topicId).toggle();
+    $("#showTopicVisibility-" + topicId).toggle();
+    $("#editTopicVisibility-" + topicId).toggle();
+    $("#saveEditTopic-" + topicId).toggle();
+    $("[data-editTopic=editTopic-" + topicId + "]").toggle();
+    $(this).toggle();
 })
 
-$(document).on("click", ".edit-topic-save", function (event) {
-    event.preventDefault();
-    $(".topicName").toggle();
-    $(".editTopicName").toggle();
-    $(".topicVisibility").toggle();
-    $(".editTopicVisibility").toggle();
-    $(".edit-topic-close").toggle();
-    $(".edit-topic-save").toggle();
-    $(".edit-btn").show();
-})
 
-$(document).on("click", ".edit-topic-close", function (event) {
-    event.preventDefault();
-    $(".topicName").toggle();
-    $(".editTopicName").toggle();
-    $(".topicVisibility").toggle();
-    $(".editTopicVisibility").toggle();
-    $(".edit-topic-save").toggle();
-    $(".edit-btn").show();
-    $(".edit-topic-close").toggle();
-})
 
-$(document).on("click", "[data-target*=Modal]", function () {
-    var element = $(this).attr('data-target');
-    console.log(element + this);
-    // $().modal('show');
-})
+
 

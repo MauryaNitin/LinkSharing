@@ -32,29 +32,32 @@
                                  alt="profile-picture"
                                  width="100px" height="100px">
                         </div>
-                        <div class="col-md-8">
+                        <div class="col">
                             <div class="card-title">
                                 <p>
-                                    <a class="float-left mr-3" th:href="@{'/topic/' + ${topic.getId()}}" th:text="${topic.getName()}"></a>
-                                    <span th:text="${'@' + topic.getUser().getUsername()}"></span>
-                                    <a class="float-right" href="#"
+                                    <a class="float-left mr-3" th:href="@{'/topic/' + ${topic.getId()}}"
+                                       th:text="${topic.getName()}"></a>
+                                    <a class="float-right small text-info" href="#"
                                        th:if="${topic.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
                                        th:text="'Unsubscribe'"></a>
-                                    <a class="float-right" href="#"
+                                    <a class="float-right small text-info" href="#"
                                        th:unless="${topic.getUser().getId() == (#session.getAttribute('loggedInUserId'))}"
                                        th:text="'Subscribe'"></a>
+                                    <br>
+                                    <a class="small text-muted" th:text="${'@' + topic.getUser().getUsername()}"></a>
+
                                 </p>
                             </div>
                             <div class="card-text">
                                 <div class="row">
-                                    <div class="col">Subsciptions</div>
-                                    <div class="col">Post</div>
+                                    <div class="col small text-muted">Subsciptions</div>
+                                    <div class="col small text-muted">Post</div>
                                 </div>
                                 <div class="row">
-                                    <div class="col">
+                                    <div class="col small text-info">
                                         <a th:text="${topic.getSubscriptions().size()}"></a>
                                     </div>
-                                    <div class="col">
+                                    <div class="col small text-info">
                                         <a th:text="${topic.getResourcesList().size()}"></a>
                                     </div>
                                 </div>
@@ -77,106 +80,124 @@
             </div>
             <div class="card">
                 <div class="card-header">
-                    <a th:text="${'Users' + topic.getName()}"></a>
+                    <a th:text="${'Users: ' + topic.getName()}"></a>
                 </div>
                 <div class="card-body">
-                    <div class="row" th:each="subscription : ${topic.getSubscriptions()}" th:with="user = ${subscription.getUser()}">
+                    <th:block th:each="subscription : ${topic.getSubscriptions()}"
+                              th:with="user = ${subscription.getUser()}">
                         <div th:fragment="users">
-                            <div class="col-md-2">
-                                <img th:if="${user.getProfilePicturePath()}"
-                                     th:src="${'/uploads/profile_pics/' + user.getUsername() + '_' + user.getProfilePicturePath()}"
-                                     alt="profile-pic" width="40px" height="40px">
-                                <img th:unless="${user.getProfilePicturePath()}" src="images/default-person.jpg"
-                                     alt="profile-picture"
-                                     width="40px" height="40px">
-                            </div>
-                            <div class="col-md-10">
-                                <div class="card-title">
-                                    <span th:text="${user.getFirstname() + ' ' + user.getLastname()}"></span>
-                                    <span th:text="${'@' + user.getUsername()}"></span>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <a th:href="${'/users/' + user.getId() + '/profile'}">
+                                        <img th:if="${user.getProfilePicturePath()}"
+                                             th:src="${'/uploads/profile_pics/' + user.getUsername() + '_' + user.getProfilePicturePath()}"
+                                             alt="profile-pic" width="40px" height="40px">
+                                        <img th:unless="${user.getProfilePicturePath()}" src="images/default-person.jpg"
+                                             alt="profile-picture"
+                                             width="40px" height="40px">
+                                    </a>
                                 </div>
-                                <div class="card-text">
-                                    <div class="row">
-                                        <div class="col">Subscriptions</div>
-                                        <div class="col">Topics</div>
+                                <div class="col">
+                                    <div class="card-title">
+                                        <a th:href="${'/users/' + user.getId() + '/profile'}" th:text="${user.getFirstname() + ' ' + user.getLastname()}"></a>
+                                        <a class="small text-muted" th:text="${'@' + user.getUsername()}"></a>
                                     </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <a href="#" th:text="${user.getSubscriptions().size()}"></a>
+                                    <div class="card-text">
+                                        <div class="row">
+                                            <div class="col small text-muted">Subscriptions</div>
+                                            <div class="col small text-muted">Topics</div>
                                         </div>
-                                        <div class="col">
-                                            <a href="#" th:text="${user.getTopics().size()}"></a>
+                                        <div class="row">
+                                            <div class="col small text-info">
+                                                <a href="#" th:text="${user.getSubscriptions().size()}"></a>
+                                            </div>
+                                            <div class="col small text-info">
+                                                <a href="#" th:text="${user.getTopics().size()}"></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </th:block>
                     <hr>
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col">
+            <!--<div class="card">-->
+            <!--<div class="card-header">-->
+            <!--<a th:text="${'Posts: ' + topic.getName()}"></a>-->
+            <!--</div>-->
+            <!--<div class="card-body">-->
+            <!--<div class="row" th:each="resource : ${topic.getResourcesList()}">-->
+            <!--<div th:fragment="posts">-->
+            <!--<div class="col-md-1">-->
+            <!--<a th:href="@{'/users/' + ${resource.getUser().getId()}  + '/profile'}">-->
+            <!--<img th:if="${resource.getUser().getProfilePicturePath()}"-->
+            <!--th:src="${'/uploads/profile_pics/' + resource.getUser().getUsername() + '_' + resource.getUser().getProfilePicturePath()}"-->
+            <!--alt="profile-pic" width="40px" height="40px">-->
+            <!--<img th:unless="${resource.getUser().getProfilePicturePath()}"-->
+            <!--src="images/default-person.jpg" alt="profile-picture"-->
+            <!--width="40px" height="40px">-->
+            <!--</a>-->
+            <!--</div>-->
+            <!--<div class="col-md-11">-->
+            <!--<div class="row">-->
+            <!--<div class="col-md-2">-->
+            <!--<a th:href="@{'/users/' + ${resource.getUser().getId()}  + '/profile'}"-->
+            <!--th:text="${resource.getUser().getFirstname() + ' ' + resource.getUser().getLastname()}"></a>-->
+            <!--</div>-->
+            <!--<div class="col-md-2" th:text="${'@' + resource.getUser().getUsername()}"></div>-->
+            <!--<div class="col">-->
+            <!--<a th:href="${'/topic/' + resource.getTopic().getId()}"-->
+            <!--th:text="${resource.getTopic().getName()}"></a>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="row">-->
+            <!--<div th:if="${resource.getDescription().length() > 150}" class="col" th:text="${resource.getDescription().substring(0,150) + '....'}"></div>-->
+            <!--<div th:unless="${resource.getDescription().length() > 150}" class="col" th:text="${resource.getDescription()}"></div>-->
+            <!--</div>-->
+            <!--<div class="row clearfix">-->
+            <!--<div class="col">-->
+            <!--<a class="float-left pr-3" href="#"><i class="fab fa-facebook"-->
+            <!--aria-hidden="true"></i></a>-->
+            <!--<a class="float-left pr-3" href="#"><i class="fab fa-twitter"-->
+            <!--aria-hidden="true"></i></a>-->
+            <!--<a class="float-left pr-3" href="#"><i class="fab fa-google-plus-square"-->
+            <!--aria-hidden="true"></i></a>-->
+            <!--</div>-->
+            <!--<div class="col-md-6">-->
+            <!--<a class="float-right pl-3" href="#">Delete</a>-->
+            <!--<a class="float-right pl-3" href="#">Edit</a>-->
+            <!--<a class="float-right pl-3"-->
+            <!--th:if="${resource.getClass().getSimpleName().equals('LinkResource')}"-->
+            <!--th:href="${resource.getLinkUrl()}"-->
+            <!--target="_blank">View Full site</a>-->
+            <!--<a class="float-right"-->
+            <!--th:unless="${resource.getClass().getSimpleName().equals('LinkResource')}"-->
+            <!--th:href="${'uploads/docs/' + resource.getUser().getUsername() + '_' + resource.getDocumentPath()}"-->
+            <!--target="_blank"-->
+            <!--download>Download</a>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<hr>-->
+            <!--</div>-->
+            <!--</div>-->
             <div class="card">
                 <div class="card-header">
                     <a th:text="${'Posts: ' + topic.getName()}"></a>
                 </div>
                 <div class="card-body">
                     <div class="row" th:each="resource : ${topic.getResourcesList()}">
-                        <div th:fragment="posts">
-                            <div class="col-md-1">
-                                <a th:href="@{'/users/' + ${resource.getUser().getId()}  + '/profile'}">
-                                    <img th:if="${resource.getUser().getProfilePicturePath()}"
-                                         th:src="${'/uploads/profile_pics/' + resource.getUser().getUsername() + '_' + resource.getUser().getProfilePicturePath()}"
-                                         alt="profile-pic" width="40px" height="40px">
-                                    <img th:unless="${resource.getUser().getProfilePicturePath()}"
-                                         src="images/default-person.jpg" alt="profile-picture"
-                                         width="40px" height="40px">
-                                </a>
-                            </div>
-                            <div class="col-md-11">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <a th:href="@{'/users/' + ${resource.getUser().getId()}  + '/profile'}"
-                                           th:text="${resource.getUser().getFirstname() + ' ' + resource.getUser().getLastname()}"></a>
-                                    </div>
-                                    <div class="col-md-2" th:text="${'@' + resource.getUser().getUsername()}"></div>
-                                    <div class="col">
-                                        <a th:href="${'/topic/' + resource.getTopic().getId()}"
-                                           th:text="${resource.getTopic().getName()}"></a>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div th:if="${resource.getDescription().length() > 150}" class="col" th:text="${resource.getDescription().substring(0,150) + '....'}"></div>
-                                    <div th:unless="${resource.getDescription().length() > 150}" class="col" th:text="${resource.getDescription()}"></div>
-                                </div>
-                                <div class="row clearfix">
-                                    <div class="col">
-                                        <a class="float-left pr-3" href="#"><i class="fab fa-facebook"
-                                                                               aria-hidden="true"></i></a>
-                                        <a class="float-left pr-3" href="#"><i class="fab fa-twitter"
-                                                                               aria-hidden="true"></i></a>
-                                        <a class="float-left pr-3" href="#"><i class="fab fa-google-plus-square"
-                                                                               aria-hidden="true"></i></a>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <a class="float-right pl-3" href="#">Delete</a>
-                                        <a class="float-right pl-3" href="#">Edit</a>
-                                        <a class="float-right pl-3"
-                                           th:if="${resource.getClass().getSimpleName().equals('LinkResource')}"
-                                           th:href="${resource.getLinkUrl()}"
-                                           target="_blank">View Full site</a>
-                                        <a class="float-right"
-                                           th:unless="${resource.getClass().getSimpleName().equals('LinkResource')}"
-                                           th:href="${'uploads/docs/' + resource.getUser().getUsername() + '_' + resource.getDocumentPath()}"
-                                           target="_blank"
-                                           download>Download</a>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col">
+                            <div th:replace="~{dashboard::resources}"></div>
                         </div>
+                        <hr>
                     </div>
-                    <hr>
                 </div>
             </div>
         </div>

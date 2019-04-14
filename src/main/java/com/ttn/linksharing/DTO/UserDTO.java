@@ -1,10 +1,12 @@
 package com.ttn.linksharing.DTO;
 
+import com.ttn.linksharing.entities.Resource;
 import com.ttn.linksharing.entities.Subscription;
 import com.ttn.linksharing.entities.Topic;
 import com.ttn.linksharing.entities.User;
 import com.ttn.linksharing.enums.Roles;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDTO {
@@ -12,10 +14,11 @@ public class UserDTO {
     private String username;
     private String firstname;
     private String lastname;
-    private List<Subscription> subscriptions;
-    private List<Topic> topics;
+    private List<Subscription> subscriptions = new ArrayList<>();
+    private List<Topic> topics = new ArrayList<>();
     private String photo;
     private Roles role;
+    private List<Resource> inboxResources = new ArrayList<>();
 
     public UserDTO(User user) {
         this.id = user.getId();
@@ -90,5 +93,13 @@ public class UserDTO {
 
     public void setRole(Roles role) {
         this.role = role;
+    }
+
+    public List<Resource> getInboxResources() {
+        return inboxResources;
+    }
+
+    public void setInboxResources(List<Resource> inboxResources) {
+        this.inboxResources = inboxResources;
     }
 }

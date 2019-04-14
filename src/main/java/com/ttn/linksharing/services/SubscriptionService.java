@@ -5,6 +5,7 @@ import com.ttn.linksharing.entities.Invitation;
 import com.ttn.linksharing.entities.Subscription;
 import com.ttn.linksharing.entities.Topic;
 import com.ttn.linksharing.entities.User;
+import com.ttn.linksharing.enums.Seriousness;
 import com.ttn.linksharing.enums.Visibility;
 import com.ttn.linksharing.repositories.InvitationRepository;
 import com.ttn.linksharing.repositories.SubscriptionRepository;
@@ -119,5 +120,13 @@ public class SubscriptionService {
         Invitation invitation = invitationRepository.findByToken(token);
         invitation.setValid(false);
         return invitationRepository.save(invitation);
+    }
+
+    public Subscription changeSeriousness(Long userId, Long topicId, Seriousness seriousness){
+        User user = userService.getUserById(userId);
+        Topic topic = topicService.getTopicById(topicId);
+        Subscription subscription = subscriptionRepository.findByUserAndTopic(user, topic);
+        subscription.setSeriousness(seriousness);
+        return subscriptionRepository.save(subscription);
     }
 }

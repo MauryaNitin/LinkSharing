@@ -1,20 +1,25 @@
 package com.ttn.linksharing.DTO;
 
-import com.ttn.linksharing.entities.*;
+import com.ttn.linksharing.entities.Rating;
+import com.ttn.linksharing.entities.Resource;
+import com.ttn.linksharing.entities.Topic;
+import com.ttn.linksharing.entities.User;
 
 public class ResourceDTO {
+    private Long id;
     private User user;
     private Topic topic;
     private String description;
     private Resource resource;
     private String type;
+    private Rating rating;
 
-    public ResourceDTO(Resource resource){
+    public ResourceDTO(Resource resource) {
+        this.id = resource.getId();
         this.description = resource.getDescription();
-        if(resource.getClass().getSimpleName().equals("LinkResource")){
+        if (resource.getClass().getSimpleName().equals("LinkResource")) {
             this.type = "linkResource";
-        }
-        else if(resource.getClass().getSimpleName().equals("DocumentResource")) {
+        } else if (resource.getClass().getSimpleName().equals("DocumentResource")) {
             this.type = "documentResource";
         }
         this.resource = resource;
@@ -22,8 +27,32 @@ public class ResourceDTO {
         this.topic = resource.getTopic();
     }
 
-    public ResourceDTO(){
+    public ResourceDTO() {
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Topic getTopic() {
+        return topic;
+    }
+
+    public void setTopic(Topic topic) {
+        this.topic = topic;
     }
 
     public String getDescription() {
@@ -50,19 +79,11 @@ public class ResourceDTO {
         this.type = type;
     }
 
-    public User getUser() {
-        return user;
+    public Rating getRating() {
+        return rating;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Topic getTopic() {
-        return topic;
-    }
-
-    public void setTopic(Topic topic) {
-        this.topic = topic;
+    public void setRating(Rating rating) {
+        this.rating = rating;
     }
 }

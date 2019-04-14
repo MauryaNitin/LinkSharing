@@ -17,14 +17,12 @@ import com.ttn.linksharing.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -116,6 +114,7 @@ public class ResourceController {
         }
         Resource resource = resourceService.getResourceById(postId);
         ResourceDTO resourceDTO = new ResourceDTO(resource);
+        resourceDTO.setRating(resourceService.getRatingOfResourceOfUser(userId, postId));
         model.addAttribute("resourceDTO", resourceDTO);
 
         UserDTO userDTO = userService.getUserDto(userId);
@@ -125,5 +124,52 @@ public class ResourceController {
         model.addAttribute("trendingTopicsDTO", trendingTopicsDTO);
 
         return "posts";
+    }
+
+    @PostMapping("/resource/markAsRead")
+    public String markResourceAsRead(@RequestBody Long resourceId,
+                                     ModelMap model,
+                                     HttpSession session) {
+        if (session.getAttribute("loggedInUserId") == null) {
+            return "redirect:/";
+        }
+        Long userId = (Long) session.getAttribute("loggedInUserId");
+        resourceService.markResourceAsRead(resourceId, userId);
+        return "dashboard";
+    }
+
+    @PostMapping("/resource/{resourceId}/rate")
+    public String rateResource(@PathVariable("resourceId") Long resourceId,
+                               @RequestParam("rate") Integer rate,
+                               ModelMap model,
+                               HttpSession session){
+        if (session.getAttribute("loggedInUserId") == null) {
+            return "redirect:/";
+        }
+        Long userId = (Long) session.getAttribute("loggedInUserId");
+        resourceService.rateResource(userId, resourceId, rate);
+        return "dashboard";
+    }
+
+    @PostMapping("/resource/{resourceId}/edit")
+    public String updateResource(@PathVariable("resourceId") Long resourceId,
+                                 @RequestParam("description") String description,
+                                 ModelMap model,
+                                 HttpSession session){
+        if (session.getAttribute("loggedInUserId") == null) {
+            return "redirect:/";
+        }
+        resourceService.updateResourceDescription(resourceId, description);
+        return "dashboard";
+    }
+
+    @DeleteMapping("/resource/{resourceId}/delete")
+    public String deleteResource(@PathVariable("resourceId") Long resourceId,
+                                 HttpSession session){
+        if (session.getAttribute("loggedInUserId") == null) {
+            return "redirect:/";
+        }
+        resourceService.deleteResource(resourceId);
+        return "dashboard";
     }
 }
