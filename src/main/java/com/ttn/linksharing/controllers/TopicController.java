@@ -39,7 +39,9 @@ public class TopicController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/topic/create")
-    public String createTopic(@Valid @ModelAttribute TopicCO topicCO, BindingResult result, HttpSession session) {
+    public String createTopic(@Valid @ModelAttribute TopicCO topicCO, BindingResult result,
+                              RedirectAttributes redirectAttributes,
+                              HttpSession session) {
         Long loggedInUserId;
         if (session.getAttribute("loggedInUserId") != null) {
             loggedInUserId = (Long) session.getAttribute("loggedInUserId");
@@ -48,9 +50,11 @@ public class TopicController {
         }
         Topic topic = topicService.createTopic(topicCO, loggedInUserId);
         if (topic != null) {
-            return "fragments/alerts :: createTopicSuccess";
+            redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: createTopicSuccess");
+            return "redirect:/dashboard";
         }
-        return "fragments/alerts :: createTopicFailed";
+        redirectAttributes.addFlashAttribute("alertFailed", "fragments/alerts :: createTopicFailed");
+        return "redirect:/dashboard";
     }
 
     @GetMapping("/topic/{id}")
@@ -65,6 +69,7 @@ public class TopicController {
             return "redirect:/dashboard";
         }
         TopicDTO topicDTO = new TopicDTO(topic);
+        topicDTO.setSubscription(subscriptionService.getSubscriptionByUserIdAndTopic(userId, topic));
         UserDTO userDTO = userService.getUserDto(userId);
         model.addAttribute("userDTO", userDTO);
         model.addAttribute("topicCO", new TopicCO());
@@ -78,7 +83,8 @@ public class TopicController {
     @PostMapping("/invite")
     public String sendInvitation(@Valid @ModelAttribute InvitationCO invitationCO,
                                  BindingResult result,
-                                 HttpSession session) {
+                                 HttpSession session,
+                                 RedirectAttributes redirectAttributes) {
         if (session.getAttribute("loggedInUserId") == null) {
             logger.warn("Redirecting to Homepage, Request not Authorized.");
             return "redirect:/";
@@ -90,24 +96,29 @@ public class TopicController {
         }
 
         if (subscriptionService.sendInvitation(userId, invitationCO)) {
-            return "fragments/alerts :: invitationSuccess";
+            redirectAttributes.addFlashAttribute("alert-success", "fragments/alerts :: invitationSuccess");
+            return "redirect:/dashboard";
         } else {
-            return "fragments/alerts :: invitationFailed";
+            redirectAttributes.addFlashAttribute("alert-success", "fragments/alerts :: invitationFailed");
+            return "redirect:/dashboard";
         }
     }
 
     @GetMapping("/subscribe")
-    public String subscribePrivateTopicByEmail(@RequestParam("token") String token, ModelMap model, HttpSession session) {
+    public String subscribePrivateTopicByEmail(@RequestParam("token") String token, ModelMap model,
+                                               RedirectAttributes redirectAttributes, HttpSession session) {
         Invitation invitation = subscriptionService.verifySubscriptionToken(token);
         if (invitation != null) {
             Long loginId = (Long) session.getAttribute("loggedInUserId");
             if (loginId != null) {
                 if (invitation.getReceiverId() != loginId) {
-                    return "fragments/alerts :: subscriptionRequestNotAuthorized";
+                    redirectAttributes.addFlashAttribute("alert-success", "fragments/alerts :: subscriptionRequestNotAuthorized");
+                    return "redirect:/dashboard";
                 }
                 subscriptionService.subscribeTopic(invitation.getReceiverId(), invitation.getTopicId());
                 subscriptionService.invalidateToken(token);
-                return "fragments/alerts :: subscriptionSuccess";
+                redirectAttributes.addFlashAttribute("alert-success", "fragments/alerts :: subscriptionSuccess");
+                return "redirect:/dashboard";
             } else {
                 session.setAttribute("subscriptionToken", token);
                 model.addAttribute("loginCO", new LoginCO());
@@ -157,7 +168,7 @@ public class TopicController {
 
     @PostMapping("/topic/{topicId}/edit")
     public String editTopic(@PathVariable("topicId") Long topicId,
-                            @RequestBody TopicCO topicCO,
+                            @ModelAttribute Topic topic,
                             HttpSession session,
                             RedirectAttributes redirectAttributes){
         if (session.getAttribute("loggedInUserId") == null) {
@@ -165,7 +176,7 @@ public class TopicController {
             return "redirect:/";
         }
         Long userId = (Long) session.getAttribute("loggedInUserId");
-        if(topicService.updateTopic(topicId, topicCO, userId) != null){
+        if(topicService.updateTopic(topicId, topic, userId) != null){
             redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: editTopicSuccess");
             return "redirect:/dashboard";
         }

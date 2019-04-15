@@ -29,7 +29,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-8" id="content">
+            <div class="col" id="content">
 
                 <!-----------------------------------Recent Shares----------------------------------------------------->
 
@@ -83,31 +83,34 @@
 
                 <!-----------------------------------Top Posts-------------------------------------------------------->
 
-                <div class="card">
-                    <div class="card-header">
-                        Top Posts
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <img src="/images/default-person.jpg" alt="image" width="100px" height="100px"
-                                             class="card-left-img">
-                                    </div>
-                                    <div class="col-md-10">
-                                        Username
-                                        <div class="card-text" style="text-align: justify; font-size: 14px">
-                                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur
-                                            dolore dolores doloribus earum enim et excepturi facere fuga ipsa ipsum
-                                            nihil, odit quam quas quo quod, reprehenderit similique veritatis, vitae!
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div th:replace="~{search :: topPosts}">
+
                 </div>
+                <!--<div class="card">-->
+                    <!--<div class="card-header">-->
+                        <!--Top Posts-->
+                    <!--</div>-->
+                    <!--<div class="card-body">-->
+                        <!--<div class="row">-->
+                            <!--<div class="col">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-2">-->
+                                        <!--<img src="/images/default-person.jpg" alt="image" width="100px" height="100px"-->
+                                             <!--class="card-left-img">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-10">-->
+                                        <!--Username-->
+                                        <!--<div class="card-text" style="text-align: justify; font-size: 14px">-->
+                                            <!--Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequuntur-->
+                                            <!--dolore dolores doloribus earum enim et excepturi facere fuga ipsa ipsum-->
+                                            <!--nihil, odit quam quas quo quod, reprehenderit similique veritatis, vitae!-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
             <!-----------------------------------------------sidebar--------------------------------------------------->
 

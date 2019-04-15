@@ -53,6 +53,7 @@ public class ResourceController {
     @PostMapping("/resources/link/create")
     public String createLinkResource(@Valid @ModelAttribute LinkResourceCO linkResourceCO,
                                      BindingResult result,
+                                     RedirectAttributes redirectAttributes,
                                      HttpSession session) {
 
         if (session.getAttribute("loggedInUserId") == null) {
@@ -70,12 +71,14 @@ public class ResourceController {
         if (resource == null) {
             logger.error("Error occured in creating resource");
         }
+        redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: createResourceSuccess");
         return "redirect:/dashboard";
     }
 
     @PostMapping("/resources/document/create")
     public String createDocumentResource(@Valid @ModelAttribute DocumentResourceCO documentResourceCO,
                                          BindingResult result,
+                                         RedirectAttributes redirectAttributes,
                                          HttpSession session) {
 
         if (session.getAttribute("loggedInUserId") == null) {
@@ -94,7 +97,7 @@ public class ResourceController {
         if (resource == null) {
             logger.error("Error occured in creating Document resource");
         }
-
+        redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: createResourceSuccess");
         return "redirect:/dashboard";
     }
 
@@ -128,15 +131,16 @@ public class ResourceController {
     }
 
     @PostMapping("/resource/markAsRead")
-    public String markResourceAsRead(@RequestBody Long resourceId,
-                                     ModelMap model,
+    public String markResourceAsRead(@RequestParam("resourceId") Long resourceId,
+                                     RedirectAttributes redirectAttributes,
                                      HttpSession session) {
         if (session.getAttribute("loggedInUserId") == null) {
             return "redirect:/";
         }
         Long userId = (Long) session.getAttribute("loggedInUserId");
         resourceService.markResourceAsRead(resourceId, userId);
-        return "dashboard";
+        redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: readResource");
+        return "redirect:/dashboard";
     }
 
     @PostMapping("/resource/{resourceId}/rate")

@@ -3,8 +3,10 @@ package com.ttn.linksharing.controllers;
 import com.ttn.linksharing.CO.*;
 import com.ttn.linksharing.DTO.UserDTO;
 import com.ttn.linksharing.DTO.UserPublicDTO;
+import com.ttn.linksharing.entities.Topic;
 import com.ttn.linksharing.entities.User;
 import com.ttn.linksharing.enums.Roles;
+import com.ttn.linksharing.services.TopicService;
 import com.ttn.linksharing.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,10 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    TopicService topicService;
+
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/users/{id}")
@@ -94,6 +100,8 @@ public class UserController {
         model.addAttribute("userDTO", userDTO);
 
         UpdateProfileCO updateProfileCO = new UpdateProfileCO(user);
+        List<Topic> trendingTopicsDTO = topicService.getTrendingTopics(5);
+        model.addAttribute("trendingTopicsDTO", trendingTopicsDTO);
 
         model.addAttribute("topicCO", new TopicCO());
         model.addAttribute("linkResourceCO", new LinkResourceCO());
@@ -108,6 +116,7 @@ public class UserController {
     public String editProfile(@Valid @ModelAttribute UpdateProfileCO updateProfileCO,
                               BindingResult result,
                               @PathVariable("id") Long id,
+                              RedirectAttributes redirectAttributes,
                               HttpSession session){
         if(session.getAttribute("loggedInUserId") == null && session.getAttribute("loggedInUserId") != id){
             return "redirect:/";
@@ -116,6 +125,7 @@ public class UserController {
             return "redirect:/users/editProfile";
         }
         userService.updateUserDetails(updateProfileCO, id);
+        redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: updateProfileSuccess");
         return "redirect:/dashboard";
     }
 
@@ -123,6 +133,7 @@ public class UserController {
     public String updatePassword(@Valid @ModelAttribute UpdatePasswordCO updatePasswordCO,
                                  BindingResult result,
                                  @PathVariable("id") Long id,
+                                 RedirectAttributes redirectAttributes,
                                  HttpSession session){
         if(session.getAttribute("loggedInUserId") == null && session.getAttribute("loggedInUserId") != id){
             return "redirect:/";
@@ -135,6 +146,7 @@ public class UserController {
             return "editProfile";
         }
         userService.updatePassword(updatePasswordCO, id);
+        redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: updatePasswordSuccess");
         return "redirect:/dashboard";
     }
 

@@ -3,17 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Topic - Linksharing</title>
-    <style>
-        .card-left-img {
-            border-radius: 50%;
-        }
-
-        div.card {
-            margin-top: 20px;
-        }
-    </style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{'/css/app.css'}">
 </head>
 <body>
 <div th:include="~{fragments/dashboardHeaderFragment}"></div>
@@ -63,15 +56,19 @@
                                 </div>
                             </div>
                             <div class="row justify-content-end">
-                                <div class="col-md-8">
-                                    <select class="custom-select " id="seriousness" name="seriousness">
+                                <div class="col">
+                                    <select class="custom-select " name="seriousness" th:id="${'topicSeriousness-' + topic.getId()}">
                                         <option th:each="seriousness : ${T(com.ttn.linksharing.enums.Seriousness).values()}"
                                                 th:value="${seriousness}"
-                                                th:text="${seriousness.getValue()}"></option>
+                                                th:text="${seriousness.getValue()}"
+                                                th:selected="${topicDTO.getSubscription().getSeriousness() == seriousness}">
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="col-md-3">
-                                    <a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                                    <a href="#" data-toggle="modal" data-target="#inviteModal">
+                                        <i class="fa fa-envelope" aria-hidden="true"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -119,74 +116,12 @@
                                 </div>
                             </div>
                         </div>
+                        <hr>
                     </th:block>
-                    <hr>
                 </div>
             </div>
         </div>
         <div class="col">
-            <!--<div class="card">-->
-            <!--<div class="card-header">-->
-            <!--<a th:text="${'Posts: ' + topic.getName()}"></a>-->
-            <!--</div>-->
-            <!--<div class="card-body">-->
-            <!--<div class="row" th:each="resource : ${topic.getResourcesList()}">-->
-            <!--<div th:fragment="posts">-->
-            <!--<div class="col-md-1">-->
-            <!--<a th:href="@{'/users/' + ${resource.getUser().getId()}  + '/profile'}">-->
-            <!--<img th:if="${resource.getUser().getProfilePicturePath()}"-->
-            <!--th:src="${'/uploads/profile_pics/' + resource.getUser().getUsername() + '_' + resource.getUser().getProfilePicturePath()}"-->
-            <!--alt="profile-pic" width="40px" height="40px">-->
-            <!--<img th:unless="${resource.getUser().getProfilePicturePath()}"-->
-            <!--src="images/default-person.jpg" alt="profile-picture"-->
-            <!--width="40px" height="40px">-->
-            <!--</a>-->
-            <!--</div>-->
-            <!--<div class="col-md-11">-->
-            <!--<div class="row">-->
-            <!--<div class="col-md-2">-->
-            <!--<a th:href="@{'/users/' + ${resource.getUser().getId()}  + '/profile'}"-->
-            <!--th:text="${resource.getUser().getFirstname() + ' ' + resource.getUser().getLastname()}"></a>-->
-            <!--</div>-->
-            <!--<div class="col-md-2" th:text="${'@' + resource.getUser().getUsername()}"></div>-->
-            <!--<div class="col">-->
-            <!--<a th:href="${'/topic/' + resource.getTopic().getId()}"-->
-            <!--th:text="${resource.getTopic().getName()}"></a>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--<div class="row">-->
-            <!--<div th:if="${resource.getDescription().length() > 150}" class="col" th:text="${resource.getDescription().substring(0,150) + '....'}"></div>-->
-            <!--<div th:unless="${resource.getDescription().length() > 150}" class="col" th:text="${resource.getDescription()}"></div>-->
-            <!--</div>-->
-            <!--<div class="row clearfix">-->
-            <!--<div class="col">-->
-            <!--<a class="float-left pr-3" href="#"><i class="fab fa-facebook"-->
-            <!--aria-hidden="true"></i></a>-->
-            <!--<a class="float-left pr-3" href="#"><i class="fab fa-twitter"-->
-            <!--aria-hidden="true"></i></a>-->
-            <!--<a class="float-left pr-3" href="#"><i class="fab fa-google-plus-square"-->
-            <!--aria-hidden="true"></i></a>-->
-            <!--</div>-->
-            <!--<div class="col-md-6">-->
-            <!--<a class="float-right pl-3" href="#">Delete</a>-->
-            <!--<a class="float-right pl-3" href="#">Edit</a>-->
-            <!--<a class="float-right pl-3"-->
-            <!--th:if="${resource.getClass().getSimpleName().equals('LinkResource')}"-->
-            <!--th:href="${resource.getLinkUrl()}"-->
-            <!--target="_blank">View Full site</a>-->
-            <!--<a class="float-right"-->
-            <!--th:unless="${resource.getClass().getSimpleName().equals('LinkResource')}"-->
-            <!--th:href="${'uploads/docs/' + resource.getUser().getUsername() + '_' + resource.getDocumentPath()}"-->
-            <!--target="_blank"-->
-            <!--download>Download</a>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--</div>-->
-            <!--<hr>-->
-            <!--</div>-->
-            <!--</div>-->
             <div class="card">
                 <div class="card-header">
                     <a th:text="${'Posts: ' + topic.getName()}"></a>
@@ -205,14 +140,13 @@
 </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
         integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
         crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+<script th:src="@{/js/app.js}"></script>
 </body>
 </html>

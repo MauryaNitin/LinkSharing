@@ -47,9 +47,11 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     }
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest webRequest){
+    public final ModelAndView handleAllExceptions(Exception ex, WebRequest webRequest){
         GenericExceptionResponse genericExceptionResponse = new GenericExceptionResponse(new Date(), ex.getMessage(), webRequest.getDescription(false));
-        return new ResponseEntity<>(genericExceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        ModelAndView modelAndView = new ModelAndView("errors/errors");
+        modelAndView.addObject("exceptionDetails", genericExceptionResponse);
+        return modelAndView;
     }
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -74,7 +76,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List<String> errorMessageList=ex.getBindingResult().getAllErrors().stream().filter(e->e instanceof FieldError).map((e)->{
             FieldError fieldError = (FieldError) e;
-            return messageSource.getMessage(fieldError, new Locale("hi"));
+            return messageSource.getMessage(fieldError, null);
         }).collect(Collectors.toList());
 
         GenericExceptionResponse exceptionResponse = new GenericExceptionResponse(new Date(),"Validation Failed!",errorMessageList.toString());

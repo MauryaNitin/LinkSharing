@@ -13,37 +13,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
-import java.time.*;
-import static java.time.temporal.ChronoUnit.MINUTES;
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 @Service
 public class LoginService {
 
+    private static final int expiryTime = 10;
     @Autowired
     UserService userService;
-
     @Autowired
     EmailServiceUtil emailService;
-
     @Autowired
     ForgotPasswordRepository forgotPasswordRepository;
-
     private Logger logger = LoggerFactory.getLogger(LoginService.class);
-
-    private static final int expiryTime = 10;
 
     public User loginUser(String username, String password) {
         // sending same parameter two times because it can have either email or username
         User user = userService.getUserByUsernameOrEmail(username, username);
         if (user == null) {
-            logger.error("User with Username: " + username +  " Not found!");
+            logger.error("User with Username: " + username + " Not found!");
             throw new UserNotFoundException("No such user exists!");
-        }
-        else if(user.getActive() != true){
+        } else if (user.getActive() != true) {
             return null;
-        }
-        else if (CryptoUtils.decrypt(user.getPassword()).equals(password)) {
+        } else if (CryptoUtils.decrypt(user.getPassword()).equals(password)) {
             return user;
         } else {
             logger.warn("Incorrect password for username: " + username);
@@ -51,55 +46,54 @@ public class LoginService {
         }
     }
 
-    public Boolean forgotPassword(String username){
+    public Boolean forgotPassword(String username) {
         User user = userService.getUserByUsernameOrEmail(username, username);
-       if(user != null){
-           boolean status;
-           try{
-               ForgotPassword forgotPassword = new ForgotPassword();
-               forgotPassword.setUserId(user.getId());
-               forgotPassword.setToken(UUID.randomUUID().toString());
-               forgotPasswordRepository.save(forgotPassword);
-               status = true;
-               new Thread(() -> emailService.sendMail(user.getEmail(),
-                       "Reset Password [LinkSharing@TTN]",
-                       "http://localhost:8080/reset?token=" + forgotPassword.getToken())).start();
-           }catch (MailException ex){
-               logger.warn("Forget password mail sent failed!");
-               status = false;
-           }
-           return status;
-       }
-       return false;
+        if (user != null) {
+            boolean status;
+            try {
+                ForgotPassword forgotPassword = new ForgotPassword();
+                forgotPassword.setUserId(user.getId());
+                forgotPassword.setToken(UUID.randomUUID().toString());
+                forgotPasswordRepository.save(forgotPassword);
+                status = true;
+                new Thread(() -> emailService.sendMail(user.getEmail(),
+                        "Reset Password [LinkSharing@TTN]",
+                        "http://localhost:8080/reset?token=" + forgotPassword.getToken())).start();
+            } catch (MailException ex) {
+                logger.warn("Forget password mail sent failed!");
+                status = false;
+            }
+            return status;
+        }
+        return false;
     }
 
-    public ForgotPassword verifyResetToken(String token){
+    public ForgotPassword verifyResetToken(String token) {
         ForgotPassword forgotPassword = forgotPasswordRepository.findByToken(token);
-        if(forgotPassword == null){
+        if (forgotPassword == null) {
             return null;
         }
         Long timeElapsed = getTimeElapsedInMinutes(forgotPassword.getCreatedOn(), LocalDateTime.now());
-        if(timeElapsed > expiryTime){
+        if (timeElapsed > expiryTime) {
             return null;
         }
         return forgotPassword;
     }
 
-    public Boolean checkForAlreadyExistingToken(String username){
+    public Boolean checkForAlreadyExistingToken(String username) {
         User user = userService.getUserByUsernameOrEmail(username, username);
-        if(user == null){
+        if (user == null) {
             return false;
         }
         ForgotPassword forgotPassword = forgotPasswordRepository.findByUserId(user.getId());
-        if(forgotPassword == null){
+        if (forgotPassword == null) {
             return false;
-        }
-        else{
-            Long timeElapsed = getTimeElapsedInMinutes(forgotPassword.getCreatedOn(), LocalDateTime.now());;
-            if(timeElapsed < expiryTime){
+        } else {
+            Long timeElapsed = getTimeElapsedInMinutes(forgotPassword.getCreatedOn(), LocalDateTime.now());
+            ;
+            if (timeElapsed < expiryTime) {
                 return true;
-            }
-            else{
+            } else {
                 deleteForgotPasswordToken(forgotPassword.getUserId());
                 return false;
             }
@@ -107,11 +101,11 @@ public class LoginService {
 
     }
 
-    public void deleteForgotPasswordToken(Long userId){
+    public void deleteForgotPasswordToken(Long userId) {
         forgotPasswordRepository.delete(forgotPasswordRepository.findByUserId(userId));
     }
 
-    public Long getTimeElapsedInMinutes(LocalDateTime time1, LocalDateTime time2){
+    public Long getTimeElapsedInMinutes(LocalDateTime time1, LocalDateTime time2) {
         return MINUTES.between(time1, time2);
     }
 }

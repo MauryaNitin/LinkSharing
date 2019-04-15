@@ -129,4 +129,9 @@ public class SubscriptionService {
         subscription.setSeriousness(seriousness);
         return subscriptionRepository.save(subscription);
     }
+
+    public Subscription getSubscriptionByUserIdAndTopic(Long userId, Topic topic){
+        User user = userService.getUserById(userId);
+        return subscriptionRepository.findByUserAndTopic(user, topic);
+    }
 }

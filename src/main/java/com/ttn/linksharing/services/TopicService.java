@@ -77,14 +77,14 @@ public class TopicService {
                 .collect(Collectors.toList());
     }
 
-    public Topic updateTopic(Long topicId, TopicCO topicCO, Long userId){
-        Topic topic  = getTopicById(topicId);
-        if(!topic.getUser().getId().equals(userId) && userService.getUserById(userId).getRole() != Roles.ADMIN){
+    public Topic updateTopic(Long topicId, Topic topic, Long userId){
+        Topic topic1  = getTopicById(topicId);
+        if(!topic1.getUser().getId().equals(userId) && userService.getUserById(userId).getRole() != Roles.ADMIN){
             return null;
         }
-        topic.setName(topicCO.getName());
-        topic.setVisibility(topicCO.getVisibility());
-        return topicRepository.save(topic);
+        topic1.setName(topic.getName());
+        topic1.setVisibility(topic.getVisibility());
+        return topicRepository.save(topic1);
     }
 
     @Transactional

@@ -55,7 +55,7 @@ public class DashboardController {
                                     ModelMap model,
                                     @ModelAttribute("alertSuccess") String alertSuccess,
                                     @ModelAttribute("alertFailed") String alertFailed,
-                                    @ModelAttribute("alertInfo") String alertInfo) {
+                                    @ModelAttribute("alertInfo") String alertInfo) throws Exception {
         if (session.getAttribute("loggedInUserId") == null) {
             logger.warn("Redirecting to Homepage, Request not Authorized.");
             return "redirect:/";
@@ -72,7 +72,9 @@ public class DashboardController {
         model.addAttribute("alertSuccess", alertSuccess);
         model.addAttribute("alertFailed", alertFailed);
         model.addAttribute("alertInfo", alertInfo);
+
         return "dashboard";
+
     }
 
     @GetMapping("/search")

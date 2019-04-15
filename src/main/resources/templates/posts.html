@@ -117,16 +117,8 @@
 
             <!--------------------------------------Trending Topics-------------------------->
 
-            <div class="card">
-                <div class="card-header">
-                    Trending Topics
-                </div>
-                <div class="card-body">
-                    <div th:each="topic : ${trendingTopicsDTO}">
-                        <div th:replace="~{dashboard :: topics}"></div>
-                        <hr>
-                    </div>
-                </div>
+            <div th:replace="~{dashboard :: trendingTopics}">
+
             </div>
         </div>
     </div>

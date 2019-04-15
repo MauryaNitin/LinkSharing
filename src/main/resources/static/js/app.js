@@ -45,31 +45,14 @@ $(document).ready(function () {
         $(el).modal('toggle');
     })
 
-    $(document).on("click", "[id^=saveEditTopic]", function (event) {
-        event.preventDefault();
-        topicId = $(this).attr("id").replace("saveEditTopic-", "");
-        $("#showTopicName-" + topicId).toggle();
-        $("#editTopicName-" + topicId).toggle();
-        $("#showTopicVisibility-" + topicId).toggle();
-        $("#editTopicVisibility-" + topicId).toggle();
-        $("#closeEditTopic-" + topicId).toggle();
-        $("[data-editTopic=editTopic-" + topicId + "]").toggle();
-        $(this).toggle();
 
-        var data = {
-            name: $("#editTopicName-" + topicId).val(),
-            visibility: $("#editTopicVisibility-" + topicId + " > select").val()
-        };
-
-        var url  = "/topic/" + topicId + "/edit";
-        $("html").load(url,data);
-    })
 
     $(document).on("click", "[id^=deleteTopic]", function (event) {
         event.preventDefault();
         var topicId = $(this).attr("id").replace("deleteTopic-", "");
         var url = '/topic/' + topicId + '/delete'
         $("html").load(url);
+        showAlert();
     })
 
     $(document).on("change", "[id^=topicSeriousness]", function (event) {
@@ -79,6 +62,7 @@ $(document).ready(function () {
         $("html").load(url,{
             seriousness : $("#topicSeriousness-" + topicId).val()
         });
+        showAlert();
     })
 });
 
@@ -88,12 +72,14 @@ function unsubscribeTopic(topic){
     var topicId = topic.getAttribute("data-topicId");
     var url  = "/topic/" + topicId + "/unsubscribe";
     $("html").load(url);
+    showAlert();
 }
 
 function subscribeTopic(topic){
     var topicId = topic.getAttribute("data-topicId");
     var url  = "/topic/" + topicId + "/subscribe";
     $("html").load(url);
+    showAlert();
 }
 
 $(document).on("click", "[data-editTopic^=editTopic]", function (event) {
@@ -120,6 +106,27 @@ $(document).on("click", "[id^=closeEditTopic]", function (event) {
     $(this).toggle();
 })
 
+$(document).on("click", "[id^=saveEditTopic]", function (event) {
+    event.preventDefault();
+    topicId = $(this).attr("id").replace("saveEditTopic-", "");
+    $("#showTopicName-" + topicId).toggle();
+    $("#editTopicName-" + topicId).toggle();
+    $("#showTopicVisibility-" + topicId).toggle();
+    $("#editTopicVisibility-" + topicId).toggle();
+    $("#closeEditTopic-" + topicId).toggle();
+    $("[data-editTopic=editTopic-" + topicId + "]").toggle();
+    $(this).toggle();
+
+    var data = {
+        name: $("#editTopicName-" + topicId).val(),
+        visibility: $("#editTopicVisibility-" + topicId + " > select").val()
+    };
+
+    var url  = "/topic/" + topicId + "/edit";
+    $("html").load(url,data);
+    showAlert();
+})
+
 $(document).on("click", "[id^=activateUser]", function (event) {
     event.preventDefault();
     var userId = $(this).attr("id").replace("activateUser-","")
@@ -128,6 +135,7 @@ $(document).on("click", "[id^=activateUser]", function (event) {
     $("html").load(url, {
         userId : userId
     });
+    showAlert();
 })
 
 $(document).on("click", "[id^=deactivateUser]", function (event) {
@@ -137,6 +145,7 @@ $(document).on("click", "[id^=deactivateUser]", function (event) {
     $("html").load(url, {
         userId : userId
     });
+    showAlert();
 })
 
 
@@ -157,6 +166,7 @@ $(document).on("click", "[id^=saveEditPost]", function (event) {
 
     var url =  "/resource/" + postId + "/edit"
     $("html").load(url,data);
+    showAlert();
 })
 
 
@@ -185,6 +195,23 @@ $(document).on("click", "[data-deletePost^=deletePost]", function (event) {
     var postId = $(this).attr("data-deletePost").replace("deletePost-", "");
     var url = '/resource/' + postId + '/delete'
     $("html").load(url);
+    showAlert();
 })
+
+$(document).on("click", "[id^=read]", function (event) {
+    event.preventDefault();
+    var postId = $(this).attr("id").replace("read-", "");
+    var url = '/resource/markAsRead'
+    $("html").load(url, {
+        resourceId : postId
+    });
+    showAlert();
+})
+
+function showAlert() {
+    setTimeout(function () {
+        $("[data-dismiss^='alert']").click();
+    }, 2000)
+}
 
 

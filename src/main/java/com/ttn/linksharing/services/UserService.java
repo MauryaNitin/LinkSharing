@@ -9,11 +9,9 @@ import com.ttn.linksharing.entities.*;
 import com.ttn.linksharing.enums.Visibility;
 import com.ttn.linksharing.exceptions.UserNotFoundException;
 import com.ttn.linksharing.repositories.MessageRepository;
-import com.ttn.linksharing.repositories.ResourceRepository;
 import com.ttn.linksharing.repositories.UserRepository;
 import com.ttn.linksharing.utils.CryptoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,24 +40,24 @@ public class UserService {
     MessageRepository messageRepository;
 
 
-    public User createUser(User user){
+    public User createUser(User user) {
         return userRepository.save(user);
     }
 
-    public Boolean findByUsernameOrEmail(User user){
-        return  userRepository.existsByUsernameOrEmail(user.getUsername(), user.getEmail());
+    public Boolean findByUsernameOrEmail(User user) {
+        return userRepository.existsByUsernameOrEmail(user.getUsername(), user.getEmail());
     }
 
-    public User getUserById(Long id){
+    public User getUserById(Long id) {
         Optional<User> optional = userRepository.findById(id);
         User user = optional.isPresent() ? optional.get() : null;
-        if(user == null){
+        if (user == null) {
             throw new UserNotFoundException("No such User Exists!");
         }
         return user;
     }
 
-    public UserDTO getUserDto(Long userId){
+    public UserDTO getUserDto(Long userId) {
         UserDTO userDTO = new UserDTO(getUserById(userId));
         userDTO.setSubscriptions(getSubscriptions(userId));
         userDTO.setTopics(getTopics(userId));
@@ -67,24 +65,23 @@ public class UserService {
         return userDTO;
     }
 
-    public List<Subscription> getSubscriptions(Long userId){
-        if(userId == null){
+    public List<Subscription> getSubscriptions(Long userId) {
+        if (userId == null) {
             throw new UserNotFoundException("No such User Exists!");
-        }
-        else{
+        } else {
             User user = getUserById(userId);
             return subscriptionService.getSubscriptionsByUser(user);
         }
     }
 
-    public List<Topic> getTopics(Long userId){
-        if(userId == null){
+    public List<Topic> getTopics(Long userId) {
+        if (userId == null) {
             throw new UserNotFoundException("No such User Exists!");
         }
         return topicService.getTopicsByUserId(userId);
     }
 
-    public List<Resource> getInboxResources(Long userId){
+    public List<Resource> getInboxResources(Long userId) {
         User user = getUserById(userId);
         List<Resource> readResources = messageRepository
                 .findByUser(user)
@@ -96,11 +93,11 @@ public class UserService {
                 .stream()
                 .map(x -> x.getTopic().getResourcesList())
                 .flatMap(List::stream)
-                .filter(x->!readResources.contains(x))
+                .filter(x -> !readResources.contains(x))
                 .collect(Collectors.toList());
     }
 
-    public UserPublicDTO getPublicUserDto(Long userId){
+    public UserPublicDTO getPublicUserDto(Long userId) {
         User user = getUserById(userId);
         UserPublicDTO userPublicDTO = new UserPublicDTO(user);
         userPublicDTO.setSubscriptions(user.getSubscriptions());
@@ -109,37 +106,37 @@ public class UserService {
         return userPublicDTO;
     }
 
-    public List<User> getAllUsers(Long userId){
+    public List<User> getAllUsers(Long userId) {
         return userRepository.findAllUsers().stream().filter(x -> x.getId() != userId).collect(Collectors.toList());
     }
 
-    public User updateUserDetails(UpdateProfileCO updateProfileCO, Long id){
+    public User updateUserDetails(UpdateProfileCO updateProfileCO, Long id) {
         User user = getUserById(id);
         user.setFirstname(updateProfileCO.getFirstname());
         user.setLastname(updateProfileCO.getLastname());
         user.setUsername(updateProfileCO.getUsername());
         user.setProfilePicturePath(updateProfileCO.getPhoto().getOriginalFilename());
-        if(updateProfileCO.getPhoto() != null){
+        if (updateProfileCO.getPhoto() != null) {
             uploader.saveProfilePicture(updateProfileCO.getPhoto(), updateProfileCO.getUsername());
         }
         return userRepository.save(user);
     }
 
-    public User updatePassword(UpdatePasswordCO updatePasswordCO, Long id){
+    public User updatePassword(UpdatePasswordCO updatePasswordCO, Long id) {
         User user = getUserById(id);
         user.setPassword(CryptoUtils.encrypt(updatePasswordCO.getPassword()));
         return userRepository.save(user);
     }
 
-    public User getUserByUsernameOrEmail(String username, String email){
+    public User getUserByUsernameOrEmail(String username, String email) {
         return userRepository.findByUsernameOrEmail(username, email);
     }
 
-    public User getUserByEmail(String email){
+    public User getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
-    public List<User> searchUsersByName(String query, Long userId){
+    public List<User> searchUsersByName(String query, Long userId) {
         return userRepository
                 .findByFirstnameLikeOrUsernameLike("%" + query + "%", "%" + query + "%")
                 .stream()
@@ -147,23 +144,21 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public User activateUser(Long userId){
+    public User activateUser(Long userId) {
         User user = getUserById(userId);
-        if(user == null){
+        if (user == null) {
             return null;
-        }
-        else{
+        } else {
             user.setActive(true);
             return userRepository.save(user);
         }
     }
 
-    public User deactivateUser(Long userId){
+    public User deactivateUser(Long userId) {
         User user = getUserById(userId);
-        if(user == null){
+        if (user == null) {
             return null;
-        }
-        else{
+        } else {
             user.setActive(false);
             return userRepository.save(user);
         }
