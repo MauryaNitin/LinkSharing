@@ -146,4 +146,26 @@ public class UserService {
                 .filter(x -> x.getId() != userId)
                 .collect(Collectors.toList());
     }
+
+    public User activateUser(Long userId){
+        User user = getUserById(userId);
+        if(user == null){
+            return null;
+        }
+        else{
+            user.setActive(true);
+            return userRepository.save(user);
+        }
+    }
+
+    public User deactivateUser(Long userId){
+        User user = getUserById(userId);
+        if(user == null){
+            return null;
+        }
+        else{
+            user.setActive(false);
+            return userRepository.save(user);
+        }
+    }
 }

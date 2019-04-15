@@ -60,7 +60,7 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" th:href="@{/users/editProfile}">Profile</a>
-                            <a class="dropdown-item" th:if="${userDTO.getRole().getValue().equals('User')}" th:href="@{/users}">Users</a>
+                            <a class="dropdown-item" th:if="${userDTO.getRole().getValue().equals('Admin')}" th:href="@{/users}">Users</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/logout">Logout</a>
                         </div>

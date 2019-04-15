@@ -39,7 +39,11 @@ public class LoginService {
         if (user == null) {
             logger.error("User with Username: " + username +  " Not found!");
             throw new UserNotFoundException("No such user exists!");
-        } else if (CryptoUtils.decrypt(user.getPassword()).equals(password)) {
+        }
+        else if(user.getActive() != true){
+            return null;
+        }
+        else if (CryptoUtils.decrypt(user.getPassword()).equals(password)) {
             return user;
         } else {
             logger.warn("Incorrect password for username: " + username);

@@ -56,20 +56,13 @@ $(document).ready(function () {
         $("[data-editTopic=editTopic-" + topicId + "]").toggle();
         $(this).toggle();
 
-        var req = {
+        var data = {
             name: $("#editTopicName-" + topicId).val(),
             visibility: $("#editTopicVisibility-" + topicId + " > select").val()
         };
 
-        $.ajax({
-            method: "POST",
-            contentType: "application/json",
-            url : "/topic/" + topicId + "/edit",
-            dataType : 'json',
-            data: JSON.stringify(req)
-        }).done(function (response) {
-            location.reload();
-        });
+        var url  = "/topic/" + topicId + "/edit";
+        $("html").load(url,data);
     })
 
     $(document).on("click", "[id^=deleteTopic]", function (event) {
@@ -127,7 +120,71 @@ $(document).on("click", "[id^=closeEditTopic]", function (event) {
     $(this).toggle();
 })
 
+$(document).on("click", "[id^=activateUser]", function (event) {
+    event.preventDefault();
+    var userId = $(this).attr("id").replace("activateUser-","")
+    console.log($(this));
+    var url = "/users/activate"
+    $("html").load(url, {
+        userId : userId
+    });
+})
+
+$(document).on("click", "[id^=deactivateUser]", function (event) {
+    event.preventDefault();
+    var userId = $(this).attr("id").replace("deactivateUser-", "")
+    var url = "/users/deactivate"
+    $("html").load(url, {
+        userId : userId
+    });
+})
 
 
+// POST EDITING
+
+$(document).on("click", "[id^=saveEditPost]", function (event) {
+    event.preventDefault();
+    postId = $(this).attr("id").replace("saveEditPost-", "");
+    $("#showPostDescription-" + postId).toggle();
+    $("#editPostDescription-" + postId).toggle();
+    $("#closeEditPost-" + postId).toggle();
+    $("[data-editPost=editPost-" + postId + "]").toggle();
+    $(this).toggle();
+
+    var data = {
+        description: $("#editPostDescription-" + postId).val(),
+    };
+
+    var url =  "/resource/" + postId + "/edit"
+    $("html").load(url,data);
+})
+
+
+$(document).on("click", "[data-editPost^=editPost]", function (event) {
+    event.preventDefault();
+    postId = $(this).attr("data-editPost").replace("editPost-", "");
+    $("#showPostDescription-" + postId).toggle();
+    $("#editPostDescription-" + postId).toggle();
+    $("#closeEditPost-" + postId).toggle();
+    $("#saveEditPost-" + postId).toggle();
+    $(this).toggle();
+});
+
+$(document).on("click", "[id^=closeEditPost]", function (event) {
+    event.preventDefault();
+    postId = $(this).attr("id").replace("closeEditPost-", "");
+    $("#showPostDescription-" + postId).toggle();
+    $("#editPostDescription-" + postId).toggle();
+    $("#saveEditPost-" + postId).toggle();
+    $("[data-editPost^=editPost-" + postId + "]").toggle();
+    $(this).toggle();
+})
+
+$(document).on("click", "[data-deletePost^=deletePost]", function (event) {
+    event.preventDefault();
+    var postId = $(this).attr("data-deletePost").replace("deletePost-", "");
+    var url = '/resource/' + postId + '/delete'
+    $("html").load(url);
+})
 
 

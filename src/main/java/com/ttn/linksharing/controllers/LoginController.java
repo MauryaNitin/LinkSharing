@@ -37,21 +37,24 @@ public class LoginController {
                         BindingResult result,
                         HttpServletRequest request,
                         ModelMap model) {
-        logger.debug(loginCO.toString());
         if (result.hasErrors()) {
             model.addAttribute("signupCO", new SignupCO());
             logger.warn(result.getFieldErrors().toString());
             return "homepage";
         }
         User user1 = loginService.loginUser(loginCO.getUsername(), loginCO.getPassword());
-        HttpSession session = request.getSession();
-        session.setAttribute("loggedInUserId", user1.getId());
+        if(user1 != null){
+            HttpSession session = request.getSession();
+            session.setAttribute("loggedInUserId", user1.getId());
 
-        if(session.getAttribute("subscriptionToken") != null){
-            return "redirect:/subscribe?token=" + session.getAttribute("subscriptionToken");
+            if(session.getAttribute("subscriptionToken") != null){
+                return "redirect:/subscribe?token=" + session.getAttribute("subscriptionToken");
+            }
+
+            return "redirect:/dashboard";
         }
+        return "redirect:/";
 
-        return "redirect:/dashboard";
     }
 
     @GetMapping("/logout")

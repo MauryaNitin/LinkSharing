@@ -204,12 +204,12 @@
                                         <div class="col small text-primary">
                                             <div th:if="${topic.getUser().getId() != (#session.getAttribute('loggedInUserId'))}">
                                                 <a class="float-right" href="#"
-                                                   th:if="${userDTO.getSubscriptions().contains(topic)}"
+                                                   th:if="${isSubscribed}"
                                                    th:onclick="unsubscribeTopic(this)"
                                                    th:data-topicId="${topic.getId()}"
                                                    th:text="'Unsubscribe'"></a>
                                                 <a class="float-right" href="#"
-                                                   th:unless="${userDTO.getSubscriptions().contains(topic)}"
+                                                   th:unless="${isSubscribed}"
                                                    th:onclick="subscribeTopic(this)"
                                                    th:data-topicId="${topic.getId()}"
                                                    th:text="'Subscribe'"></a>

@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Alerts</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" th:href="@{'/css/app.css'}">
 </head>
 <body>
 <!------------------------------------success----------------------------------------------->
@@ -41,6 +45,27 @@
 <div th:fragment="changeSeriousnessSuccess" class="alert alert-success alert-dismissible fade show">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     <strong>Topic Seriousness Changed Successfully!</strong>
+</div>
+
+<div th:fragment="userActivateSuccess" class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>User Activated Successfully!</strong>
+</div>
+
+<div th:fragment="userDeactivateSuccess" class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>User Deactivated Successfully!</strong>
+</div>
+
+
+<div th:fragment="editPostSuccess" class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Post Updated Successfully!</strong>
+</div>
+
+<div th:fragment="deletePostSuccess" class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Post Deleted Successfully!</strong>
 </div>
 
 <!------------------------------------failed----------------------------------------------->
@@ -102,6 +127,21 @@
     <strong>Cannot Change Topic Seriousness!</strong>
 </div>
 
+<div th:fragment="userActivateFailed" class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>User Activated Successfully!</strong>
+</div>
+
+<div th:fragment="userDeactivateFailed" class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>User Deactivated Successfully!</strong>
+</div>
+
+<div th:fragment="editPostFailed" class="alert alert-success alert-dismissible fade show">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Cannot update Post!</strong>
+</div>
+
 <!------------------------------------Info----------------------------------------------->
 
 <div th:fragment="forgetPassword-acknowledgement" class="login-popups alert alert-info alert-dismissible fade show">
@@ -115,7 +155,13 @@
 </div>
 
 
-
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script th:src="@{/js/app.js}"></script>
 </body>
 </html>

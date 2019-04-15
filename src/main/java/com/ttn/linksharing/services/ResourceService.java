@@ -121,6 +121,9 @@ public class ResourceService {
 
     public Resource updateResourceDescription(Long resourceId, String description){
         Resource resource = getResourceById(resourceId);
+        if(resource == null){
+            return null;
+        }
         resource.setDescription(description);
         return resourceRepository.save(resource);
     }

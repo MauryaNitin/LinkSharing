@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -154,22 +155,27 @@ public class ResourceController {
     @PostMapping("/resource/{resourceId}/edit")
     public String updateResource(@PathVariable("resourceId") Long resourceId,
                                  @RequestParam("description") String description,
-                                 ModelMap model,
+                                 RedirectAttributes redirectAttributes,
                                  HttpSession session){
         if (session.getAttribute("loggedInUserId") == null) {
             return "redirect:/";
         }
-        resourceService.updateResourceDescription(resourceId, description);
-        return "dashboard";
+        if(resourceService.updateResourceDescription(resourceId, description) != null){
+           redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: editPostSuccess");
+           return "redirect:/dashboard";
+        }
+        redirectAttributes.addFlashAttribute("alertFailed", "fragments/alerts :: editPostFailed");
+        return "redirect:/dashboard";
     }
 
-    @DeleteMapping("/resource/{resourceId}/delete")
+    @GetMapping("/resource/{resourceId}/delete")
     public String deleteResource(@PathVariable("resourceId") Long resourceId,
-                                 HttpSession session){
+                                 HttpSession session, RedirectAttributes redirectAttributes){
         if (session.getAttribute("loggedInUserId") == null) {
             return "redirect:/";
         }
         resourceService.deleteResource(resourceId);
-        return "dashboard";
+        redirectAttributes.addFlashAttribute("alertSuccess", "fragments/alerts :: deletePostSuccess");
+        return "redirect:/dashboard";
     }
 }

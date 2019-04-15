@@ -6,6 +6,8 @@ import com.ttn.linksharing.DTO.UserPublicDTO;
 import com.ttn.linksharing.entities.User;
 import com.ttn.linksharing.enums.Roles;
 import com.ttn.linksharing.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,7 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/users/{id}")
     public User getUser(@PathVariable Long id){
@@ -49,14 +52,18 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public String showUsers(ModelMap model, HttpSession session){
+    public String showUsers(ModelMap model,
+                            HttpSession session,
+                            @ModelAttribute("alertSuccess") String alertSuccess,
+                            @ModelAttribute("alertFailed") String alertFailed,
+                            @ModelAttribute("alertInfo") String alertInfo){
         if(session.getAttribute("loggedInUserId") == null){
             return "redirect:/";
         }
         Long userId = (Long)session.getAttribute("loggedInUserId");
         User user = userService.getUserById(userId);
         if(!user.getRole().equals(Roles.ADMIN)){
-//            return "redirect:/";
+            return "redirect:/";
         }
         List<User> users = userService.getAllUsers(userId);
         model.addAttribute("usersList", users);
@@ -68,6 +75,10 @@ public class UserController {
         model.addAttribute("linkResourceCO", new LinkResourceCO());
         model.addAttribute("documentResourceCO", new DocumentResourceCO());
         model.addAttribute("invitationCO", new InvitationCO());
+
+        model.addAttribute("alertSuccess", alertSuccess);
+        model.addAttribute("alertFailed", alertFailed);
+        model.addAttribute("alertInfo", alertInfo);
         return "users";
     }
 
@@ -125,6 +136,40 @@ public class UserController {
         }
         userService.updatePassword(updatePasswordCO, id);
         return "redirect:/dashboard";
+    }
+
+    @PostMapping("/users/activate")
+    public String activateUser(@RequestParam("userId") Long userId,
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes){
+        if(session.getAttribute("loggedInUserId") == null){
+            return "redirect:/";
+        }
+        logger.warn("Activating User" + userId);
+
+        if(userService.activateUser(userId) != null){
+            redirectAttributes.addFlashAttribute("alertSuccess", "fragment/alerts :: userActivateSuccess");
+            return "redirect:/users";
+        }
+        redirectAttributes.addFlashAttribute("alertFailed", "fragment/alerts :: userActivateFailed");
+        return "redirect:/users";
+
+    }
+
+    @PostMapping("/users/deactivate")
+    public String deactivateUser(@RequestParam("userId") Long userId,
+                               HttpSession session,
+                               RedirectAttributes redirectAttributes){
+        if(session.getAttribute("loggedInUserId") == null){
+            return "redirect:/";
+        }
+        logger.warn("Deactivating User" + userId);
+        if(userService.deactivateUser(userId) != null){
+            redirectAttributes.addFlashAttribute("alertSuccess", "fragment/alerts :: userDeactivateSuccess");
+            return "redirect:/users";
+        }
+        redirectAttributes.addFlashAttribute("alertFailed", "fragment/alerts :: userDeactivateFailed");
+        return "redirect:/users";
     }
 
 }
